@@ -2,71 +2,103 @@
 #include "compass.h"
 #include "../helper/helper.h"
 
-#define pi 3.141593
-#define COMPASS_X 25
-#define COMPASS_Y 25
-#define COMPASS_SIZE 25
-
-void drawCompass() {
-    display.setFont(u8g_font_5x7);
-    drawCompassCircles();
-    drawNorth();
-    drawSouth();
-    drawEast();
-    drawWest();
-    drawCompassDegree();
+Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
+  this->x = x;
+  this->y = y;
+  this->size = size;
 }
 
-void drawCompassCircles()
+void Compass::draw(uint8_t degree)
 {
-    display.drawCircle(COMPASS_X, COMPASS_Y, COMPASS_SIZE);
-    display.drawCircle(COMPASS_X, COMPASS_Y, COMPASS_SIZE - 10);
+  this->compassDegree = 360 - degree;
+
+  display.setFont(u8g_font_5x7);
+  drawCompassCircles();
+  drawNeedle();
+  drawNorth();
+  drawSouth();
+  drawEast();
+  drawWest();
+  drawCompassDegree(degree);
 }
 
-void drawNorth()
+void Compass::drawCompassCircles()
 {
-    unsigned int compassDegree = 360 - degree;
-    unsigned char x = ((cos((compassDegree + 270) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_X;
-    unsigned char y = ((sin((compassDegree + 270) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_Y + 6;
-
-    display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
-    display.print("N");
+  display.drawCircle(this->x, this->y, this->size);
+  display.drawCircle(this->x, this->y, this->size - 10);
 }
 
-void drawSouth()
+void Compass::drawNeedle()
 {
-    unsigned int compassDegree = 360 - degree;
-    unsigned char x = ((cos((compassDegree + 90) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_X;
-    unsigned char y = ((sin((compassDegree + 90) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_Y + 6;
+    display.drawLine(
+        this->x, 
+        this->y - 10,
+        this->x - 5, 
+        this->y + 10
+    );
 
-    display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
-    display.print("S");
+    display.drawLine(
+        this->x, 
+        this->y - 10,
+        this->x + 5, 
+        this->y + 10
+    );
+
+    display.drawLine(
+        this->x, 
+        this->y + 5,
+        this->x - 5, 
+        this->y + 10
+    );
+
+    display.drawLine(
+        this->x, 
+        this->y + 5,
+        this->x + 5, 
+        this->y + 10
+    );
 }
 
-void drawEast()
+void Compass::drawNorth()
 {
-    unsigned int compassDegree = 360 - degree;
-    unsigned char x = ((cos(compassDegree * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_X;
-    unsigned char y = ((sin(compassDegree * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_Y + 6;
+  unsigned char x = ((cos((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-    display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
-    display.print("E");
+  display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
+  display.print("N");
 }
 
-void drawWest()
+void Compass::drawSouth()
 {
-    unsigned int compassDegree = 360 - degree;
-    unsigned char x = ((cos((compassDegree + 180) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_X;
-    unsigned char y = ((sin((compassDegree + 180) * (pi / 180))) * (COMPASS_SIZE - 5)) + COMPASS_Y + 6;
+  unsigned char x = ((cos((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-    display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
-    display.print("W");
+  display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
+  display.print("S");
 }
 
-void drawCompassDegree()
+void Compass::drawEast()
 {
-    printNumberCenter(
-        degree,
-        COMPASS_X,
-        COMPASS_Y + COMPASS_SIZE + display.getMaxCharHeight() + 1);
+  unsigned char x = ((cos(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->x;
+  unsigned char y = ((sin(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->y + 6;
+
+  display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
+  display.print("E");
+}
+
+void Compass::drawWest()
+{
+  unsigned char x = ((cos((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->y + 6;
+
+  display.setCursor(x - (display.getMaxCharWidth() / 2), y - (display.getMaxCharHeight() / 2));
+  display.print("W");
+}
+
+void Compass::drawCompassDegree(uint8_t degree)
+{
+  printNumberCenter(
+      degree,
+      this->x,
+      this->y + this->size + display.getMaxCharHeight() + 1);
 }
