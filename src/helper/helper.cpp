@@ -1,5 +1,6 @@
 #include <U8g2lib.h>
 #include "helper.h"
+#include "../defines.h"
 
 void printCenter(const char *text, uint8_t textX, uint8_t textY)
 {
@@ -39,5 +40,26 @@ void printNumberRight(int num, uint8_t textX, uint8_t textY)
 
 uint8_t countDigits(int num)
 {
-    return (1 + log10(num));
+    return num < 0 
+        ? (1 + log10(abs(num))) + 1
+        : num == 0 ? 1 : (1 + log10(num));
+}
+
+void drawInfoBox (int num, const char* unit, uint8_t x, uint8_t y)
+{
+    // display.drawFrame(x, y, INFOBOX_WIDTH, INFOBOX_HEIGHT);
+
+    display.setFont(BIG_FONT);
+
+    printNumberRight(
+        num,
+        x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
+        y + BIG_FONT_HEIGHT - 5);
+
+    display.setFont(SMALL_FONT);
+
+    printRight(
+        unit,
+        x + INFOBOX_WIDTH,
+        y + INFOBOX_HEIGHT);
 }
