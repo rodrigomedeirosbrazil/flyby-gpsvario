@@ -21,6 +21,7 @@ void loop(void) {
   do {
     drawCompass();
     drawAltitude();
+    drawSpeed();
   } while (display.nextPage());
   delay(100);
   degree = degree >= 360 
@@ -43,4 +44,13 @@ void drawAltitude()
   display.setFont(u8g_font_5x7);
   display.setCursor(display.getDisplayWidth() - display.getMaxCharWidth(), display.getMaxCharHeight());
   display.print("m");
+}
+
+void drawSpeed()
+{
+  display.setFont(u8g2_font_10x20_tr);
+  printNumberRight(speed, display.getDisplayWidth(), display.getMaxCharHeight()*2+1);
+  display.setFont(u8g_font_5x7);
+  display.setCursor(display.getDisplayWidth() - display.getMaxCharWidth(), display.getMaxCharHeight()*2+1);
+  display.print("km/h");
 }

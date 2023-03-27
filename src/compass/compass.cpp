@@ -4,11 +4,6 @@
 
 #define pi 3.141593
 
-// unsigned int degree;
-// unsigned char compassX;
-// unsigned char compassY;
-// unsigned char compassSize;
-
 void drawCompass() {
     display.setFont(u8g_font_5x7);
     drawCompassCircles();
