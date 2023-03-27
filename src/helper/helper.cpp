@@ -1,10 +1,19 @@
 #include <U8g2lib.h>
 #include "helper.h"
 
-void printHorizontalCenter(const char *text, uint8_t textX, uint8_t textY)
+void printCenter(const char *text, uint8_t textX, uint8_t textY)
 {
     unsigned int chars = strlen(text);
-    unsigned char x = chars * display.getMaxCharWidth();
+    unsigned char x = textX - ((chars * display.getMaxCharWidth()) / 2);
+
+    display.setCursor(x, textY);
+    display.print(text);
+}
+
+void printRight(const char *text, uint8_t textX, uint8_t textY)
+{
+    unsigned int chars = strlen(text);
+    unsigned char x = textX - (chars * display.getMaxCharWidth());
 
     display.setCursor(x, textY);
     display.print(text);
