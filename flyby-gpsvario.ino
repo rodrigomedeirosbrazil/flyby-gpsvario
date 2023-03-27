@@ -38,7 +38,9 @@ void loop(void) {
 
 void drawAltitude()
 {
-  display.setFont(u8g2_font_courB24_tn);
-  display.setCursor(64, display.getMaxCharHeight());
-  display.print(altitude);
+  display.setFont(u8g2_font_10x20_tr);
+  printNumberRight(altitude, display.getDisplayWidth(), display.getMaxCharHeight());
+  display.setFont(u8g_font_5x7);
+  display.setCursor(display.getDisplayWidth() - display.getMaxCharWidth(), display.getMaxCharHeight());
+  display.print("m");
 }
