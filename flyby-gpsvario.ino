@@ -4,6 +4,17 @@
 
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0);
 
+#define INFOBOX_WIDTH 64
+#define INFOBOX_HEIGHT 20
+
+#define SMALL_FONT u8g_font_5x7
+#define SMALL_FONT_WIDTH 5
+#define SMALL_FONT_HEIGHT 7
+
+#define BIG_FONT u8g2_font_10x20_tr
+#define BIG_FONT_WIDTH 10
+#define BIG_FONT_HEIGHT 20
+
 unsigned int degree = 0;
 unsigned int altitude = 100;
 unsigned int speed = 45;
@@ -20,8 +31,8 @@ void loop(void) {
   display.firstPage();
   do {
     drawCompass();
-    drawAltitude();
-    drawSpeed();
+    drawAltitude(64, 0);
+    drawSpeed(64, 20);
   } while (display.nextPage());
   delay(100);
   degree = degree >= 360 
@@ -37,20 +48,43 @@ void loop(void) {
     : speed + 5;
 }
 
-void drawAltitude()
+void drawAltitude(unsigned int x, unsigned int y)
 {
-  display.setFont(u8g2_font_10x20_tr);
-  printNumberRight(altitude, display.getDisplayWidth(), display.getMaxCharHeight());
-  display.setFont(u8g_font_5x7);
-  display.setCursor(display.getDisplayWidth() - display.getMaxCharWidth(), display.getMaxCharHeight());
-  display.print("m");
+  // display.drawFrame(x, y, INFOBOX_WIDTH, INFOBOX_HEIGHT);
+
+  display.setFont(BIG_FONT);
+
+  printNumberRight(
+    altitude, 
+    x + INFOBOX_WIDTH - SMALL_FONT_WIDTH, 
+    y + BIG_FONT_HEIGHT - 5
+  );
+
+  display.setFont(SMALL_FONT);
+
+  printRight(
+      "m",
+      x + INFOBOX_WIDTH,
+      y + INFOBOX_HEIGHT
+  );
 }
 
-void drawSpeed()
+void drawSpeed(unsigned int x, unsigned int y)
 {
-  display.setFont(u8g2_font_10x20_tr);
-  printNumberRight(speed, display.getDisplayWidth(), display.getMaxCharHeight()*2+1);
-  display.setFont(u8g_font_5x7);
-  display.setCursor(display.getDisplayWidth() - display.getMaxCharWidth(), display.getMaxCharHeight()*2+1);
-  display.print("km/h");
+  // display.drawFrame(x, y, INFOBOX_WIDTH, INFOBOX_HEIGHT);
+
+  display.setFont(BIG_FONT);
+
+  printNumberRight(
+      speed,
+      x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
+      y + BIG_FONT_HEIGHT - 5);
+
+  display.setFont(SMALL_FONT);
+
+  printRight(
+      "km/h",
+      x + INFOBOX_WIDTH,
+      y + INFOBOX_HEIGHT
+  );
 }
