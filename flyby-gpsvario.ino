@@ -10,10 +10,6 @@ unsigned int altitude = 100;
 unsigned int speed = 45;
 char variometer = 0;
 
-unsigned char compassX=25;
-unsigned char compassY=25;
-unsigned char compassSize=25;
-
 void setup(void) {
   display.begin();
 }
