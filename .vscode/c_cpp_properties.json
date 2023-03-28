@@ -19,8 +19,10 @@
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/variants/eightanaloginputs",
                 "/Users/rodrigomedeiros/Documents/Arduino/libraries/U8g2/src",
-                "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+                "/Users/rodrigomedeiros/Documents/Arduino/libraries/Adafruit_BMP085_Library",
+                "/Users/rodrigomedeiros/Documents/Arduino/libraries/Adafruit_BusIO",
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+                "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
                 "/Users/rodrigomedeiros/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"
@@ -534,8 +536,7 @@
                 "__ATOMIC_RELEASE=3",
                 "__BUILTIN_AVR_FMUL=1",
                 "USBCON"
-            ],
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            ]
         }
     ]
 }

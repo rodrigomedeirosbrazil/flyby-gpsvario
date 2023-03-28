@@ -1,5 +1,5 @@
 #include <U8g2lib.h>
-#include "compass.h"
+#include "Compass.h"
 #include "../helper/helper.h"
 
 Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
