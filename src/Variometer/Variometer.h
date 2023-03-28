@@ -1,6 +1,8 @@
 #include <Adafruit_BMP085.h>
 
-#define NUMBER_OF_SAMPLES 25
+#define NUMBER_OF_PRESSURE_SAMPLES 6
+#define SAMPLES 40
+#define MAX_SAMPLES 50
 
 class Variometer
 {
@@ -9,8 +11,8 @@ class Variometer
         void tick();
         unsigned int getPressure();
         unsigned int getAltitude();
-        char getTemperature();
-        char getVario();
+        float getTemperature();
+        float getVario();
         void setQnh(unsigned int qnh);
         void setQnhByAltitude(unsigned int altitude);
 
@@ -18,12 +20,14 @@ class Variometer
         Adafruit_BMP085 barometer;
         bool barometerInitialized = false;
         unsigned int qnh = 101325;
-        unsigned int pressureSamples[NUMBER_OF_SAMPLES];
+        unsigned int pressureSamples[NUMBER_OF_PRESSURE_SAMPLES];
         unsigned long lastTimeVarioWasCalculated = 0;
         unsigned int lastPressure = qnh;
-        char vario = 0;
+        float vario = 0;
+        float altitudeArray[MAX_SAMPLES + 1];
+        float timeArray[MAX_SAMPLES + 1];
 
-        void shiftPressureSamples();
+        void calcVario();
         unsigned int calcAltitude(unsigned int pressure);
-        unsigned int calcAveragePressure();
+        unsigned int getAveragePressure(unsigned int newPressure);
 };
