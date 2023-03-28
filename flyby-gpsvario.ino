@@ -3,6 +3,7 @@
 #include "src/helper/helper.h"
 #include "src/Compass/Compass.h"
 #include "src/Variometer/Variometer.h"
+#include "src/Beep/Beep.h"
 
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0);
 
@@ -13,6 +14,7 @@ char vario = 0;
 
 Compass compass(25, 25, 25);
 Variometer variometer;
+Beep beep(SPEAKER_PIN);
 
 void setup(void) {
   display.begin();
@@ -20,6 +22,8 @@ void setup(void) {
 
 void loop(void) {
   variometer.tick();
+  beep.tick(variometer.getVario());
+
   display.firstPage();
   do {
     compass.draw(degree);

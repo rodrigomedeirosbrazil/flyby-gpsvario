@@ -8,3 +8,5 @@
 #define BIG_FONT u8g2_font_10x20_tr
 #define BIG_FONT_WIDTH 10
 #define BIG_FONT_HEIGHT 20
+
+#define SPEAKER_PIN 13
