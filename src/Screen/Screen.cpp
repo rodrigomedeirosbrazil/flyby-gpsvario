@@ -2,8 +2,9 @@
 #include "../defines.h"
 #include "../helper/helper.h"
 
-Screen::Screen() : compass(25, 25, 25)
+Screen::Screen()
 {
+    this->compass = new Compass(64, 32, 30);
 }
 
 void Screen::draw()
@@ -48,7 +49,7 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    compass.draw(this->degree);
+    compass->draw(this->degree);
     drawInfoBox(this->altitude, "m", 64, 0);
     drawInfoBox(this->speed, "km/h", 64, 20);
     drawInfoBox(this->vario, "m/s", 64, 40);

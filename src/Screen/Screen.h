@@ -24,7 +24,7 @@ class Screen
 
     private:
         unsigned char screenSelected = GPS_SCREEN;
-        Compass compass;
+        Compass *compass;
         unsigned long lastTimeScreenWasDrawn = 0;
         unsigned int degree=0;
         unsigned int altitude=0;
