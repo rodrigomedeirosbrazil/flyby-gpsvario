@@ -1,3 +1,6 @@
+#define POWER_ON_DELAY 2000
+#define SCREEN_CONTRAST 60
+
 #define INFOBOX_WIDTH 64
 #define INFOBOX_HEIGHT 20
 
@@ -9,4 +12,21 @@
 #define BIG_FONT_WIDTH 10
 #define BIG_FONT_HEIGHT 20
 
-#define SPEAKER_PIN 13
+#define DEMO
+
+#define SMARTVARIO
+
+#ifdef SMARTVARIO
+    #define SPEAKER_PIN 9
+    #define LCD_CS_PIN 6
+    #define LCD_RESET_PIN 5
+    #define LCD_DC_PIN 4 // RS
+    #define LCD_DATA_PIN 3  // SDA
+    #define LCD_CLOCK_PIN 2 // SCL
+#endif
+
+// #define WOKWI
+
+#ifdef WOKWI
+    #define SPEAKER_PIN 13
+#endif

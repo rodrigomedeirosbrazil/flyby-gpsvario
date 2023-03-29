@@ -4,7 +4,13 @@
 
 #define pi 3.141593
 
+#ifdef WOKWI
 extern U8G2_SSD1306_128X64_NONAME_1_HW_I2C display;
+#endif
+
+#ifdef SMARTVARIO
+extern U8G2_ST7565_JLX12864_1_4W_SW_SPI display;
+#endif
 
 class Compass
 {

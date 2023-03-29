@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include "../defines.h"
 #include "../helper/helper.h"
 
 Screen::Screen() : compass(25, 25, 25)
@@ -26,22 +27,23 @@ void Screen::draw()
         }
     } while (display.nextPage());
 
-    // ==== DEMO
-    this->degree = this->degree >= 360 
-        ? 0
-        : this->degree + 5;
-  
-    this->altitude = this->altitude > 2000
-        ? 0
-        : this->altitude + 20;
+    #ifdef DEMO
+        this->degree = this->degree >= 360 
+            ? 0
+            : this->degree + 5;
+    
+        this->altitude = this->altitude > 2000
+            ? 0
+            : this->altitude + 20;
 
-    this->speed = this->speed > 60
-        ? 0
-        : this->speed + 5;
+        this->speed = this->speed > 60
+            ? 0
+            : this->speed + 5;
 
-    this->vario = this->vario > 5
-        ? -5
-        : this->vario + 1;
+        this->vario = this->vario > 254
+            ? 0
+            : this->vario + 16;
+    #endif
 }
 
 void Screen::drawGpsScreen()
