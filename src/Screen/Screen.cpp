@@ -40,9 +40,9 @@ void Screen::draw()
             ? 0
             : this->speed + 5;
 
-        this->vario = this->vario > 254
-            ? 0
-            : this->vario + 16;
+        this->vario = this->vario > 5
+            ? -5
+            : this->vario + .2;
     #endif
 }
 
@@ -69,7 +69,7 @@ void Screen::setSpeed(unsigned int speed)
     this->speed = speed;
 }
 
-void Screen::setVario(char vario)
+void Screen::setVario(float vario)
 {
     this->vario = vario;
 }

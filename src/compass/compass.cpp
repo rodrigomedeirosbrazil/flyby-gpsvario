@@ -8,7 +8,7 @@ Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
   this->size = size;
 }
 
-void Compass::draw(uint8_t degree)
+void Compass::draw(unsigned int degree)
 {
   this->compassDegree = 360 - degree;
 
@@ -95,7 +95,7 @@ void Compass::drawWest()
   display.print("W");
 }
 
-void Compass::drawCompassDegree(uint8_t degree)
+void Compass::drawCompassDegree(unsigned int degree)
 {
   printNumberCenter(
       degree,

@@ -16,12 +16,12 @@ class Compass
 {
     public:
         Compass(uint8_t x, uint8_t y, uint8_t size);
-        void draw(uint8_t degree);
+        void draw(unsigned int degree);
     private:
         uint8_t x;
         uint8_t y;
         uint8_t size;
-        uint8_t compassDegree;
+        unsigned int compassDegree;
 
         void drawCompassCircles();
         void drawNeedle();
@@ -29,5 +29,5 @@ class Compass
         void drawSouth();
         void drawEast();
         void drawWest();
-        void drawCompassDegree(uint8_t degree);
+        void drawCompassDegree(unsigned int degree);
 };

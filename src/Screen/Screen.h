@@ -20,7 +20,7 @@ class Screen
         void setDegree(unsigned int degree);
         void setAltitude(unsigned int altitude);
         void setSpeed(unsigned int speed);
-        void setVario(char vario);
+        void setVario(float vario);
 
     private:
         unsigned char screenSelected = GPS_SCREEN;
@@ -29,7 +29,7 @@ class Screen
         unsigned int degree=0;
         unsigned int altitude=0;
         unsigned int speed=0;
-        char vario=0;
+        float vario=0;
 
         void drawGpsScreen();
 };
