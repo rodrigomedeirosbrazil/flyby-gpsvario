@@ -1,10 +1,30 @@
 #include "Screen.h"
 #include "../defines.h"
-#include "../helper/helper.h"
 
 Screen::Screen()
 {
-    this->compass = new Compass(64, 32, 30);
+    #ifdef WOKWI
+    this->display = new Display(U8G2_R0);
+    #endif
+
+    #ifdef SMARTVARIO
+    this->display = new Display(
+        U8G2_R0, 
+        LCD_CLOCK_PIN,
+        LCD_DATA_PIN,
+        LCD_CS_PIN, 
+        LCD_DC_PIN, 
+        LCD_RESET_PIN
+    );
+    #endif
+
+    this->compass = new Compass(this->display, 25, 25, 25);
+}
+
+void Screen::begin()
+{
+    this->display->begin();
+    this->display->setContrast(SCREEN_CONTRAST);
 }
 
 void Screen::draw()
@@ -15,7 +35,7 @@ void Screen::draw()
 
     this->lastTimeScreenWasDrawn = millis();
 
-    display.firstPage();
+    this->display->firstPage();
     do {
         switch (this->screenSelected)
         {
@@ -26,7 +46,7 @@ void Screen::draw()
             default:
                 break;
         }
-    } while (display.nextPage());
+    } while (this->display->nextPage());
 
     #ifdef DEMO
         this->degree = this->degree >= 360 
@@ -49,9 +69,9 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    compass->draw(this->degree);
-    drawInfoBox(this->altitude, "m", 64, 0);
-    drawInfoBox(this->speed, "km/h", 64, 20);
+    this->compass->draw(this->degree);
+    drawInfoBox((int) this->altitude, "m", 64, 0);
+    drawInfoBox((int) this->speed, "km/h", 64, 20);
     drawInfoBox(this->vario, "m/s", 64, 40);
 }
 
@@ -73,4 +93,35 @@ void Screen::setSpeed(unsigned int speed)
 void Screen::setVario(float vario)
 {
     this->vario = vario;
+}
+
+void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y)
+{
+    this->display->setFont(BIG_FONT);
+
+    this->display->printRight(
+        value,
+        x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
+        y + BIG_FONT_HEIGHT - 5);
+
+    this->display->setFont(SMALL_FONT);
+
+    this->display->printRight(
+        unit,
+        x + INFOBOX_WIDTH,
+        y + INFOBOX_HEIGHT);
+}
+
+void Screen::drawInfoBox (int value, char* unit, uint8_t x, uint8_t y)
+{
+    char buffer[6];
+    sprintf(buffer, "%d", value);
+    drawInfoBox(buffer, unit, x, y);
+}
+
+void Screen::drawInfoBox (float value, char* unit, uint8_t x, uint8_t y)
+{
+    char buffer[6]; 
+    dtostrf(value, 2, 1, buffer);
+    drawInfoBox(buffer, unit, x, y);
 }

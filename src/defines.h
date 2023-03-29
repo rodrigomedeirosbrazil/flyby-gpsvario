@@ -14,7 +14,7 @@
 
 #define DEMO
 
-#define SMARTVARIO
+// #define SMARTVARIO
 
 #ifdef SMARTVARIO
     #define SPEAKER_PIN 9
@@ -25,7 +25,7 @@
     #define LCD_CLOCK_PIN 2 // SCL
 #endif
 
-// #define WOKWI
+#define WOKWI
 
 #ifdef WOKWI
     #define SPEAKER_PIN 13

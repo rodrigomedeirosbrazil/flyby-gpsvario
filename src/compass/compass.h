@@ -1,27 +1,21 @@
 
 #include <U8g2lib.h>
 #include "../defines.h"
+#include "../Display/Display.h"
 
 #define pi 3.141593
-
-#ifdef WOKWI
-extern U8G2_SSD1306_128X64_NONAME_1_HW_I2C display;
-#endif
-
-#ifdef SMARTVARIO
-extern U8G2_ST7565_JLX12864_1_4W_SW_SPI display;
-#endif
 
 class Compass
 {
     public:
-        Compass(uint8_t x, uint8_t y, uint8_t size);
+        Compass(Display *display, uint8_t x, uint8_t y, uint8_t size);
         void draw(unsigned int degree);
     private:
         uint8_t x;
         uint8_t y;
         uint8_t size;
         unsigned int compassDegree;
+        Display *display;
 
         void drawCompassCircles();
         void drawNeedle();

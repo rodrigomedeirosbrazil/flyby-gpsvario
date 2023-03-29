@@ -1,21 +1,15 @@
 #include <U8g2lib.h>
 #include "../defines.h"
 #include "../Compass/Compass.h"
+#include "../Display/Display.h"
 
 #define GPS_SCREEN 0
-
-#ifdef WOKWI
-extern U8G2_SSD1306_128X64_NONAME_1_HW_I2C display;
-#endif
-
-#ifdef SMARTVARIO
-extern U8G2_ST7565_JLX12864_1_4W_SW_SPI display;
-#endif
 
 class Screen
 {
     public:
         Screen();
+        void begin();
         void draw();
         void setDegree(unsigned int degree);
         void setAltitude(unsigned int altitude);
@@ -25,6 +19,7 @@ class Screen
     private:
         unsigned char screenSelected = GPS_SCREEN;
         Compass *compass;
+        Display *display;
         unsigned long lastTimeScreenWasDrawn = 0;
         unsigned int degree=0;
         unsigned int altitude=0;
@@ -32,4 +27,7 @@ class Screen
         float vario=0;
 
         void drawGpsScreen();
+        void drawInfoBox(char *value, char* unit, uint8_t x, uint8_t y);
+        void drawInfoBox (int value, char* unit, uint8_t x, uint8_t y);
+        void drawInfoBox (float value, char* unit, uint8_t x, uint8_t y);
 };
