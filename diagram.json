@@ -4,13 +4,48 @@
   "editor": "wokwi",
   "parts": [
     { "type": "wokwi-arduino-nano", "id": "nano", "top": 0, "left": 0, "attrs": {} },
-    { "type": "board-ssd1306", "id": "oled1", "top": 113.99, "left": 11.07, "attrs": {} }
+    { "type": "board-ssd1306", "id": "oled1", "top": 113.99, "left": 11.07, "attrs": {} },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -118.93,
+      "left": 54.47,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 98.93,
+      "left": -69.96,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 158.11,
+      "left": 127.14,
+      "attrs": { "color": "blue" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -17.89,
+      "left": 14.54,
+      "attrs": { "value": "1000" }
+    }
   ],
   "connections": [
     [ "oled1:GND", "nano:GND.1", "black", [ "v0" ] ],
     [ "oled1:VCC", "nano:5V", "red", [ "v0" ] ],
     [ "oled1:SCL", "nano:A5", "green", [ "v0" ] ],
-    [ "oled1:SDA", "nano:A4", "green", [ "v0" ] ]
+    [ "oled1:SDA", "nano:A4", "green", [ "v0" ] ],
+    [ "btn1:1.r", "nano:8", "green", [ "v0" ] ],
+    [ "btn2:1.r", "nano:7", "green", [ "v0" ] ],
+    [ "btn1:1.l", "nano:GND.1", "green", [ "h0" ] ],
+    [ "btn2:1.l", "nano:GND.1", "green", [ "h0" ] ],
+    [ "bz1:2", "r1:2", "green", [ "v0" ] ],
+    [ "r1:1", "nano:13", "green", [ "v0" ] ],
+    [ "bz1:1", "nano:GND.2", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }
