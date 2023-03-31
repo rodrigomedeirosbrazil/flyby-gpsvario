@@ -1,18 +1,11 @@
-#include <U8g2lib.h>
 #include "src/defines.h"
 #include "src/Screen/Screen.h"
+#include "src/Variometer/Variometer.h"
+#include "src/Beep/Beep.h"
 
-#ifndef DEMO
-  #include "src/Variometer/Variometer.h"
-  #include "src/Beep/Beep.h"
-#endif
-
-Screen screen;
-
-#ifndef DEMO
-  Variometer variometer;
-  Beep beep(SPEAKER_PIN);
-#endif
+Variometer variometer;
+Beep beep(SPEAKER_PIN);
+Screen screen(&variometer);
 
 void setup(void) {
   startSound();
@@ -26,11 +19,6 @@ void loop(void) {
   #ifndef DEMO
     variometer.tick();
     beep.tick(variometer.getVario());
-
-    screen.setDegree(0);
-    screen.setAltitude(0);
-    screen.setSpeed(0);
-    screen.setVario(variometer.getVario());
   #endif
 
   screen.draw();

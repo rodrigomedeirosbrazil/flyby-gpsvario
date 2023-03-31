@@ -12,8 +12,6 @@
 #define BIG_FONT_WIDTH 10
 #define BIG_FONT_HEIGHT 20
 
-#define DEMO
-
 // #define SMARTVARIO
 
 #ifdef SMARTVARIO

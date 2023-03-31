@@ -2,9 +2,11 @@
 #include "Variometer.h"
 
 Variometer::Variometer() {
+  #ifdef SMARTVARIO
    if (barometer.begin(BMP085_ULTRAHIGHRES)) {
     this->barometerInitialized = true;
   }
+  #endif
 }
 
 void Variometer::tick()
@@ -50,18 +52,22 @@ void Variometer::calcVario()
     / (SAMPLES * D1 - D2 * D2);
 }
 
-unsigned int Variometer::getPressure()
+long Variometer::getPressure()
 {
   this->lastPressure;
 }
 
-unsigned int Variometer::calcAltitude(unsigned int pressure)
+int Variometer::calcAltitude(long pressure)
 {
   return 44330 * (1.0 - pow(pressure / this->qnh, 0.1903));
 }
 
 float Variometer::getTemperature()
 {
+  if (! this->barometerInitialized) {
+    return 0;
+  }
+
   return barometer.readTemperature();
 }
 
@@ -70,22 +76,27 @@ float Variometer::getVario()
   return this->vario;
 }
 
-unsigned int Variometer::getAltitude()
+int Variometer::getAltitude()
 {
   return calcAltitude(this->lastPressure);
 }
 
-void Variometer::setQnh(unsigned int qnh)
+void Variometer::setQnh(long qnh)
 {
   this->qnh = qnh;
 }
 
-void Variometer::setQnhByAltitude(unsigned int altitude)
+long Variometer::getQnh()
+{
+  return this->qnh;
+}
+
+void Variometer::setQnhByAltitude(int altitude)
 {
   setQnh(this->lastPressure / pow(1.0 - altitude / 44330.0, 5.255));
 }
 
-unsigned int Variometer::getAveragePressure(unsigned int newPressure)
+long Variometer::getAveragePressure(long newPressure)
 {
   memmove(
     &this->pressureSamples[1], 

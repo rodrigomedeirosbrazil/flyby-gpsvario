@@ -1,7 +1,7 @@
 #include "Screen.h"
 #include "../defines.h"
 
-Screen::Screen()
+Screen::Screen(Variometer *variometer)
 {
     #ifdef WOKWI
     this->display = new Display(U8G2_R0);
@@ -19,6 +19,7 @@ Screen::Screen()
     #endif
 
     this->compass = new Compass(this->display, 25, 25, 25);
+    this->variometer = variometer;
 }
 
 void Screen::begin()
@@ -42,57 +43,34 @@ void Screen::draw()
             case GPS_SCREEN:
                 drawGpsScreen();
                 break;
-            
+
+            case INFO_SCREEN:
+                drawInfoScreen();
+                break;
+
             default:
                 break;
         }
     } while (this->display->nextPage());
-
-    #ifdef DEMO
-        this->degree = this->degree >= 360 
-            ? 0
-            : this->degree + 5;
-    
-        this->altitude = this->altitude > 2000
-            ? 0
-            : this->altitude + 20;
-
-        this->speed = this->speed > 60
-            ? 0
-            : this->speed + 5;
-
-        this->vario = this->vario > 5
-            ? -5
-            : this->vario + .2;
-    #endif
 }
 
 void Screen::drawGpsScreen()
 {
-    this->compass->draw(this->degree);
-    drawInfoBox((int) this->altitude, "m", 64, 0);
-    drawInfoBox((int) this->speed, "km/h", 64, 20);
-    drawInfoBox(this->vario, "m/s", 64, 40);
+    this->compass->draw(0);
+    drawInfoBox(this->variometer->getAltitude(), "m", 64, 0);
+    drawInfoBox("--", "km/h", 64, 20);
+    drawInfoBox(this->variometer->getVario(), "m/s", 64, 40);
 }
 
-void Screen::setDegree(unsigned int degree)
+void Screen::drawInfoScreen()
 {
-    this->degree = degree;
-}
+    drawInfoBox(this->variometer->getAltitude(), "m", 0, 0);
+    drawInfoBox("--", "km/h", 0, 20);
+    drawInfoBox(this->variometer->getVario(), "m/s", 0, 40);
 
-void Screen::setAltitude(unsigned int altitude)
-{
-    this->altitude = altitude;
-}
-
-void Screen::setSpeed(unsigned int speed)
-{
-    this->speed = speed;
-}
-
-void Screen::setVario(float vario)
-{
-    this->vario = vario;
+    drawInfoBox(this->variometer->getPressure(), "Pa", 64, 0);
+    drawInfoBox(this->variometer->getTemperature(), "C", 64, 20);
+    drawInfoBox(this->variometer->getQnh(), "Pa", 64, 40);
 }
 
 void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y)
@@ -114,14 +92,21 @@ void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y)
 
 void Screen::drawInfoBox (int value, char* unit, uint8_t x, uint8_t y)
 {
-    char buffer[6];
+    char buffer[10];
     sprintf(buffer, "%d", value);
+    drawInfoBox(buffer, unit, x, y);
+}
+
+void Screen::drawInfoBox (long value, char* unit, uint8_t x, uint8_t y)
+{
+    char buffer[10];
+    sprintf(buffer, "%ld", value);
     drawInfoBox(buffer, unit, x, y);
 }
 
 void Screen::drawInfoBox (float value, char* unit, uint8_t x, uint8_t y)
 {
-    char buffer[6]; 
+    char buffer[10]; 
     dtostrf(value, 2, 1, buffer);
     drawInfoBox(buffer, unit, x, y);
 }
