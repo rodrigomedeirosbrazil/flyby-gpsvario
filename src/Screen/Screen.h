@@ -22,14 +22,15 @@ class Screen
         Display *display;
         Variometer *variometer;
         unsigned long lastTimeScreenWasDrawn = 0;
+        const char notAvailableText[4] = "N/A";
 
         void drawGpsScreen();
         void drawInfoScreen();
 
-        void drawInfoBox(char *value, char* unit, uint8_t x, uint8_t y);
-        void drawInfoBox (int value, char* unit, uint8_t x, uint8_t y);
-        void drawInfoBox (long value, char* unit, uint8_t x, uint8_t y);
-        void drawInfoBox (float value, char* unit, uint8_t x, uint8_t y);
+        void drawInfoBox(char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (int value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (long value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (float value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
 };
 
 #endif

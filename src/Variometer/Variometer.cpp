@@ -114,4 +114,9 @@ long Variometer::getAveragePressure(long newPressure)
   return sum / NUMBER_OF_PRESSURE_SAMPLES;
 }
 
+bool Variometer::isAvailable()
+{
+  return this->barometerInitialized;
+}
+
 

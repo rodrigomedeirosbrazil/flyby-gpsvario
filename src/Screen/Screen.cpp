@@ -57,28 +57,30 @@ void Screen::draw()
 void Screen::drawGpsScreen()
 {
     this->compass->draw(0);
-    drawInfoBox(this->variometer->getAltitude(), "m", 64, 0);
-    drawInfoBox("--", "km/h", 64, 20);
-    drawInfoBox(this->variometer->getVario(), "m/s", 64, 40);
+    drawInfoBox(this->variometer->getAltitude(), "m", 64, 0, this->variometer->isAvailable());
+    drawInfoBox(nullptr, "km/h", 64, 20, false);
+    drawInfoBox(this->variometer->getVario(), "m/s", 64, 40, this->variometer->isAvailable());
 }
 
 void Screen::drawInfoScreen()
 {
-    drawInfoBox(this->variometer->getAltitude(), "m", 0, 0);
-    drawInfoBox("--", "km/h", 0, 20);
-    drawInfoBox(this->variometer->getVario(), "m/s", 0, 40);
+    drawInfoBox(this->variometer->getAltitude(), "m", 0, 0, this->variometer->isAvailable());
+    drawInfoBox(nullptr, "km/h", 0, 20, false);
+    drawInfoBox(this->variometer->getVario(), "m/s", 0, 40, this->variometer->isAvailable());
 
-    drawInfoBox(this->variometer->getPressure(), "Pa", 64, 0);
-    drawInfoBox(this->variometer->getTemperature(), "C", 64, 20);
-    drawInfoBox(this->variometer->getQnh(), "Pa", 64, 40);
+    drawInfoBox(this->variometer->getPressure(), "Pa", 64, 0, this->variometer->isAvailable());
+    drawInfoBox(this->variometer->getTemperature(), "C", 64, 20, this->variometer->isAvailable());
+    drawInfoBox(this->variometer->getQnh(), "Pa", 64, 40, true);
 }
 
-void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y)
+void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     this->display->setFont(BIG_FONT);
 
     this->display->printRight(
-        value,
+        isAvailable 
+            ? value 
+            : (char *) this->notAvailableText,
         x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
         y + BIG_FONT_HEIGHT - 5);
 
@@ -90,23 +92,23 @@ void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y)
         y + INFOBOX_HEIGHT);
 }
 
-void Screen::drawInfoBox (int value, char* unit, uint8_t x, uint8_t y)
+void Screen::drawInfoBox (int value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%d", value);
-    drawInfoBox(buffer, unit, x, y);
+    drawInfoBox(buffer, unit, x, y, isAvailable);
 }
 
-void Screen::drawInfoBox (long value, char* unit, uint8_t x, uint8_t y)
+void Screen::drawInfoBox (long value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%ld", value);
-    drawInfoBox(buffer, unit, x, y);
+    drawInfoBox(buffer, unit, x, y, isAvailable);
 }
 
-void Screen::drawInfoBox (float value, char* unit, uint8_t x, uint8_t y)
+void Screen::drawInfoBox (float value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     char buffer[10]; 
     dtostrf(value, 2, 1, buffer);
-    drawInfoBox(buffer, unit, x, y);
+    drawInfoBox(buffer, unit, x, y, isAvailable);
 }

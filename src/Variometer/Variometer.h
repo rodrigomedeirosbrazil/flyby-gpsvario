@@ -19,6 +19,7 @@ class Variometer
         void setQnh(long qnh);
         long getQnh();
         void setQnhByAltitude(int altitude);
+        bool isAvailable();
 
     private:
         Adafruit_BMP085 barometer;
