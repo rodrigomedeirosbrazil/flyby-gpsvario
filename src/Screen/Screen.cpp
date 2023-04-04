@@ -67,60 +67,58 @@ void Screen::drawInfoScreen()
 {
     this->display->setFont(SMALL_FONT);
 
-    this->display->setCursor(0, 0);
-    this->variometer->isAvailable() 
-        ?   this->display->print(this->variometer->getPressure())
-        :   this->display->print(this->notAvailableText);
-
     this->display->setCursor(0, 8);
     this->variometer->isAvailable() 
-        ?   this->display->print(this->variometer->getAltitude())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Pres: %ld", this->variometer->getPressure())
+        :   this->display->print("Pres: N/A");
 
     this->display->setCursor(0, 16);
     this->variometer->isAvailable() 
-        ?   this->display->print(this->variometer->getVario())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Alti: %d", this->variometer->getAltitude())
+        :   this->display->print("Alti: N/A");
 
     this->display->setCursor(0, 24);
     this->variometer->isAvailable() 
-        ?   this->display->print(this->variometer->getQnh())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Vari: %.1f", this->variometer->getVario())
+        :   this->display->print("Vari: N/A");
 
     this->display->setCursor(0, 32);
-    this->variometer->isAvailable() 
-        ?   this->display->print(this->variometer->getTemperature())
-        :   this->display->print(this->notAvailableText);
+    this->display->printf("QNH: %ld", this->variometer->getQnh());
 
-    this->display->setCursor(64, 0);
-    this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getLatitude())
-        :   this->display->print(this->notAvailableText);
+    this->display->setCursor(0, 40);
+    this->variometer->isAvailable() 
+        ?   this->display->printf("Temp: %.1f", this->variometer->getTemperature())
+        :   this->display->print("Temp: N/A");
 
     this->display->setCursor(64, 8);
-    this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getLongitude())
-        :   this->display->print(this->notAvailableText);
+    this->gps->isAvailable()
+        ?   this->display->printf("Lat: %.6f", this->gps->getLatitude())
+        :   this->display->print("Lat: N/A");
 
     this->display->setCursor(64, 16);
     this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getSpeed())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Lon: %.6f", this->gps->getLongitude())
+        :   this->display->print("Lon: N/A");
 
     this->display->setCursor(64, 24);
     this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getHeading())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Spd: %.1f", this->gps->getSpeed())
+        :   this->display->print("Spd: N/A");
 
     this->display->setCursor(64, 32);
     this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getHdop())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("Hed: %.0f", this->gps->getHeading())
+        :   this->display->print("Hed: N/A");
 
     this->display->setCursor(64, 40);
     this->gps->isAvailable() 
-        ?   this->display->print(this->gps->getVdop())
-        :   this->display->print(this->notAvailableText);
+        ?   this->display->printf("HDOP: %ld", this->gps->getHdop())
+        :   this->display->print("HDOP: N/A");
+
+    this->display->setCursor(64, 48);
+    this->gps->isAvailable() 
+        ?   this->display->printf("VDOP: %ld", this->gps->getVdop())
+        :   this->display->print("VDOP: N/A");
 }
 
 void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
