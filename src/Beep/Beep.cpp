@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include "Beep.h"
+#include "../helpers/helpers.h"
 
 Beep::Beep(unsigned char pin)
 {
@@ -15,11 +15,11 @@ void Beep::tick(float vario)
 
     if (vario > this->climbRate && vario < 15 )
     {
-      this->beepTime = min(1000, 350 - (vario * 5));
+      this->beepTime = _min(1000, 350 - (vario * 5));
       tone(
         this->pin, 
-        max(100, (1000 + (100 * vario))), 
-        min(1000, 300 - (vario * 5))
+        _max(100, (1000 + (100 * vario))), 
+        _min(1000, 300 - (vario * 5))
       );
     }
     else if (vario < this->sinkRate)

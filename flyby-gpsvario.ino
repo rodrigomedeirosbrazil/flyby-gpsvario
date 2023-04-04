@@ -1,4 +1,5 @@
 #include "src/defines.h"
+#include "src/helpers/helpers.h"
 #include "src/Screen/Screen.h"
 #include "src/Variometer/Variometer.h"
 #include "src/Beep/Beep.h"
@@ -23,14 +24,4 @@ void loop(void) {
   gps.tick();
 
   screen.draw();
-}
-
-void startSound()
-{
-  tone(SPEAKER_PIN, 300, 500);
-  delay(500);
-  tone(SPEAKER_PIN, 400, 500);
-  delay(500);
-  tone(SPEAKER_PIN, 500, 500);
-  delay(500);
 }

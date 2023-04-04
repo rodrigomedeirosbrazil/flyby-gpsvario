@@ -1,6 +1,6 @@
 {
-    "configuration": "cpu=8MHzatmega328",
-    "board": "arduino:avr:pro",
+    "configuration": "PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none",
+    "board": "esp32:esp32:esp32",
     "output": "./build",
     "debugger": "jlink",
     "sketch": "flyby-gpsvario.ino",
