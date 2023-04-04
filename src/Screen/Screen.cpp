@@ -65,42 +65,62 @@ void Screen::drawGpsScreen()
 
 void Screen::drawInfoScreen()
 {
-    if (this->variometer->isAvailable()) {
-        this->display->setCursor(0, 0);
-        this->display->print(this->variometer->getPressure());
+    this->display->setFont(SMALL_FONT);
 
-        this->display->setCursor(0, 8);
-        this->display->print(this->variometer->getAltitude());
+    this->display->setCursor(0, 0);
+    this->variometer->isAvailable() 
+        ?   this->display->print(this->variometer->getPressure())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(0, 16);
-        this->display->print(this->variometer->getVario());
+    this->display->setCursor(0, 8);
+    this->variometer->isAvailable() 
+        ?   this->display->print(this->variometer->getAltitude())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(0, 24);
-        this->display->print(this->variometer->getQnh());
+    this->display->setCursor(0, 16);
+    this->variometer->isAvailable() 
+        ?   this->display->print(this->variometer->getVario())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(0, 32);
-        this->display->print(this->variometer->getTemperature());
-    }
+    this->display->setCursor(0, 24);
+    this->variometer->isAvailable() 
+        ?   this->display->print(this->variometer->getQnh())
+        :   this->display->print(this->notAvailableText);
 
-    if (this->gps->isAvailable()) {
-        this->display->setCursor(64, 0);
-        this->display->print(this->gps->getLatitude());
+    this->display->setCursor(0, 32);
+    this->variometer->isAvailable() 
+        ?   this->display->print(this->variometer->getTemperature())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(64, 8);
-        this->display->print(this->gps->getLongitude());
+    this->display->setCursor(64, 0);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getLatitude())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(64, 16);
-        this->display->print(this->gps->getSpeed());
+    this->display->setCursor(64, 8);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getLongitude())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(64, 24);
-        this->display->print(this->gps->getHeading());
+    this->display->setCursor(64, 16);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getSpeed())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(64, 32);
-        this->display->print(this->gps->getHdop());
+    this->display->setCursor(64, 24);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getHeading())
+        :   this->display->print(this->notAvailableText);
 
-        this->display->setCursor(64, 40);
-        this->display->print(this->gps->getVdop());
-    }
+    this->display->setCursor(64, 32);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getHdop())
+        :   this->display->print(this->notAvailableText);
+
+    this->display->setCursor(64, 40);
+    this->gps->isAvailable() 
+        ?   this->display->print(this->gps->getVdop())
+        :   this->display->print(this->notAvailableText);
 }
 
 void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
