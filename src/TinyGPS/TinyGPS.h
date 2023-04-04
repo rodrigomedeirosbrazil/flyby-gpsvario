@@ -19,6 +19,8 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+** Add VDOP by Rodrigo Medeiros <rodrigo@medeirostec.com.br>
 */
 
 #ifndef TinyGPS_h
@@ -32,7 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <stdlib.h>
 
-#define _GPS_VERSION 13 // software version of this library
+#define _GPS_VERSION 14 // software version of this library
 #define _GPS_MPH_PER_KNOT 1.15077945
 #define _GPS_MPS_PER_KNOT 0.51444444
 #define _GPS_KMPH_PER_KNOT 1.852
@@ -48,7 +50,7 @@ public:
     GPS_INVALID_ALTITUDE = 999999999,  GPS_INVALID_DATE = 0,
     GPS_INVALID_TIME = 0xFFFFFFFF,		 GPS_INVALID_SPEED = 999999999, 
     GPS_INVALID_FIX_TIME = 0xFFFFFFFF, GPS_INVALID_SATELLITES = 0xFF,
-    GPS_INVALID_HDOP = 0xFFFFFFFF
+    GPS_INVALID_HDOP = 0xFFFFFFFF,     GPS_INVALID_VDOP = 0xFFFFFFFF
   };
 
   static const float GPS_INVALID_F_ANGLE, GPS_INVALID_F_ALTITUDE, GPS_INVALID_F_SPEED;
@@ -78,6 +80,7 @@ public:
 
   // horizontal dilution of precision in 100ths
   inline unsigned long hdop() { return _hdop; }
+  inline unsigned long vdop() { return _vdop; }
 
   void f_get_position(float *latitude, float *longitude, unsigned long *fix_age = 0);
   void crack_datetime(int *year, byte *month, byte *day, 
@@ -100,7 +103,7 @@ public:
 #endif
 
 private:
-  enum {_GPS_SENTENCE_GPGGA, _GPS_SENTENCE_GPRMC, _GPS_SENTENCE_OTHER};
+  enum {_GPS_SENTENCE_GPGGA, _GPS_SENTENCE_GPRMC, _GPS_SENTENCE_OTHER, _GPS_SENTENCE_GPGSA};
 
   // properties
   unsigned long _time, _new_time;
@@ -111,6 +114,7 @@ private:
   unsigned long  _speed, _new_speed;
   unsigned long  _course, _new_course;
   unsigned long  _hdop, _new_hdop;
+  unsigned long  _vdop, _new_vdop;
   unsigned short _numsats, _new_numsats;
 
   unsigned long _last_time_fix, _new_time_fix;
