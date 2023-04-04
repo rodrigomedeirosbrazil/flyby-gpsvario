@@ -16,6 +16,8 @@ class Gps
         float getSpeed();
         float getAltitude();
         float getHeading();
+        unsigned long getHdop();
+        unsigned long getVdop();
 
     private:
         TinyGPS *gpsParser;
@@ -28,6 +30,8 @@ class Gps
         float speed = 0;
         float altitude = 0;
         float heading = 0;
+        unsigned long hdop = 0;
+        unsigned long vdop = 0;
 
         void getParserData();
         bool gpsHasFreshData();

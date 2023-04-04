@@ -5,6 +5,7 @@
 #include "../Variometer/Variometer.h"
 #include "../Compass/Compass.h"
 #include "../Display/Display.h"
+#include "../Gps/Gps.h"
 
 #define GPS_SCREEN 0
 #define INFO_SCREEN 1
@@ -12,7 +13,7 @@
 class Screen
 {
     public:
-        Screen(Variometer *variometer);
+        Screen(Variometer *variometer, Gps *gps);
         void begin();
         void draw();
 
@@ -21,6 +22,7 @@ class Screen
         Compass *compass;
         Display *display;
         Variometer *variometer;
+        Gps *gps;
         unsigned long lastTimeScreenWasDrawn = 0;
         const char notAvailableText[4] = "N/A";
 

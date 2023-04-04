@@ -1,7 +1,7 @@
 #include "Screen.h"
 #include "../defines.h"
 
-Screen::Screen(Variometer *variometer)
+Screen::Screen(Variometer *variometer, Gps *gps)
 {
     #ifdef WOKWI
     this->display = new Display(U8G2_R0);
@@ -20,6 +20,7 @@ Screen::Screen(Variometer *variometer)
 
     this->compass = new Compass(this->display, 25, 25, 25);
     this->variometer = variometer;
+    this->gps = gps;
 }
 
 void Screen::begin()
@@ -64,13 +65,42 @@ void Screen::drawGpsScreen()
 
 void Screen::drawInfoScreen()
 {
-    drawInfoBox(this->variometer->getAltitude(), "m", 0, 0, this->variometer->isAvailable());
-    drawInfoBox(nullptr, "km/h", 0, 20, false);
-    drawInfoBox(this->variometer->getVario(), "m/s", 0, 40, this->variometer->isAvailable());
+    if (this->variometer->isAvailable()) {
+        this->display->setCursor(0, 0);
+        this->display->print(this->variometer->getPressure());
 
-    drawInfoBox(this->variometer->getPressure(), "Pa", 64, 0, this->variometer->isAvailable());
-    drawInfoBox(this->variometer->getTemperature(), "C", 64, 20, this->variometer->isAvailable());
-    drawInfoBox(this->variometer->getQnh(), "Pa", 64, 40, true);
+        this->display->setCursor(0, 8);
+        this->display->print(this->variometer->getAltitude());
+
+        this->display->setCursor(0, 16);
+        this->display->print(this->variometer->getVario());
+
+        this->display->setCursor(0, 24);
+        this->display->print(this->variometer->getQnh());
+
+        this->display->setCursor(0, 32);
+        this->display->print(this->variometer->getTemperature());
+    }
+
+    if (this->gps->isAvailable()) {
+        this->display->setCursor(64, 0);
+        this->display->print(this->gps->getLatitude());
+
+        this->display->setCursor(64, 8);
+        this->display->print(this->gps->getLongitude());
+
+        this->display->setCursor(64, 16);
+        this->display->print(this->gps->getSpeed());
+
+        this->display->setCursor(64, 24);
+        this->display->print(this->gps->getHeading());
+
+        this->display->setCursor(64, 32);
+        this->display->print(this->gps->getHdop());
+
+        this->display->setCursor(64, 40);
+        this->display->print(this->gps->getVdop());
+    }
 }
 
 void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)

@@ -77,6 +77,8 @@ void Gps::getParserData()
     this->speed = this->gpsParser->f_speed_kmph();
     this->altitude = this->gpsParser->f_altitude() / 100;
     this->heading = this->gpsParser->f_course();
+    this->hdop = this->gpsParser->hdop();
+    this->vdop = this->gpsParser->vdop();
 }
 
 bool Gps::isAvailable()
@@ -114,4 +116,19 @@ float Gps::getSpeed()
 float Gps::getAltitude()
 {
     return this->altitude;
+}
+
+float Gps::getHeading()
+{
+    return this->heading;
+}
+
+unsigned long Gps::getHdop()
+{
+    return this->hdop;
+}
+
+unsigned long Gps::getVdop()
+{
+    return this->vdop;
 }

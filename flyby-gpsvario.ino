@@ -2,10 +2,12 @@
 #include "src/Screen/Screen.h"
 #include "src/Variometer/Variometer.h"
 #include "src/Beep/Beep.h"
+#include "src/Gps/Gps.h"
 
 Variometer variometer;
+Gps gps;
 Beep beep(SPEAKER_PIN);
-Screen screen(&variometer);
+Screen screen(&variometer, &gps);
 
 void setup(void) {
   startSound();
@@ -16,10 +18,9 @@ void setup(void) {
 }
 
 void loop(void) {
-  #ifndef DEMO
-    variometer.tick();
-    beep.tick(variometer.getVario());
-  #endif
+  variometer.tick();
+  beep.tick(variometer.getVario());
+  gps.tick();
 
   screen.draw();
 }
