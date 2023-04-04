@@ -1,4 +1,4 @@
 [wokwi]
 version = 1
-firmware = './build/flyby-gpsvario.ino.hex'
+firmware = './build/flyby-gpsvario.ino.bin'
 elf = './build/flyby-gpsvario.ino.elf'
