@@ -7,18 +7,21 @@
 #include "../Display/Display.h"
 #include "../Gps/Gps.h"
 
-#define GPS_SCREEN 0
-#define INFO_SCREEN 1
 
 class Screen
 {
     public:
+        enum Screens {
+            GpsScreen,
+            InfoScreen
+        };
+
         Screen(Variometer *variometer, Gps *gps);
         void begin();
         void draw();
 
     private:
-        unsigned char screenSelected = INFO_SCREEN;
+        Screens screenSelected = InfoScreen;
         Compass *compass;
         Display *display;
         Variometer *variometer;

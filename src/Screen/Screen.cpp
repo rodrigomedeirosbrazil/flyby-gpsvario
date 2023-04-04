@@ -41,11 +41,11 @@ void Screen::draw()
     do {
         switch (this->screenSelected)
         {
-            case GPS_SCREEN:
+            case GpsScreen:
                 drawGpsScreen();
                 break;
 
-            case INFO_SCREEN:
+            case InfoScreen:
                 drawInfoScreen();
                 break;
 
