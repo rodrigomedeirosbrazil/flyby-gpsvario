@@ -14,6 +14,14 @@
 #define BIG_FONT_WIDTH 10
 #define BIG_FONT_HEIGHT 20
 
+#define FLYBY_GPS_VARIO
+
+#ifdef FLYBY_GPS_VARIO
+    #define SPEAKER_PIN 9
+    #define LCD_DATA_PIN 21  // SDA
+    #define LCD_CLOCK_PIN 22 // SCL
+#endif
+
 // #define SMARTVARIO
 
 #ifdef SMARTVARIO
@@ -25,7 +33,7 @@
     #define LCD_CLOCK_PIN 2 // SCL
 #endif
 
-#define WOKWI
+// #define WOKWI
 
 #ifdef WOKWI
     #define SPEAKER_PIN 13

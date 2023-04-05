@@ -3,6 +3,15 @@
 
 Screen::Screen(Variometer *variometer, Gps *gps)
 {
+    #ifdef FLYBY_GPS_VARIO
+    this->display = new Display(
+        U8G2_R2, 
+        LCD_CLOCK_PIN,
+        LCD_DATA_PIN,
+        U8X8_PIN_NONE
+    );
+    #endif
+
     #ifdef WOKWI
     this->display = new Display(U8G2_R0);
     #endif
@@ -25,8 +34,12 @@ Screen::Screen(Variometer *variometer, Gps *gps)
 
 void Screen::begin()
 {
+    // #ifdef FLYBY_GPS_VARIO
+    this->display->setI2CAddress(0x3F * 2);
+    // #endif
+
     this->display->begin();
-    this->display->setContrast(SCREEN_CONTRAST);
+    // this->display->setContrast(SCREEN_CONTRAST);
 }
 
 void Screen::draw()
