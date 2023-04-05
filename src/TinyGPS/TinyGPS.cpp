@@ -276,7 +276,7 @@ bool TinyGPS::term_complete()
     case COMBINE(_GPS_SENTENCE_GPGGA, 8): // HDOP
       _new_hdop = parse_decimal();
       break;
-    case COMBINE(_GPS_SENTENCE_GPGSA, 8): // VDOP
+    case COMBINE(_GPS_SENTENCE_GPGSA, 17): // VDOP
       _new_vdop = parse_decimal();
       break;
     case COMBINE(_GPS_SENTENCE_GPGGA, 9): // Altitude (GPGGA)
