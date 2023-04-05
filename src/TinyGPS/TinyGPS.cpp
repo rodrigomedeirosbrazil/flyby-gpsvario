@@ -270,6 +270,9 @@ bool TinyGPS::term_complete()
     case COMBINE(_GPS_SENTENCE_GPGGA, 6): // Fix data (GPGGA)
       _gps_data_good = _term[0] > '0';
       break;
+    case COMBINE(_GPS_SENTENCE_GPGSA, 2): // Fix data (GPGSA)
+      _gps_data_good = _term[0] == '3';
+      break;
     case COMBINE(_GPS_SENTENCE_GPGGA, 7): // Satellites used (GPGGA)
       _new_numsats = (unsigned char)atoi(_term);
       break;
