@@ -1,3 +1,8 @@
 {
-    "editor.autoIndent": "none"
+    "editor.autoIndent": "none",
+    "files.associations": {
+        "*.module": "php",
+        "array": "cpp",
+        "string": "cpp"
+    }
 }

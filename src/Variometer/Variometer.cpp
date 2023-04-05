@@ -3,7 +3,7 @@
 
 Variometer::Variometer() {
   #ifdef SMARTVARIO
-   if (barometer.begin(BMP085_ULTRAHIGHRES)) {
+  if (barometer.begin(BMP085_ULTRAHIGHRES)) {
     this->barometerInitialized = true;
   }
   #endif

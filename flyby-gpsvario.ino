@@ -11,7 +11,7 @@ Beep beep(SPEAKER_PIN);
 Screen screen(&variometer, &gps);
 
 void setup(void) {
-  startSound();
+  // startSound();
 
   delay(POWER_ON_DELAY);
 
