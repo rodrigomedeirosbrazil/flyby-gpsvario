@@ -1,6 +1,7 @@
 #ifndef GPS_H
 #define GPS_H
 
+#include <HardwareSerial.h>
 #include "../defines.h"
 #include "../TinyGPS/TinyGPS.h"
 
@@ -18,6 +19,8 @@ class Gps
         float getHeading();
         unsigned long getHdop();
         unsigned long getVdop();
+        unsigned short getSatellites();
+        // get date and time
 
     private:
         TinyGPS *gpsParser;
@@ -32,6 +35,8 @@ class Gps
         float heading = 0;
         unsigned long hdop = 0;
         unsigned long vdop = 0;
+        unsigned short satellites = 0;
+        HardwareSerial *serial2;
 
         void getParserData();
         bool gpsHasFreshData();

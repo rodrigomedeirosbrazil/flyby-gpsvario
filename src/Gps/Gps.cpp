@@ -1,6 +1,6 @@
+#include <HardwareSerial.h>
 #include "Gps.h"
 #include "../defines.h"
-
 /*
 $GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A
 $GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D
@@ -47,7 +47,8 @@ $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
 Gps::Gps()
 {
     this->gpsParser = new TinyGPS();
-    Serial.begin(GPS_SERIAL_BAUD_RATE);
+    serial2 = new HardwareSerial(2);
+    serial2->begin(GPS_BAUD_RATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
 }
 
 void Gps::tick()
@@ -59,9 +60,11 @@ void Gps::tick()
 
     bool dataIsAvailable = false;
 
-    while (Serial.available())
+    while (serial2->available())
     {
-        if (this->gpsParser->encode(Serial.read())) {
+        char c = serial2->read();
+        Serial.print(c);
+        if (this->gpsParser->encode(c)) {
             dataIsAvailable = true;
         }
     }
@@ -75,10 +78,11 @@ void Gps::getParserData()
 {
     this->gpsParser->f_get_position(&this->latitude, &this->longitude, &this->gpsFixAge);
     this->speed = this->gpsParser->f_speed_kmph();
-    this->altitude = this->gpsParser->f_altitude() / 100;
+    this->altitude = this->gpsParser->f_altitude();
     this->heading = this->gpsParser->f_course();
     this->hdop = this->gpsParser->hdop();
     this->vdop = this->gpsParser->vdop();
+    this->satellites = this->gpsParser->satellites();
 }
 
 bool Gps::isAvailable()
@@ -131,4 +135,9 @@ unsigned long Gps::getHdop()
 unsigned long Gps::getVdop()
 {
     return this->vdop;
+}
+
+unsigned short Gps::getSatellites()
+{
+    return this->satellites;
 }

@@ -1,6 +1,6 @@
 #define POWER_ON_DELAY 2000
 #define SCREEN_CONTRAST 60
-#define GPS_SERIAL_BAUD_RATE 9600
+#define GPS_BAUD_RATE 9600
 #define TIMEZONE -3
 
 #define INFOBOX_WIDTH 64
@@ -20,6 +20,8 @@
     #define SPEAKER_PIN 9
     #define LCD_DATA_PIN 21  // SDA
     #define LCD_CLOCK_PIN 22 // SCL
+    #define GPS_TX_PIN 17
+    #define GPS_RX_PIN 16
 #endif
 
 // #define SMARTVARIO

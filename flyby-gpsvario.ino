@@ -12,6 +12,7 @@ Screen screen(&variometer, &gps);
 
 void setup(void) {
   // startSound();
+  Serial.begin(115200);
 
   delay(POWER_ON_DELAY);
 
