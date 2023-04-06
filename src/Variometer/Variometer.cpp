@@ -57,7 +57,7 @@ long Variometer::getPressure()
   this->lastPressure;
 }
 
-int Variometer::calcAltitude(long pressure)
+float Variometer::calcAltitude(long pressure)
 {
   return 44330 * (1.0 - pow(pressure / this->qnh, 0.1903));
 }
@@ -76,7 +76,7 @@ float Variometer::getVario()
   return this->vario;
 }
 
-int Variometer::getAltitude()
+float Variometer::getAltitude()
 {
   return calcAltitude(this->lastPressure);
 }
@@ -91,7 +91,7 @@ long Variometer::getQnh()
   return this->qnh;
 }
 
-void Variometer::setQnhByAltitude(int altitude)
+void Variometer::setQnhByAltitude(float altitude)
 {
   setQnh(this->lastPressure / pow(1.0 - altitude / 44330.0, 5.255));
 }

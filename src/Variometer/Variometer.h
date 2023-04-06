@@ -13,12 +13,12 @@ class Variometer
         Variometer();
         void tick();
         long getPressure();
-        int getAltitude();
+        float getAltitude();
         float getTemperature();
         float getVario();
         void setQnh(long qnh);
         long getQnh();
-        void setQnhByAltitude(int altitude);
+        void setQnhByAltitude(float altitude);
         bool isAvailable();
 
     private:
@@ -33,7 +33,7 @@ class Variometer
         float timeArray[MAX_SAMPLES + 1];
 
         void calcVario();
-        int calcAltitude(long pressure);
+        float calcAltitude(long pressure);
         long getAveragePressure(long newPressure);
 };
 
