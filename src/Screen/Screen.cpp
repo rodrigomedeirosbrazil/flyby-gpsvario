@@ -88,7 +88,7 @@ void Screen::drawInfoScreen()
 
     this->display->setCursor(0, 16);
     this->variometer->isAvailable() 
-        ?   this->display->printf("Alt:%d", this->variometer->getAltitude())
+        ?   this->display->printf("Alt:%.0f", this->variometer->getAltitude())
         :   this->display->print("Alt: N/A");
 
     this->display->setCursor(0, 24);
