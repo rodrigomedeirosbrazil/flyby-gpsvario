@@ -12,7 +12,7 @@ Screen screen(&variometer, &gps);
 unsigned long smallerVdop = 9999;
 
 void setup(void) {
-  // startSound();
+  startSound();
 
   delay(POWER_ON_DELAY);
 
@@ -35,5 +35,5 @@ void autoAdjustQNH() {
 
   smallerVdop = gps.getVdop();
   variometer.setQnhByAltitude(gps.getAltitude());
-  // TODO: play notification sound
+  notificationSound();
 }

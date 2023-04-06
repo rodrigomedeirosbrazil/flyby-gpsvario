@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include "Beep.h"
-#include "../helpers/helpers.h"
 
 Beep::Beep(unsigned char pin)
 {
