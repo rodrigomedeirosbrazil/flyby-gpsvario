@@ -29,7 +29,7 @@ void loop(void) {
 }
 
 void autoAdjustQNH() {
-  if (! gps.isAvailable() || smallerVdop < gps.getVdop()) {
+  if (! gps.isAvailable() || smallerVdop <= gps.getVdop()) {
     return;
   }
 
