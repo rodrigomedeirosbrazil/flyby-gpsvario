@@ -20,11 +20,18 @@ class Gps
         unsigned long getHdop();
         unsigned long getVdop();
         unsigned short getSatellites();
-        // get date and time
+        void getDateTime(
+            int *year, 
+            byte *month, 
+            byte *day, 
+            byte *hour, 
+            byte *minute, 
+            byte *second
+        );
 
     private:
         TinyGPS *gpsParser;
-        byte bestVdop = 0;
+        HardwareSerial *serial2;
         unsigned long lastTimeGpsWasTicked = 0;
         unsigned long gpsFixAge = 0;
         bool dataAvailable = false;
@@ -36,7 +43,6 @@ class Gps
         unsigned long hdop = 0;
         unsigned long vdop = 0;
         unsigned short satellites = 0;
-        HardwareSerial *serial2;
 
         void getParserData();
         bool gpsHasFreshData();

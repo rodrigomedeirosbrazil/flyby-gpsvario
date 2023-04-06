@@ -2,7 +2,7 @@
 #include "Variometer.h"
 
 Variometer::Variometer() {
-  #ifdef SMARTVARIO
+  #ifdef SMARTVARIO || FLYBY_GPS_VARIO
   if (barometer.begin(BMP085_ULTRAHIGHRES)) {
     this->barometerInitialized = true;
   }

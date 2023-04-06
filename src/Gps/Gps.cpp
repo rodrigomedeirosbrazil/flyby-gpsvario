@@ -47,8 +47,10 @@ $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
 Gps::Gps()
 {
     this->gpsParser = new TinyGPS();
+    #ifdef FLYB_GPS_VARIO
     serial2 = new HardwareSerial(2);
     serial2->begin(GPS_BAUD_RATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+    #endif
 }
 
 void Gps::tick()
@@ -60,14 +62,40 @@ void Gps::tick()
 
     bool dataIsAvailable = false;
 
+    #ifdef SMARTVARIO || FLYBY_GPS_VARIO
     while (serial2->available())
     {
         char c = serial2->read();
-        Serial.print(c);
         if (this->gpsParser->encode(c)) {
             dataIsAvailable = true;
         }
     }
+    #endif
+    
+    #ifdef WOKWI
+    char GPGGA[] = "$GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A";
+    char GPGSA[] = "$GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39";
+    char GPRMC[] = "$GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D";
+    dataIsAvailable = true;
+
+    for(int i = 0; i < strlen(GPGGA); i++) {
+        this->gpsParser->encode(GPGGA[i]);
+    }
+    this->gpsParser->encode('\r');
+    this->gpsParser->encode('\n');
+
+    for(int i = 0; i < strlen(GPGSA); i++) {
+        this->gpsParser->encode(GPGSA[i]);
+    }
+    this->gpsParser->encode('\r');
+    this->gpsParser->encode('\n');
+
+    for(int i = 0; i < strlen(GPRMC); i++) {
+        this->gpsParser->encode(GPRMC[i]);
+    }
+    this->gpsParser->encode('\r');
+    this->gpsParser->encode('\n');
+    #endif
 
     if (dataIsAvailable) {
         getParserData();
@@ -140,4 +168,15 @@ unsigned long Gps::getVdop()
 unsigned short Gps::getSatellites()
 {
     return this->satellites;
+}
+
+void Gps::getDateTime(
+    int *year, 
+    byte *month, 
+    byte *day, 
+    byte *hour, 
+    byte *minute, 
+    byte *second
+) {
+    this->gpsParser->crack_datetime(year, month, day, hour, minute, second, nullptr);
 }
