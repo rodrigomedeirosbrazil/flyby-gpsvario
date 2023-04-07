@@ -74,7 +74,7 @@ void Gps::tick()
     
     #ifdef NO_GPS
     char GPGGA[] = "$GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A";
-    char GPGSA[] = "$GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39";
+    char GPGSA[] = "$GPGSA,A,2,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39";
     char GPRMC[] = "$GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D";
     dataIsAvailable = true;
 
@@ -115,7 +115,8 @@ void Gps::getParserData()
 
 bool Gps::isAvailable()
 {
-    return gpsHasFreshData() && isValidData();
+    return gpsHasFreshData() 
+        && isValidData();
 }
 
 bool Gps::gpsHasFreshData()
@@ -127,7 +128,8 @@ bool Gps::gpsHasFreshData()
 bool Gps::isValidData()
 {
     return this->latitude != this->gpsParser->GPS_INVALID_ANGLE 
-        && this->longitude != this->gpsParser->GPS_INVALID_ANGLE;
+        && this->longitude != this->gpsParser->GPS_INVALID_ANGLE
+        && this->gpsParser->vdop() != this->gpsParser->GPS_INVALID_VDOP;
 }
 
 float Gps::getLatitude()
