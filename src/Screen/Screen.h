@@ -28,6 +28,8 @@ class Screen
         Gps *gps;
         unsigned long lastTimeScreenWasDrawn = 0;
         const char notAvailableText[4] = "N/A";
+        const char spinner[4] = {'-', '\\', '|', '/'};
+        byte spinnerIndex = 0;
 
         void drawGpsScreen();
         void drawInfoScreen();

@@ -115,6 +115,9 @@ void Screen::drawInfoScreen()
 
         this->display->setCursor(0, 56);
         this->display->printf("%02d:%02d:%02d", hour, minute, second);
+
+        this->display->setCursor(0, 64);
+        this->display->printf("TMZ: %d", TIMEZONE);
     }
 
     this->display->setCursor(64, 8);
@@ -140,6 +143,14 @@ void Screen::drawInfoScreen()
 
     this->display->setCursor(64, 64);
     this->display->printf("Alt:%.0f", this->gps->getAltitude());
+
+    this->display->setCursor(123, 64);
+    this->display->print(spinner[spinnerIndex]);
+    if (spinnerIndex == 3) {
+        spinnerIndex = 0;
+    } else {
+        spinnerIndex++;
+    }
 }
 
 void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
