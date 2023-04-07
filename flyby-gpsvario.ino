@@ -5,10 +5,10 @@
 #include "src/Beep/Beep.h"
 #include "src/Gps/Gps.h"
 
-Variometer variometer;
-Gps gps;
-Beep beep(SPEAKER_PIN);
-Screen screen(&variometer, &gps);
+Variometer *variometer;
+Gps *gps;
+Beep *beep;
+Screen *screen;
 unsigned long smallerVdop = 9999;
 
 void setup(void) {
@@ -16,24 +16,29 @@ void setup(void) {
 
   delay(POWER_ON_DELAY);
 
-  screen.begin();
+  variometer = new Variometer();
+  gps = new Gps();
+  beep = new Beep(SPEAKER_PIN);
+  screen = new Screen(variometer, gps);
+
+  screen->begin();
 }
 
 void loop(void) {
-  variometer.tick();
-  beep.tick(variometer.getVario());
-  gps.tick();
+  variometer->tick();
+  beep->tick(variometer->getVario());
+  gps->tick();
   autoAdjustQNH();
 
-  screen.draw();
+  screen->draw();
 }
 
 void autoAdjustQNH() {
-  if (! gps.isAvailable() || smallerVdop <= gps.getVdop()) {
+  if (! gps->isAvailable() || smallerVdop <= gps->getVdop()) {
     return;
   }
 
-  smallerVdop = gps.getVdop();
-  variometer.setQnhByAltitude(gps.getAltitude());
+  smallerVdop = gps->getVdop();
+  variometer->setQnhByAltitude(gps->getAltitude());
   notificationSound();
 }
