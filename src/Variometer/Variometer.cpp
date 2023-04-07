@@ -2,7 +2,7 @@
 #include "Variometer.h"
 
 Variometer::Variometer() {
-  #ifdef NO_BAROMETER
+  #ifndef NO_BAROMETER
   if (barometer.begin(BMP085_ULTRAHIGHRES)) {
     this->barometerInitialized = true;
   }
@@ -54,12 +54,12 @@ void Variometer::calcVario()
 
 long Variometer::getPressure()
 {
-  this->lastPressure;
+  return this->lastPressure;
 }
 
 float Variometer::calcAltitude(long pressure)
 {
-  return 44330 * (1.0 - pow(pressure / this->qnh, 0.1903));
+  return 44330 * (1.0 - pow((float) pressure / (float) this->qnh, 0.1903));
 }
 
 float Variometer::getTemperature()
