@@ -4,7 +4,9 @@
 #include <Arduino.h>
 
 void startSound();
-void notificationSound();
+void oneUpSound();
+void coinSound();
+void fireballSound();
 void adjustTimezone(int timezone, int *year, byte *month, byte *day, byte *hour);
 
 #endif

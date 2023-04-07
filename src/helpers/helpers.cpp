@@ -11,7 +11,7 @@ void startSound()
   delay(500);
 }
 
-void notificationSound()
+void oneUpSound()
 {
     tone(SPEAKER_PIN,1319,125);
     delay(130);
@@ -25,6 +25,26 @@ void notificationSound()
     delay(130);
     tone(SPEAKER_PIN,3136,125);
     delay(125);
+    noTone(SPEAKER_PIN);
+}
+
+void coinSound()
+{
+    tone(SPEAKER_PIN, 988, 100);
+    delay(100);
+    tone(SPEAKER_PIN, 1319, 500);
+    delay(800);
+    noTone(SPEAKER_PIN);
+}
+  
+void fireballSound()
+{
+    tone(SPEAKER_PIN,196,35);
+    delay(35);
+    tone(SPEAKER_PIN,784,35);
+    delay(35);
+    tone(SPEAKER_PIN,1568,35);
+    delay(35);
     noTone(SPEAKER_PIN);
 }
 

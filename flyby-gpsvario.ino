@@ -40,5 +40,5 @@ void autoAdjustQNH() {
 
   smallerVdop = gps->getVdop();
   variometer->setQnhByAltitude(gps->getAltitude());
-  notificationSound();
+  coinSound();
 }
