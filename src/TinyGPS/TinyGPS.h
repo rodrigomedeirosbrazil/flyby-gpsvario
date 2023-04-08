@@ -82,6 +82,9 @@ public:
   inline unsigned long hdop() { return _hdop; }
   inline unsigned long vdop() { return _vdop; }
 
+  inline unsigned long date() { return _date; }
+  inline unsigned long time() { return _time; }
+
   void f_get_position(float *latitude, float *longitude, unsigned long *fix_age = 0);
   void crack_datetime(int *year, byte *month, byte *day, 
     byte *hour, byte *minute, byte *second, byte *hundredths = 0, unsigned long *fix_age = 0);
