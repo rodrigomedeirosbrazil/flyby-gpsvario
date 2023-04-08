@@ -2,9 +2,7 @@
 #define SCREEN_CONTRAST 60
 #define GPS_BAUD_RATE 9600
 #define TIMEZONE -3
-
-#define INFOBOX_WIDTH 64
-#define INFOBOX_HEIGHT 20
+#define TAKEOFF_SPEED 6
 
 #define SMALL_FONT u8g_font_5x7
 #define SMALL_FONT_WIDTH 5
