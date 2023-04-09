@@ -20,14 +20,8 @@ class Gps
         unsigned long getHdop();
         unsigned long getVdop();
         unsigned short getSatellites();
-        void getDateTime(
-            int *year, 
-            byte *month, 
-            byte *day, 
-            byte *hour, 
-            byte *minute, 
-            byte *second
-        );
+        unsigned long getDate();
+        unsigned long getTime();
 
     private:
         TinyGPS *gpsParser;
@@ -37,12 +31,6 @@ class Gps
         bool dataAvailable = false;
         float latitude = 0;
         float longitude = 0;
-        float speed = 0;
-        float altitude = 0;
-        float heading = 0;
-        unsigned long hdop = 0;
-        unsigned long vdop = 0;
-        unsigned short satellites = 0;
 
         void getParserData();
         bool gpsHasFreshData();

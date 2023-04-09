@@ -73,6 +73,7 @@ void Gps::tick()
     #endif
     
     #ifdef NO_GPS
+    delay(2000);
     char GPGGA[] = "$GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A";
     char GPGSA[] = "$GPGSA,A,2,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39";
     char GPRMC[] = "$GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D";
@@ -105,12 +106,6 @@ void Gps::tick()
 void Gps::getParserData()
 {
     this->gpsParser->f_get_position(&this->latitude, &this->longitude, &this->gpsFixAge);
-    this->speed = this->gpsParser->f_speed_kmph();
-    this->altitude = this->gpsParser->f_altitude();
-    this->heading = this->gpsParser->f_course();
-    this->hdop = this->gpsParser->hdop();
-    this->vdop = this->gpsParser->vdop();
-    this->satellites = this->gpsParser->satellites();
 }
 
 bool Gps::isAvailable()
@@ -144,41 +139,40 @@ float Gps::getLongitude()
 
 float Gps::getSpeed()
 {
-    return this->speed;
+    return this->gpsParser->f_speed_kmph();
 }
 
 float Gps::getAltitude()
 {
-    return this->altitude;
+    return this->gpsParser->f_altitude();
 }
 
 float Gps::getHeading()
 {
-    return this->heading;
+    return this->gpsParser->f_course();
 }
 
 unsigned long Gps::getHdop()
 {
-    return this->hdop;
+    return this->gpsParser->hdop();
 }
 
 unsigned long Gps::getVdop()
 {
-    return this->vdop;
+    return this->gpsParser->vdop();
 }
 
 unsigned short Gps::getSatellites()
 {
-    return this->satellites;
+    return this->gpsParser->satellites();
 }
 
-void Gps::getDateTime(
-    int *year, 
-    byte *month, 
-    byte *day, 
-    byte *hour, 
-    byte *minute, 
-    byte *second
-) {
-    this->gpsParser->crack_datetime(year, month, day, hour, minute, second, nullptr);
+unsigned long Gps::getDate()
+{
+    return this->gpsParser->date();
+}
+
+unsigned long Gps::getTime()
+{
+    return this->gpsParser->time();
 }
