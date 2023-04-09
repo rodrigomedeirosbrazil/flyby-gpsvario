@@ -3,7 +3,7 @@
 #include "../defines.h"
 #include "../helpers/helpers.h"
 
-Screen::Screen(Variometer *variometer, Gps *gps)
+Screen::Screen(FlightCpu *flightCpu)
 {
     #ifdef FLYBY_GPS_VARIO
     this->display = new Display(
@@ -29,9 +29,8 @@ Screen::Screen(Variometer *variometer, Gps *gps)
     );
     #endif
 
+    this->flightCpu = flightCpu;
     this->compass = new Compass(this->display, 25, 25, 25);
-    this->variometer = variometer;
-    this->gps = gps;
 }
 
 void Screen::begin()
@@ -51,7 +50,7 @@ void Screen::draw()
     }
     this->lastTimeScreenWasDrawn = millis();
 
-    this->screenSelected = this->gps->isAvailable() 
+    this->screenSelected = this->flightCpu->getGps()->isAvailable() 
         ? GpsScreen 
         : InfoScreen;
 
@@ -75,10 +74,19 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    this->compass->draw(this->gps->getHeading());
-    drawInfoBox(this->variometer->getAltitude(), "m", 64, 0, this->variometer->isAvailable());
-    drawInfoBox(this->gps->getSpeed(), "km/h", 64, 20, this->gps->isAvailable());
-    drawInfoBox(this->variometer->getVario(), "m/s", 64, 40, this->variometer->isAvailable());
+    this->compass->draw(this->flightCpu->getGps()->getHeading());
+    drawInfoBox(this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getVariometer()->isAvailable());
+    drawInfoBox(this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
+    drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getVariometer()->isAvailable());
+
+    if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
+        this->display->setFont(SMALL_FONT);
+        this->display->setCursor(54, 64);
+        
+        unsigned int hours = this->flightCpu->getFlightTime() / 3600;
+        unsigned int minutes = (this->flightCpu->getFlightTime() % 3600) / 60;
+        this->display->printf("%01d:%02d", hours, minutes);
+    }
 }
 
 void Screen::drawInfoScreen()
@@ -86,29 +94,29 @@ void Screen::drawInfoScreen()
     this->display->setFont(SMALL_FONT);
 
     this->display->setCursor(0, 8);
-    this->variometer->isAvailable() 
-        ?   this->display->printf("Pre:%ld", this->variometer->getPressure())
+    this->flightCpu->getVariometer()->isAvailable() 
+        ?   this->display->printf("Pre:%ld", this->flightCpu->getVariometer()->getPressure())
         :   this->display->print("Pre: N/A");
 
     this->display->setCursor(0, 16);
-    this->variometer->isAvailable() 
-        ?   this->display->printf("Alt:%.0f", this->variometer->getAltitude())
+    this->flightCpu->getVariometer()->isAvailable() 
+        ?   this->display->printf("Alt:%.0f", this->flightCpu->getVariometer()->getAltitude())
         :   this->display->print("Alt: N/A");
 
     this->display->setCursor(0, 24);
-    this->variometer->isAvailable() 
-        ?   this->display->printf("Var:%.1f", this->variometer->getVario())
+    this->flightCpu->getVariometer()->isAvailable() 
+        ?   this->display->printf("Var:%.1f", this->flightCpu->getVariometer()->getVario())
         :   this->display->print("Var: N/A");
 
     this->display->setCursor(0, 32);
-    this->display->printf("QNH:%ld", this->variometer->getQnh());
+    this->display->printf("QNH:%ld", this->flightCpu->getVariometer()->getQnh());
 
     this->display->setCursor(0, 40);
-    this->variometer->isAvailable() 
-        ?   this->display->printf("Tmp:%.1f", this->variometer->getTemperature())
+    this->flightCpu->getVariometer()->isAvailable() 
+        ?   this->display->printf("Tmp:%.1f", this->flightCpu->getVariometer()->getTemperature())
         :   this->display->print("Tmp: N/A");
 
-    unsigned long unixtime = convertDateAndTimeEpochTime(this->gps->getDate(), this->gps->getTime());
+    unsigned long unixtime = convertDateAndTimeEpochTime(this->flightCpu->getGps()->getDate(), this->flightCpu->getGps()->getTime());
 
     time_t t = unixtime - (TIMEZONE * 3600);
     struct tm *timestamp = gmtime(&t);
@@ -123,28 +131,28 @@ void Screen::drawInfoScreen()
     this->display->printf("TMZ: %d", TIMEZONE);
 
     this->display->setCursor(64, 8);
-    this->display->printf("Lat:%.6f", this->gps->getLatitude());
+    this->display->printf("Lat:%.6f", this->flightCpu->getGps()->getLatitude());
 
     this->display->setCursor(64, 16);
-    this->display->printf("Lon:%.6f", this->gps->getLongitude());
+    this->display->printf("Lon:%.6f", this->flightCpu->getGps()->getLongitude());
 
     this->display->setCursor(64, 24);
-    this->display->printf("Spd:%.1f", this->gps->getSpeed());
+    this->display->printf("Spd:%.1f", this->flightCpu->getGps()->getSpeed());
 
     this->display->setCursor(64, 32);
-    this->display->printf("Hed:%.0f", this->gps->getHeading());
+    this->display->printf("Hed:%.0f", this->flightCpu->getGps()->getHeading());
 
     this->display->setCursor(64, 40);
-    this->display->printf("HDP:%ld", this->gps->getHdop());
+    this->display->printf("HDP:%ld", this->flightCpu->getGps()->getHdop());
 
     this->display->setCursor(64, 48);
-    this->display->printf("VDP:%ld", this->gps->getVdop());
+    this->display->printf("VDP:%ld", this->flightCpu->getGps()->getVdop());
 
     this->display->setCursor(64, 56);
-    this->display->printf("Sat:%d", this->gps->getSatellites());
+    this->display->printf("Sat:%d", this->flightCpu->getGps()->getSatellites());
 
     this->display->setCursor(64, 64);
-    this->display->printf("Alt:%.0f", this->gps->getAltitude());
+    this->display->printf("Alt:%.0f", this->flightCpu->getGps()->getAltitude());
 
     this->display->setCursor(123, 64);
     this->display->print(spinner[spinnerIndex]);

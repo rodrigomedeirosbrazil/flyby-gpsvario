@@ -2,14 +2,14 @@
 #define SCREEN_H
 
 #include "../defines.h"
-#include "../Variometer/Variometer.h"
 #include "../Compass/Compass.h"
 #include "../Display/Display.h"
-#include "../Gps/Gps.h"
+#include "../FlightCpu/FlightCpu.h"
 
 #define INFOBOX_WIDTH 64
 #define INFOBOX_HEIGHT 20
 
+class FlightCpu;
 class Screen
 {
     public:
@@ -18,7 +18,7 @@ class Screen
             InfoScreen
         };
 
-        Screen(Variometer *variometer, Gps *gps);
+        Screen(FlightCpu *flightCpu);
         void begin();
         void draw();
 
@@ -26,8 +26,7 @@ class Screen
         Screens screenSelected = InfoScreen;
         Compass *compass;
         Display *display;
-        Variometer *variometer;
-        Gps *gps;
+        FlightCpu *flightCpu;
         unsigned long lastTimeScreenWasDrawn = 0;
         const char notAvailableText[4] = "N/A";
         const char spinner[4] = {'-', '\\', '|', '/'};

@@ -1,18 +1,40 @@
 #include "FlightCpu.h"
 
-FlightCpu::FlightCpu(
-    Variometer *variometer,
-    Gps *gps,
-    Beep *beep,
-    Screen *screen
-) {
-    this->variometer = variometer;
-    this->gps = gps;
-    this->beep = beep;
-    this->screen = screen;
+FlightCpu::FlightCpu() {
+    this->variometer = new Variometer();
+    this->beep = new Beep(SPEAKER_PIN);
+    this->gps = new Gps();
+    this->screen = new Screen(this);
+
+    this->screen->begin();
+}
+
+Variometer* FlightCpu::getVariometer() {
+    return this->variometer;
+}
+
+Gps* FlightCpu::getGps() {
+    return this->gps;
+}
+
+Beep* FlightCpu::getBeep() {
+    return this->beep;
+}
+
+Screen* FlightCpu::getScreen() {
+    return this->screen;
 }
 
 void FlightCpu::tick() {
+    variometer->tick();
+    
+    if (inFlight) {
+      beep->tick(this->variometer->getVario());
+    }
+
+    gps->tick();
+    screen->draw();
+
     bySecondTask();
 }
 
@@ -39,6 +61,7 @@ void FlightCpu::autoAdjustQNH() {
 void FlightCpu::checkInFlight() {
   if (! inFlight && gps->getSpeed() > TAKEOFF_SPEED && inFlightCounter == 4) {
     inFlight = true;
+    inFlightCounter = 0;
     startFlightTime = millis(); // TODO: change to timestamp
     oneUpSound();
   } else if (! inFlight && gps->getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
@@ -47,6 +70,7 @@ void FlightCpu::checkInFlight() {
     inFlightCounter = 0;
   } else if (inFlight && gps->getSpeed() < TAKEOFF_SPEED && inFlightCounter == 4) {
     inFlight = false;
+    inFlightCounter = 0;
     fireballSound();
     fireballSound();
     fireballSound();
@@ -63,5 +87,5 @@ unsigned long FlightCpu::getFlightTime()
     return 0;
   }
 
-  return millis() - startFlightTime;
+  return (millis() - startFlightTime) / 1000;
 }

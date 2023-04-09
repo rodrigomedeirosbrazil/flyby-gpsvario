@@ -1,25 +1,25 @@
 #ifndef FLIGHTCPU_H
 #define FLIGHTCPU_H
 
+#include "../defines.h"
+#include "../helpers/helpers.h"
 #include "../Variometer/Variometer.h"
 #include "../Gps/Gps.h"
 #include "../Beep/Beep.h"
 #include "../Screen/Screen.h"
-#include "../defines.h"
-#include "../helpers/helpers.h"
 
+class Screen;
 class FlightCpu
 {
     public:
-        FlightCpu(
-            Variometer *variometer,
-            Gps *gps,
-            Beep *beep,
-            Screen *screen
-        );
+        FlightCpu();
         void tick();
         void autoAdjustQNH();
         unsigned long getFlightTime();
+        Variometer* getVariometer();
+        Gps* getGps();
+        Beep* getBeep();
+        Screen* getScreen();
 
     private:
         void bySecondTask();
