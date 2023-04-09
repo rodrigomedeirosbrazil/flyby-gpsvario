@@ -7,6 +7,10 @@ void startSound();
 void oneUpSound();
 void coinSound();
 void fireballSound();
-void adjustTimezone(int timezone, int *year, byte *month, byte *day, byte *hour);
+
+unsigned long convertDateAndTimeEpochTime(
+    unsigned long date, // format ddmmyy
+    unsigned long time // format hhmmsscc
+);
 
 #endif
