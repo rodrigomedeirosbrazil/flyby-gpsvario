@@ -7,6 +7,8 @@
 #include "../Display/Display.h"
 #include "../Gps/Gps.h"
 
+#define INFOBOX_WIDTH 64
+#define INFOBOX_HEIGHT 20
 
 class Screen
 {

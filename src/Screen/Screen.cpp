@@ -1,3 +1,4 @@
+#include <time.h>
 #include "Screen.h"
 #include "../defines.h"
 #include "../helpers/helpers.h"
@@ -48,8 +49,11 @@ void Screen::draw()
     if (millis() - this->lastTimeScreenWasDrawn < 1000) {
         return;
     }
-
     this->lastTimeScreenWasDrawn = millis();
+
+    this->screenSelected = this->gps->isAvailable() 
+        ? GpsScreen 
+        : InfoScreen;
 
     this->display->firstPage();
     do {
@@ -71,9 +75,9 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    this->compass->draw(0);
+    this->compass->draw(this->gps->getHeading());
     drawInfoBox(this->variometer->getAltitude(), "m", 64, 0, this->variometer->isAvailable());
-    drawInfoBox(nullptr, "km/h", 64, 20, false);
+    drawInfoBox(this->gps->getSpeed(), "km/h", 64, 20, this->gps->isAvailable());
     drawInfoBox(this->variometer->getVario(), "m/s", 64, 40, this->variometer->isAvailable());
 }
 
@@ -104,21 +108,19 @@ void Screen::drawInfoScreen()
         ?   this->display->printf("Tmp:%.1f", this->variometer->getTemperature())
         :   this->display->print("Tmp: N/A");
 
-    if (this->gps->isAvailable()) {
-        int year;
-        byte month, day, hour, minute, second;
-        this->gps->getDateTime(&year, &month, &day, &hour, &minute, &second);
-        adjustTimezone(TIMEZONE, &year, &month, &day, &hour);
+    unsigned long unixtime = convertDateAndTimeEpochTime(this->gps->getDate(), this->gps->getTime());
 
-        this->display->setCursor(0, 48);
-        this->display->printf("%04d-%02d-%02d", year, month, day);
+    time_t t = unixtime - (TIMEZONE * 3600);
+    struct tm *timestamp = gmtime(&t);
 
-        this->display->setCursor(0, 56);
-        this->display->printf("%02d:%02d:%02d", hour, minute, second);
+    this->display->setCursor(0, 48);
+    this->display->printf("%04d-%02d-%02d", timestamp->tm_year + 1900, timestamp->tm_mon + 1, timestamp->tm_mday);
 
-        this->display->setCursor(0, 64);
-        this->display->printf("TMZ: %d", TIMEZONE);
-    }
+    this->display->setCursor(0, 56);
+    this->display->printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
+
+    this->display->setCursor(0, 64);
+    this->display->printf("TMZ: %d", TIMEZONE);
 
     this->display->setCursor(64, 8);
     this->display->printf("Lat:%.6f", this->gps->getLatitude());
