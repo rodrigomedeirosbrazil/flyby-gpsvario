@@ -37,6 +37,7 @@ TinyGPS::TinyGPS()
   ,  _course(GPS_INVALID_ANGLE)
   ,  _hdop(GPS_INVALID_HDOP)
   ,  _vdop(GPS_INVALID_VDOP)
+  ,  _pdop(GPS_INVALID_PDOP)
   ,  _numsats(GPS_INVALID_SATELLITES)
   ,  _last_time_fix(GPS_INVALID_FIX_TIME)
   ,  _last_position_fix(GPS_INVALID_FIX_TIME)
@@ -200,6 +201,7 @@ bool TinyGPS::term_complete()
           break;
         case _GPS_SENTENCE_GPGSA:
           _vdop      = _new_vdop;
+          _pdop      = _new_pdop;
           break;
         }
 
@@ -278,6 +280,9 @@ bool TinyGPS::term_complete()
       break;
     case COMBINE(_GPS_SENTENCE_GPGGA, 8): // HDOP
       _new_hdop = parse_decimal();
+      break;
+    case COMBINE(_GPS_SENTENCE_GPGSA, 15): // PDOP
+      _new_pdop = parse_decimal();
       break;
     case COMBINE(_GPS_SENTENCE_GPGSA, 17): // VDOP
       _new_vdop = parse_decimal();

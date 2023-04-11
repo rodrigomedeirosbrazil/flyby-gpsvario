@@ -19,6 +19,7 @@ class Gps
         float getHeading();
         unsigned long getHdop();
         unsigned long getVdop();
+        unsigned long getPdop();
         unsigned short getSatellites();
         unsigned long getDate();
         unsigned long getTime();

@@ -79,6 +79,11 @@ void Screen::drawGpsScreen()
     drawInfoBox(this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
     drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getVariometer()->isAvailable());
 
+
+    this->display->setFont(SMALL_FONT);
+    this->display->setCursor(54, 48);
+    this->display->printf("%ld", this->flightCpu->getGps()->getPdop());
+
     if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
         this->display->setFont(SMALL_FONT);
         this->display->setCursor(54, 64);
@@ -143,7 +148,7 @@ void Screen::drawInfoScreen()
     this->display->printf("Hed:%.0f", this->flightCpu->getGps()->getHeading());
 
     this->display->setCursor(64, 40);
-    this->display->printf("HDP:%ld", this->flightCpu->getGps()->getHdop());
+    this->display->printf("PDP:%ld", this->flightCpu->getGps()->getPdop());
 
     this->display->setCursor(64, 48);
     this->display->printf("VDP:%ld", this->flightCpu->getGps()->getVdop());

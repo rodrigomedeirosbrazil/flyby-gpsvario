@@ -162,6 +162,11 @@ unsigned long Gps::getVdop()
     return this->gpsParser->vdop();
 }
 
+unsigned long Gps::getPdop()
+{
+    return this->gpsParser->pdop();
+}
+
 unsigned short Gps::getSatellites()
 {
     return this->gpsParser->satellites();
