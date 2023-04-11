@@ -84,6 +84,9 @@ void Screen::drawGpsScreen()
     this->display->setCursor(54, 48);
     this->display->printf("%ld", this->flightCpu->getGps()->getPdop());
 
+    this->display->setCursor(54, 56);
+    this->display->printf("%ld", this->flightCpu->getGps()->getVdop());
+
     if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
         this->display->setFont(SMALL_FONT);
         this->display->setCursor(54, 64);
@@ -121,19 +124,22 @@ void Screen::drawInfoScreen()
         ?   this->display->printf("Tmp:%.1f", this->flightCpu->getVariometer()->getTemperature())
         :   this->display->print("Tmp: N/A");
 
-    unsigned long unixtime = convertDateAndTimeEpochTime(this->flightCpu->getGps()->getDate(), this->flightCpu->getGps()->getTime());
-
-    time_t t = unixtime - (TIMEZONE * 3600);
-    struct tm *timestamp = gmtime(&t);
-
     this->display->setCursor(0, 48);
-    this->display->printf("%04d-%02d-%02d", timestamp->tm_year + 1900, timestamp->tm_mon + 1, timestamp->tm_mday);
-
-    this->display->setCursor(0, 56);
-    this->display->printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
-
-    this->display->setCursor(0, 64);
     this->display->printf("TMZ: %d", TIMEZONE);
+
+    if (this->flightCpu->getGps()->isAvailable()) {
+        unsigned long unixtime = convertDateAndTimeEpochTime(this->flightCpu->getGps()->getDate(), this->flightCpu->getGps()->getTime());
+
+        time_t t = unixtime - (TIMEZONE * 3600);
+        struct tm *timestamp = gmtime(&t);
+
+        this->display->setCursor(0, 56);
+        this->display->printf("%04d-%02d-%02d", timestamp->tm_year + 1900, timestamp->tm_mon + 1, timestamp->tm_mday);
+
+        this->display->setCursor(0, 64);
+        this->display->printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
+    }
+    
 
     this->display->setCursor(64, 8);
     this->display->printf("Lat:%.6f", this->flightCpu->getGps()->getLatitude());

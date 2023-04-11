@@ -20,6 +20,7 @@ class FlightCpu
         Gps* getGps();
         Beep* getBeep();
         Screen* getScreen();
+        inline unsigned long getSmallerVdop() { return smallerVdop; }
 
     private:
         void bySecondTask();
