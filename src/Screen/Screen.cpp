@@ -82,7 +82,7 @@ void Screen::drawGpsScreen()
 
     this->display->setFont(SMALL_FONT);
     this->display->setCursor(54, 8);
-    this->display->printf("%.0fm", this->flightCpu->getVariometer()->getAltitude());
+    this->display->printf("%.0fm", this->flightCpu->getGps()->getAltitude());
 
     this->display->setCursor(54, 32);
     this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
