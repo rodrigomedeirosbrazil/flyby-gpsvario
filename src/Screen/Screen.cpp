@@ -75,12 +75,21 @@ void Screen::draw()
 void Screen::drawGpsScreen()
 {
     this->compass->draw(this->flightCpu->getGps()->getHeading());
-    drawInfoBox(this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getVariometer()->isAvailable());
-    drawInfoBox(this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
+    drawInfoBox((int) this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getVariometer()->isAvailable());
+    drawInfoBox((int) this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
     drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getVariometer()->isAvailable());
 
 
     this->display->setFont(SMALL_FONT);
+    this->display->setCursor(54, 8);
+    this->display->printf("%.0fm", this->flightCpu->getVariometer()->getAltitude());
+
+    this->display->setCursor(54, 32);
+    this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
+
+    this->display->setCursor(54, 40);
+    this->display->printf("%ld", this->flightCpu->getWind()->getDirection());
+
     this->display->setCursor(54, 48);
     this->display->printf("%ld", this->flightCpu->getGps()->getPdop());
 

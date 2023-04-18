@@ -5,6 +5,7 @@ FlightCpu::FlightCpu() {
     this->beep = new Beep(SPEAKER_PIN);
     this->gps = new Gps();
     this->screen = new Screen(this);
+    this->wind = new Wind();
 
     this->screen->begin();
 }
@@ -23,6 +24,10 @@ Beep* FlightCpu::getBeep() {
 
 Screen* FlightCpu::getScreen() {
     return this->screen;
+}
+
+Wind* FlightCpu::getWind() {
+    return this->wind;
 }
 
 void FlightCpu::tick() {
@@ -46,6 +51,9 @@ void FlightCpu::bySecondTask() {
 
     autoAdjustQNH();
     checkInFlight();
+    if (inFlight) {
+      wind->storeSpeed(gps->getHeading(), gps->getSpeed());
+    }
 }
 
 void FlightCpu::autoAdjustQNH() {

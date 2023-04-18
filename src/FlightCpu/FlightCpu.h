@@ -7,6 +7,7 @@
 #include "../Gps/Gps.h"
 #include "../Beep/Beep.h"
 #include "../Screen/Screen.h"
+#include "../Wind/Wind.h"
 
 class Screen;
 class FlightCpu
@@ -20,6 +21,7 @@ class FlightCpu
         Gps* getGps();
         Beep* getBeep();
         Screen* getScreen();
+        Wind* getWind();
         inline unsigned long getSmallerVdop() { return smallerVdop; }
 
     private:
@@ -30,6 +32,7 @@ class FlightCpu
         Gps *gps;
         Beep *beep;
         Screen *screen;
+        Wind *wind;
 
         unsigned long smallerVdop = 9999;
         unsigned long lastTimeBySecondTask = 0;
