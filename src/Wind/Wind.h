@@ -1,11 +1,10 @@
 #ifndef WIND_H
 #define WIND_H
 
-#include <Arduino.h>
 class Wind
 {
     public:
-        void storeSpeed(unsigned long heading, float speed);
+        void storeSpeed(unsigned long heading, float speed, unsigned long now);
         bool isAvailable();
         float getSpeed();
         unsigned long getDirection();
@@ -17,7 +16,7 @@ class Wind
         float speeds[16];
         unsigned long times[16];
 
-        void calcWind();
+        void calcWind(unsigned long now);
 };
 
 #endif

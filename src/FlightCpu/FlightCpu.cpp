@@ -52,7 +52,7 @@ void FlightCpu::bySecondTask() {
     autoAdjustQNH();
     checkInFlight();
     if (inFlight) {
-      wind->storeSpeed(gps->getHeading(), gps->getSpeed());
+      wind->storeSpeed(gps->getHeading(), gps->getSpeed(), millis());
     }
 }
 

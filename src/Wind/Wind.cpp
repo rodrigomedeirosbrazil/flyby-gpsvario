@@ -9,17 +9,17 @@ bool Wind::isAvailable()
   return true;
 }
 
-void Wind::storeSpeed(unsigned long heading, float speed)
+void Wind::storeSpeed(unsigned long heading, float speed, unsigned long now)
 {
   int cardinalDirection = (int)((heading + 11.25f) / 22.5f) % 16;
-  if (millis() - times[cardinalDirection] < timeout && speeds[cardinalDirection] != 0) {
+  if (now - times[cardinalDirection] < timeout && speeds[cardinalDirection] != 0) {
       speeds[cardinalDirection] = (speeds[cardinalDirection] + speed) / 2;
-      times[cardinalDirection] = millis();
+      times[cardinalDirection] = now;
   } else {
       speeds[cardinalDirection] = speed;
-      times[cardinalDirection] = millis();
+      times[cardinalDirection] = now;
   }
-  calcWind();
+  calcWind(now);
 }
 
 float Wind::getSpeed()
@@ -32,7 +32,7 @@ unsigned long Wind::getDirection()
   return direction;
 }
 
-void Wind::calcWind()
+void Wind::calcWind(unsigned long now)
 {
   int maxIndex = 0;
   for (int i = 0; i < 16; i++) {
@@ -41,7 +41,7 @@ void Wind::calcWind()
     }
   }
 
-  if (millis() - times[maxIndex] > timeout) {
+  if (now - times[maxIndex] > timeout) {
     return;
   }
 
@@ -52,7 +52,7 @@ void Wind::calcWind()
     }
   }
 
-  if (millis() - times[minIndex] > timeout) {
+  if (now - times[minIndex] > timeout) {
     return;
   }
 
@@ -65,6 +65,6 @@ void Wind::calcWind()
   ) {
     speed = speeds[maxIndex] - speeds[minIndex];
     direction = ((int)(maxIndex * 22.5f + 11.25f)) % 360;
-    lastCalculedWind = millis();
+    lastCalculedWind = now;
   }
 }
