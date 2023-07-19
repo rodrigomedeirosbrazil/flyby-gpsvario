@@ -1,6 +1,9 @@
 #include <string.h>
 #include "Wind.h"
 
+// #include <iostream>
+// using namespace std;
+
 Wind::Wind()
 {
   timeout = 300000;
@@ -51,6 +54,8 @@ void Wind::calcWind(unsigned long now)
       maxIndex = i;
     }
   }
+  // cout << "maxIndex " << maxIndex << endl;
+  // cout << "maxIndex speed " << speeds[maxIndex] << endl;
 
   if (now - times[maxIndex] > timeout) {
     return;
@@ -58,16 +63,27 @@ void Wind::calcWind(unsigned long now)
 
   int minIndex = 0;
   for (int i = 0; i < 16; i++) {
-    if (speeds[i] < speeds[minIndex] && speeds[i] != 0) {
+    if (speeds[i] == 0) {
+      continue;
+    }
+
+    if (
+      speeds[i] < speeds[minIndex]
+      || speeds[minIndex] == 0
+    ) {
       minIndex = i;
     }
   }
+
+  // cout << "minIndex " << minIndex << endl;
+  // cout << "minIndex speed " << speeds[minIndex] << endl;
 
   if (now - times[minIndex] > timeout) {
     return;
   }
 
   int minIndexInverted = (minIndex + 8) % 16;
+  // cout << "minIndexInverted " << minIndexInverted << endl;
 
   if (
       minIndexInverted == maxIndex
@@ -75,7 +91,7 @@ void Wind::calcWind(unsigned long now)
       || (minIndexInverted - 1) % 16 == maxIndex
   ) {
     speed = speeds[maxIndex] - speeds[minIndex];
-    direction = ((int)(maxIndex * 22.5f + 11.25f)) % 360;
+    direction = ((int)(minIndex * 22.5f)) % 360;
     lastCalculedWind = now;
   }
 }
