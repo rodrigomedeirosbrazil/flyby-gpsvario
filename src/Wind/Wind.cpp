@@ -1,4 +1,15 @@
+#include <string.h>
 #include "Wind.h"
+
+Wind::Wind()
+{
+  timeout = 300000;
+  speed = 0;
+  direction = 0;
+  lastCalculedWind = 0;
+  memset(speeds, 0, sizeof(speeds));
+  memset(times, 0, sizeof(times));
+}
 
 bool Wind::isAvailable()
 {
@@ -47,7 +58,7 @@ void Wind::calcWind(unsigned long now)
 
   int minIndex = 0;
   for (int i = 0; i < 16; i++) {
-    if (speeds[i] < speeds[minIndex]) {
+    if (speeds[i] < speeds[minIndex] && speeds[i] != 0) {
       minIndex = i;
     }
   }

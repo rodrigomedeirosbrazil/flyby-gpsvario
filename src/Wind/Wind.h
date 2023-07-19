@@ -4,15 +4,16 @@
 class Wind
 {
     public:
+        Wind();
         void storeSpeed(unsigned long heading, float speed, unsigned long now);
         bool isAvailable();
         float getSpeed();
         unsigned long getDirection();
     private:
-        const unsigned long timeout = 10000;
-        float speed = 0;
-        unsigned long direction = 0;
-        unsigned long lastCalculedWind = 0;
+        unsigned long timeout;
+        float speed;
+        unsigned long direction;
+        unsigned long lastCalculedWind;
         float speeds[16];
         unsigned long times[16];
 
