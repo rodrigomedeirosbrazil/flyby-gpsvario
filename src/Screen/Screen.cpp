@@ -74,7 +74,11 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    this->compass->draw(this->flightCpu->getGps()->getHeading());
+    this->compass->setHeading(this->flightCpu->getGps()->getHeading());
+    this->compass->setWindDirection(this->flightCpu->getWind()->getDirection());
+    this->compass->setWindAvailabilty(this->flightCpu->getWind()->isAvailable());
+    this->compass->draw();
+
     drawInfoBox((int) this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getVariometer()->isAvailable());
     drawInfoBox((int) this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
     drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getVariometer()->isAvailable());

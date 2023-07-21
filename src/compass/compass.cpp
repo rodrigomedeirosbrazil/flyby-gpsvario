@@ -8,10 +8,24 @@ Compass::Compass(Display *display, uint8_t x, uint8_t y, uint8_t size) {
   this->size = size;
 }
 
-void Compass::draw(unsigned int degree)
+void Compass::setHeading(unsigned int heading)
 {
-  this->compassDegree = 360 - degree;
+  this->heading = heading;
+  this->compassDegree = 360 - heading;
+}
 
+void Compass::setWindDirection(unsigned long windDirection)
+{
+  this->windDirection = windDirection;
+}
+
+void Compass::setWindAvailabilty(bool isAvailable)
+{
+  this->isWindAvailable = isAvailable;
+}
+
+void Compass::draw()
+{
   this->display->setFont(SMALL_FONT);
   drawCompassCircles();
   drawNeedle();
@@ -19,7 +33,8 @@ void Compass::draw(unsigned int degree)
   drawSouth();
   drawEast();
   drawWest();
-  drawCompassDegree(degree);
+  drawCompassDegree(this->heading);
+  drawWindSock();
 }
 
 void Compass::drawCompassCircles()
@@ -101,4 +116,17 @@ void Compass::drawCompassDegree(unsigned int degree)
       (int) degree,
       this->x,
       this->y + this->size + SMALL_FONT_HEIGHT + 1);
+}
+
+void Compass::drawWindSock()
+{
+  if (! this->isWindAvailable) {
+    return;
+  }
+
+  unsigned char x = ((cos((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size)) + this->y + 6;
+
+  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  this->display->print("P");
 }
