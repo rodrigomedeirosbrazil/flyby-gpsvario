@@ -29,7 +29,7 @@ class Variometer
         unsigned long lastTimeVarioWasCalculated = 0;
         long lastPressure = qnh;
         float vario = 0;
-        float altitudeArray[MAX_SAMPLES + 1];
+        long pressureArray[MAX_SAMPLES + 1];
         float timeArray[MAX_SAMPLES + 1];
 
         void calcVario();
