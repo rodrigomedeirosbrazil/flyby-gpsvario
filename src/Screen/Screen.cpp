@@ -79,9 +79,9 @@ void Screen::drawGpsScreen()
     this->compass->setWindAvailabilty(this->flightCpu->getWind()->isAvailable());
     this->compass->draw();
 
-    drawInfoBox((int) this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getVariometer()->isAvailable());
+    drawInfoBox((int) this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getBarometer()->isAvailable());
     drawInfoBox((int) this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
-    drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getVariometer()->isAvailable());
+    drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getBarometer()->isAvailable());
 
 
     this->display->setFont(SMALL_FONT);
@@ -115,17 +115,17 @@ void Screen::drawInfoScreen()
     this->display->setFont(SMALL_FONT);
 
     this->display->setCursor(0, 8);
-    this->flightCpu->getVariometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable() 
         ?   this->display->printf("Pre:%ld", this->flightCpu->getVariometer()->getPressure())
         :   this->display->print("Pre: N/A");
 
     this->display->setCursor(0, 16);
-    this->flightCpu->getVariometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable() 
         ?   this->display->printf("Alt:%.0f", this->flightCpu->getVariometer()->getAltitude())
         :   this->display->print("Alt: N/A");
 
     this->display->setCursor(0, 24);
-    this->flightCpu->getVariometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable() 
         ?   this->display->printf("Var:%.1f", this->flightCpu->getVariometer()->getVario())
         :   this->display->print("Var: N/A");
 
@@ -133,8 +133,8 @@ void Screen::drawInfoScreen()
     this->display->printf("QNH:%ld", this->flightCpu->getVariometer()->getQnh());
 
     this->display->setCursor(0, 40);
-    this->flightCpu->getVariometer()->isAvailable() 
-        ?   this->display->printf("Tmp:%.1f", this->flightCpu->getVariometer()->getTemperature())
+    this->flightCpu->getBarometer()->isAvailable() 
+        ?   this->display->printf("Tmp:%.1f", this->flightCpu->getBarometer()->getTemperature())
         :   this->display->print("Tmp: N/A");
 
     this->display->setCursor(0, 48);
