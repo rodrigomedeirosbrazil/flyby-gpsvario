@@ -88,18 +88,14 @@ void Screen::drawGpsScreen()
     this->display->setCursor(54, 8);
     this->display->printf("%.0fm", this->flightCpu->getGps()->getAltitude());
 
-    this->display->setCursor(54, 32);
-    this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
+    if (this->flightCpu->getWind()->isAvailable()) {
+        this->display->setCursor(54, 32);
+        this->display->print("Wind:");
 
-    this->display->setCursor(54, 40);
-    this->display->printf("%ld", this->flightCpu->getWind()->getDirection());
-
-    this->display->setCursor(54, 48);
-    this->display->printf("%ld", this->flightCpu->getGps()->getPdop());
-
-    this->display->setCursor(54, 56);
-    this->display->printf("%ld", this->flightCpu->getGps()->getVdop());
-
+        this->display->setCursor(54, 40);
+        this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
+    }
+    
     if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
         this->display->setFont(SMALL_FONT);
         this->display->setCursor(54, 64);
