@@ -1,6 +1,7 @@
 #include "FlightCpu.h"
 
 FlightCpu::FlightCpu() {
+    this->barometer = new Barometer();
     this->variometer = new Variometer();
     this->beep = new Beep(SPEAKER_PIN);
     this->gps = new Gps();
@@ -30,8 +31,14 @@ Wind* FlightCpu::getWind() {
     return this->wind;
 }
 
+Barometer* FlightCpu::getBarometer() {
+    return this->barometer;
+}
+
 void FlightCpu::tick() {
-    variometer->tick();
+    if (barometer->isAvailable()) {
+      variometer->tick(barometer->getPressure(), millis());
+    }
     
     if (inFlight) {
       beep->tick(this->variometer->getVario());

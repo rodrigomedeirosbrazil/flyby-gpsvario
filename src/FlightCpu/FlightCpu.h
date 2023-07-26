@@ -8,6 +8,7 @@
 #include "../Beep/Beep.h"
 #include "../Screen/Screen.h"
 #include "../Wind/Wind.h"
+#include "../Barometer/Barometer.h"
 
 class Screen;
 class FlightCpu
@@ -22,6 +23,7 @@ class FlightCpu
         Beep* getBeep();
         Screen* getScreen();
         Wind* getWind();
+        Barometer* getBarometer();
         inline unsigned long getSmallerVdop() { return smallerVdop; }
 
     private:
@@ -33,6 +35,7 @@ class FlightCpu
         Beep *beep;
         Screen *screen;
         Wind *wind;
+        Barometer *barometer;
 
         unsigned long smallerVdop = 9999;
         unsigned long lastTimeBySecondTask = 0;
