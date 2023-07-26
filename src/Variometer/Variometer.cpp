@@ -1,25 +1,17 @@
 #include <string.h>
+#include <cmath>
 #include "Variometer.h"
 
 Variometer::Variometer() {
-  #ifndef NO_BAROMETER
-  if (barometer.begin(BMP085_ULTRAHIGHRES)) {
-    this->barometerInitialized = true;
-  }
-  #endif
 }
 
-void Variometer::tick()
+void Variometer::tick(long pressure, long now)
 {
-  if (! this->barometerInitialized) {
-    return;
-  }
-
-  this->lastPressure = getAveragePressure(barometer.readPressure());
-  calcVario();
+  this->lastPressure = getAveragePressure(pressure);
+  calcVario(now);
 }
 
-void Variometer::calcVario()
+void Variometer::calcVario(long now)
 {
   float N1 = 0;
   float N2 = 0;
@@ -36,7 +28,7 @@ void Variometer::calcVario()
 
   // after moving, add the new value to the end of the array
   this->pressureArray[MAX_SAMPLES] = this->lastPressure;
-  this->timeArray[MAX_SAMPLES] = millis();
+  this->timeArray[MAX_SAMPLES] = now;
 
   float elapsedTime = this->timeArray[MAX_SAMPLES - SAMPLES];
 
@@ -64,15 +56,6 @@ long Variometer::getPressure()
 float Variometer::calcAltitude(long pressure)
 {
   return 44330 * (1.0 - pow((float) pressure / (float) this->qnh, 0.1903));
-}
-
-float Variometer::getTemperature()
-{
-  if (! this->barometerInitialized) {
-    return 0;
-  }
-
-  return barometer.readTemperature();
 }
 
 float Variometer::getVario()
@@ -118,9 +101,5 @@ long Variometer::getAveragePressure(long newPressure)
   return sum / NUMBER_OF_PRESSURE_SAMPLES;
 }
 
-bool Variometer::isAvailable()
-{
-  return this->barometerInitialized;
-}
 
 
