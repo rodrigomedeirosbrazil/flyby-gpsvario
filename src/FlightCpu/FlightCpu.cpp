@@ -70,7 +70,6 @@ void FlightCpu::autoAdjustQNH() {
 
   smallerVdop = gps->getVdop();
   variometer->setQnhByAltitude(gps->getAltitude());
-  coinSound();
 }
 
 void FlightCpu::checkInFlight() {
