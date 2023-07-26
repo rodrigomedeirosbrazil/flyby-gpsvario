@@ -1,10 +1,10 @@
 /*
     Use this command to run the test:
-    g++ -c -w Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
+    g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
 */
 #include <iostream>
 #include <string.h>
-#include "Variometer.h"
+#include "../src/Variometer/Variometer.h"
 
 using namespace std;
 

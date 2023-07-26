@@ -1,10 +1,10 @@
 /*
     Use this command to run the test:
-    g++ -c Wind.cpp Wind.test.cpp && g++ -o Wind.test Wind.o Wind.test.o && ./Wind.test
+    g++ -c -w ../src/Wind/Wind.cpp Wind.test.cpp && g++ -o Wind.test Wind.o Wind.test.o && ./Wind.test
 */
 #include <iostream>
 #include <string.h>
-#include "Wind.h"
+#include "../src/Wind/Wind.h"
 
 using namespace std;
 
