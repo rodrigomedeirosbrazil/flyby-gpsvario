@@ -1,6 +1,6 @@
 /*
     Use this command to run the test:
-    g++ -c Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
+    g++ -c -w Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
 */
 #include <iostream>
 #include <string.h>
@@ -22,9 +22,9 @@ void test_vario()
     if (
         (int) vario.getVario() == 83
     ) {
-        cout << "test_vario OK" << endl;
+        cout << "\x1b[40m" << "test_vario OK" << "\x1b[0m" << endl;
     } else {
-        cout << "test_vario FAIL" << endl;
+        cout << "\x1b[40m" << "test_vario FAIL" << "\x1b[0m"  << endl;
     }
 }
 
@@ -47,9 +47,9 @@ void test_vario_with_qnh_change()
     if (
         (int) vario.getVario() == 83
     ) {
-        cout << "test_vario_with_qnh_change OK" << endl;
+        cout << "\x1b[40m" << "test_vario_with_qnh_change OK" << "\x1b[0m" << endl;
     } else {
-        cout << "test_vario_with_qnh_change FAIL" << endl;
+        cout << "\x1b[40m" << "test_vario_with_qnh_change FAIL" << "\x1b[0m"  << endl;
     }
 }
 
