@@ -1,51 +1,30 @@
 #include <string.h>
 #include <cmath>
 #include "Variometer.h"
+#include "../KalmanFilter4d/kalmanfilter4d.h"
 
 Variometer::Variometer() {
+    kalmanFilter4d_configure(0, 0, 1.0f, 0.0f, 0.0f);
 }
 
-void Variometer::tick(long pressure, long now)
+void Variometer::tick(long pressure, long nowMsec)
 {
   this->lastPressure = getAveragePressure(pressure);
-  calcVario(now);
+  calcVario(nowMsec);
 }
 
-void Variometer::calcVario(long now)
+void Variometer::calcVario(long nowMsec)
 {
-  float N1 = 0;
-  float N2 = 0;
-  float N3 = 0;
-  float D1 = 0;
-  float D2 = 0;
+  float KFAltitudeCm, KFClimbrateCps;
 
-  // move the array one position to the left
-  for(int i = 1; i <= MAX_SAMPLES; i++)
-  {
-    this->pressureArray[(i - 1)] = this->pressureArray[i];
-    this->timeArray[(i - 1)] = this->timeArray[i];
-  };
+  float elapsedTimeMsec = nowMsec - lastTimeVarioWasCalculatedMsec;
+  kalmanFilter4d_predict(elapsedTimeMsec / 1000.0f);
 
-  // after moving, add the new value to the end of the array
-  this->pressureArray[MAX_SAMPLES] = this->lastPressure;
-  this->timeArray[MAX_SAMPLES] = now;
+  float altitudeMeters = calcAltitude(this->lastPressure);
+  kalmanFilter4d_update(altitudeMeters * 100, 0, (float*)&KFAltitudeCm, (float*)&KFClimbrateCps);
 
-  float elapsedTime = this->timeArray[MAX_SAMPLES - SAMPLES];
-
-  for(int i = (MAX_SAMPLES - SAMPLES); i < MAX_SAMPLES; i++)
-  {
-    float altitude = calcAltitude(this->pressureArray[i]);
-
-    N1 += (this->timeArray[i] - elapsedTime) * altitude;
-    N2 += (this->timeArray[i] - elapsedTime);
-    N3 += (altitude);
-    D1 += (this->timeArray[i] - elapsedTime) * (this->timeArray[i] - elapsedTime);
-    D2 += (this->timeArray[i] - elapsedTime);
-  };
-
-  this->vario = 1000 
-    * ((SAMPLES * N1) - N2 * N3) 
-    / (SAMPLES * D1 - D2 * D2);
+  this->lastAltitude = KFAltitudeCm / 100.0f;
+  this->vario = KFClimbrateCps / 100.0f;
 }
 
 long Variometer::getPressure()
@@ -65,7 +44,7 @@ float Variometer::getVario()
 
 float Variometer::getAltitude()
 {
-  return calcAltitude(this->lastPressure);
+  return this->lastAltitude;
 }
 
 void Variometer::setQnh(long qnh)
