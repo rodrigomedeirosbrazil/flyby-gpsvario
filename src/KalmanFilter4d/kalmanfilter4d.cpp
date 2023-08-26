@@ -1,9 +1,11 @@
-#include "common.h"
 #include <math.h>
-#include "config.h"
 #include "kalmanfilter4d.h"
 
 static const char* TAG = "kalmanfilter4d";
+
+#define KF_Z_MEAS_VARIANCE            200
+#define KF_A_MEAS_VARIANCE   		50.0f
+#define KF_ACCELBIAS_VARIANCE   0.005f
 
 typedef struct KF4_STATE_ {
 	float z; // altitude
