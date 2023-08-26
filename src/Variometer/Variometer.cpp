@@ -18,12 +18,13 @@ void Variometer::calcVario(long nowMsec)
   float KFAltitudeCm, KFClimbrateCps;
 
   float elapsedTimeMsec = nowMsec - lastTimeVarioWasCalculatedMsec;
+  lastTimeVarioWasCalculatedMsec = nowMsec;
+
   kalmanFilter4d_predict(elapsedTimeMsec / 1000.0f);
 
   float altitudeMeters = calcAltitude(this->lastPressure);
   kalmanFilter4d_update(altitudeMeters * 100, 0, (float*)&KFAltitudeCm, (float*)&KFClimbrateCps);
 
-  this->lastAltitude = KFAltitudeCm / 100.0f;
   this->vario = KFClimbrateCps / 100.0f;
 }
 
@@ -44,7 +45,7 @@ float Variometer::getVario()
 
 float Variometer::getAltitude()
 {
-  return this->lastAltitude;
+  return calcAltitude(this->lastPressure);
 }
 
 void Variometer::setQnh(long qnh)
@@ -64,6 +65,14 @@ void Variometer::setQnhByAltitude(float altitude)
 
 long Variometer::getAveragePressure(long newPressure)
 {
+
+  if (lastTimeVarioWasCalculatedMsec == 0) {
+    for (unsigned i = 0; i < NUMBER_OF_PRESSURE_SAMPLES; i++) {
+      this->pressureSamples[i] = newPressure;
+    }
+    return newPressure;
+  }
+
   memmove(
     &this->pressureSamples[1], 
     &this->pressureSamples, 

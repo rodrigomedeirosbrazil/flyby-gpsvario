@@ -20,7 +20,6 @@ class Variometer
         long pressureSamples[NUMBER_OF_PRESSURE_SAMPLES];
         unsigned long lastTimeVarioWasCalculatedMsec = 0;
         long lastPressure = qnh;
-        float lastAltitude = 0;
         float vario = 0;
 
         void calcVario(long nowMsec);
