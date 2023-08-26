@@ -1,6 +1,9 @@
 /*
     Use this command to run the test:
-    g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
+    g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && \ 
+    g++ -c -w ../src/KalmanFilter4d/kalmanfilter4d.cpp kalmanfilter4d.test.cpp && \ 
+    g++ -o Variometer.test Variometer.o Variometer.test.o kalmanfilter4d.o && \
+    ./Variometer.test
 */
 #include <iostream>
 #include <string.h>
@@ -16,7 +19,7 @@ void test_vario()
         vario.tick(101325 - i, i);
     };
     
-    int expected_vario = 83;
+    int expected_vario = 9;
 
     if (
         (int) vario.getVario() == expected_vario
@@ -43,7 +46,7 @@ void test_vario_with_qnh_change()
         }
     };
     
-    int expected_vario = 83;
+    int expected_vario = 9;
 
     if (
         (int) vario.getVario() == expected_vario

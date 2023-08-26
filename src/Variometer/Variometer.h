@@ -23,7 +23,7 @@ class Variometer
         float vario = 0;
 
         void calcVario(long nowMsec);
-        float calcAltitude(long pressure);
+        float calcAltitude(long pressure, bool useQnh = true);
         long getAveragePressure(long newPressure);
 };
 
