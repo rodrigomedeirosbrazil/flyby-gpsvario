@@ -1,6 +1,8 @@
 #ifndef NmeaParser_H
 #define NmeaParser_H
 
+#include <time.h>
+
 #define GPRMC_TERM   "GPRMC"
 #define GPGGA_TERM   "GPGGA"
 #define GPGSA_TERM   "GPGSA"
@@ -15,7 +17,13 @@ class NmeaParser
     float getLatitude();
     float getLongitude();
     unsigned short getNumSats();
-    long getSpeed();
+    unsigned long getSpeedKnots();
+    unsigned long getDate();
+    unsigned long getTime();
+    struct tm * getDatetime(int timezone = 0);
+    unsigned long getHdop();
+    long getAltitudeMeters();
+    long getCourseDegrees();
 
   private:
     bool termComplete(long nowMsec);
@@ -26,6 +34,10 @@ class NmeaParser
     bool gpsisdigit(char c);
     unsigned long parseDecimal(char *decimal);
     unsigned long parseDegrees(char *degree);
+    time_t convertDateAndTimeToEpochTime(
+      unsigned long date, // format ddmmyy
+      unsigned long time // format hhmmsscc
+    );
 
     enum {
       GPS_SENTENCE_OTHER, 

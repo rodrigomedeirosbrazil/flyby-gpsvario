@@ -1,6 +1,7 @@
 #include "NmeaParser.h"
 
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -48,14 +49,12 @@ bool NmeaParser::encode(char c, long nowMsec)
   if (!isChecksumTerm) {
     parity ^= c;
   }
-  cout << "isChecksumTerm: " << isChecksumTerm << endl;
   return validSentence;
 }
 
 bool NmeaParser::termComplete(long nowMsec)
 {
   if (isChecksumTerm) {
-    cout << "isChecksumTerm" << endl;
     return verifyChecksum();
   }
 
@@ -107,7 +106,7 @@ bool NmeaParser::termComplete(long nowMsec)
         decodingData.numsats = gpsatol(term);
         break;
       case 8:
-        decodingData.hdop = gpsatol(term);
+        decodingData.hdop = parseDecimal(term);
         break;
       case 9:
         decodingData.altitude = gpsatol(term);
@@ -118,23 +117,51 @@ bool NmeaParser::termComplete(long nowMsec)
 
   if (sentenceType == GPS_SENTENCE_GPGSA) {
     switch(termNumber) {
-    case 2:
-      gpsDataGood = term[0] != '1';
-      break;
-    case 15:
-      decodingData.pdop = gpsatol(term);
-      break;
-    case 16:
-      decodingData.hdop = gpsatol(term);
-      break;
-    case 17:
-      decodingData.vdop = gpsatol(term);
-      break;
+      case 2:
+        gpsDataGood = term[0] != '1';
+        break;
+      case 15:
+        decodingData.pdop = gpsatol(term);
+        break;
+      case 16:
+        decodingData.hdop = gpsatol(term);
+        break;
+      case 17:
+        decodingData.vdop = gpsatol(term);
+        break;
+    }
+    return false;
+  }
+
+  if (sentenceType == GPS_SENTENCE_GPRMC) {
+    switch(termNumber) {
+      case 2:
+        gpsDataGood = term[0] == 'A';
+        break;
+      case 7:
+        decodingData.speed = parseDecimal(term);
+        break;
+      case 8:
+        decodingData.course = parseDecimal(term);
+        break;
+      case 9:
+        decodingData.date = gpsatol(term);
+        break;
     }
     return false;
   }
 
   return false;
+}
+
+unsigned long NmeaParser::getDate()
+{
+  return decodedData.date;
+}
+
+unsigned long NmeaParser::getTime()
+{
+  return decodedData.time;
 }
 
 float NmeaParser::getLatitude()
@@ -152,23 +179,32 @@ unsigned short NmeaParser::getNumSats()
   return decodedData.numsats;
 }
 
-long NmeaParser::getSpeed()
+unsigned long NmeaParser::getHdop()
 {
-  return decodedData.speed;
+  return decodedData.hdop;
+}
+
+long NmeaParser::getAltitudeMeters()
+{
+  return decodedData.altitude;
+}
+
+unsigned long NmeaParser::getSpeedKnots()
+{
+  return decodedData.speed / 100;
+}
+
+long NmeaParser::getCourseDegrees()
+{
+  return decodedData.course / 100;
 }
 
 bool NmeaParser::verifyChecksum()
 {
     byte checksum = 16 * hexCharToInt(term[0]) + hexCharToInt(term[1]);
-    cout << "checksum: " << checksum << endl;
-    cout << "parity: " << parity << endl;
-    if (checksum == parity)
-    {
-      if (gpsDataGood)
-      {
-        decodedData = decodingData;
-        return true;
-      }
+    if (checksum == parity && gpsDataGood) {
+      decodedData = decodingData;
+      return true;
     }
     return false;
 }
@@ -237,3 +273,49 @@ unsigned long NmeaParser::parseDegrees(char *degree)
   return (left_of_decimal / 100) * 1000000 + (hundred1000ths_of_minute + 3) / 6;
 }
 
+time_t NmeaParser::convertDateAndTimeToEpochTime(
+    unsigned long dateParam, // format ddmmyy
+    unsigned long timeParam // format hhmmsscc
+) {
+
+  time_t rawtime;
+  time(&rawtime);
+  time_t localTimestamp = mktime(localtime(&rawtime));
+  time_t utcTimestamp = mktime(gmtime(&rawtime));
+  int localTimezone = (localTimestamp - utcTimestamp) / 3600;
+
+  struct tm timeStruct;
+  timeStruct.tm_mday = dateParam / 10000;
+  timeStruct.tm_mon = ((dateParam - timeStruct.tm_mday * 10000) / 100);
+  timeStruct.tm_year = dateParam - timeStruct.tm_mday * 10000 -  (timeStruct.tm_mon + 1) * 100 + 2000 - 1900;
+  timeStruct.tm_hour = timeParam / 1000000;
+  timeStruct.tm_min = (timeParam - timeStruct.tm_hour * 1000000) / 10000;
+  timeStruct.tm_sec = (timeParam - timeStruct.tm_hour * 1000000 - timeStruct.tm_min * 10000) / 100;
+
+  cout << "dateParam: " << dateParam << endl;
+  cout << "tm_hour: " << timeStruct.tm_hour << endl;
+  cout << "tm_min: " << (timeParam - timeStruct.tm_hour * 1000000) / 10000 << endl;
+  cout << "tm_sec: " << (timeParam - timeStruct.tm_hour * 1000000 - timeStruct.tm_min * 10000) / 100 << endl;
+
+  printf ( "The current date/time is: %s", asctime(&timeStruct));
+
+  cout << "localTimezone: " << localTimezone << endl;
+  cout << "timestamp: " << mktime(&timeStruct) << endl;
+  cout << "localTimestamp: " << mktime(&timeStruct) - (localTimezone * 3600 * -1) << endl;
+
+  return mktime(&timeStruct) - (localTimezone * 3600 * -1);
+  // return mktime(&timeStruct);
+}
+
+struct tm * NmeaParser::getDatetime(int timezone)
+{
+  if (
+    decodedData.date == 0
+    || decodedData.time == 0
+  ) {
+    return NULL;
+  }
+
+  time_t t = convertDateAndTimeToEpochTime(decodedData.date, decodedData.time) - (timezone * 3600);
+  return gmtime(&t);
+}
