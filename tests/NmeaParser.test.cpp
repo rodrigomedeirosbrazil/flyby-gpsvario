@@ -14,13 +14,8 @@ void test_nmea_parser()
 
     const char stream[] = "$GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A\r\n$GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D\r\n";
 
-    bool dataIsAvailable = false;
     for(int i = 0; i <= strlen(stream); i++) {
         gpsParser.encode(stream[i], 1000);
-        // dataIsAvailable = gpsParser.encode(stream[i], 1000);
-        // if (dataIsAvailable) {
-        //     break;
-        // }
     };
 
     unsigned long expected_time = 23200000;
@@ -131,16 +126,17 @@ void test_nmea_parser()
         return;
     }
 
-    struct tm * datetime = gpsParser.getDatetime();
-    if (!datetime) {
+    struct tm datetime;
+
+    if (gpsParser.getDatetime(&datetime) == false) {
       cout << "\x1b[41m" << 
         "test_nmea_parser FAIL " <<
-        "datetime is null" <<
+        "datetime fail" <<
         "\x1b[0m"  << endl;
         return;
     }
 
-    int expected_year = 16;
+    int expected_year = 116;
     int expected_month = 6;
     int expected_day = 5;
     int expected_hour = 23;
@@ -148,21 +144,56 @@ void test_nmea_parser()
     int expected_second = 0;
 
     if (
-        datetime->tm_year != expected_year
-        || datetime->tm_mon != expected_month
-        || datetime->tm_mday != expected_day
-        || datetime->tm_hour != expected_hour
-        || datetime->tm_min != expected_minute
-        || datetime->tm_sec != expected_second
+        datetime.tm_year != expected_year
+        || datetime.tm_mon != expected_month
+        || datetime.tm_mday != expected_day
+        || datetime.tm_hour != expected_hour
+        || datetime.tm_min != expected_minute
+        || datetime.tm_sec != expected_second
     ) {
         cout << "\x1b[41m" << 
         "test_nmea_parser FAIL " << endl <<
-        "expected_year: " << expected_year << " encountered " << datetime->tm_year << endl <<
-        "expected_month: " << expected_month << " encountered " << datetime->tm_mon << endl <<
-        "expected_day: " << expected_day << " encountered " << datetime->tm_mday << endl <<
-        "expected_hour: " << expected_hour << " encountered " << datetime->tm_hour << endl <<
-        "expected_minute: " << expected_minute << " encountered " << datetime->tm_min << endl <<
-        "expected_second: " << expected_second << " encountered " << datetime->tm_sec <<
+        "expected_year: " << expected_year << " encountered " << datetime.tm_year << endl <<
+        "expected_month: " << expected_month << " encountered " << datetime.tm_mon << endl <<
+        "expected_day: " << expected_day << " encountered " << datetime.tm_mday << endl <<
+        "expected_hour: " << expected_hour << " encountered " << datetime.tm_hour << endl <<
+        "expected_minute: " << expected_minute << " encountered " << datetime.tm_min << endl <<
+        "expected_second: " << expected_second << " encountered " << datetime.tm_sec <<
+        "\x1b[0m"  << endl;
+        return;
+    }
+
+    if (gpsParser.getDatetime(&datetime, -3) == false) {
+      cout << "\x1b[41m" << 
+        "test_nmea_parser FAIL " <<
+        "datetime with timezone fail" <<
+        "\x1b[0m"  << endl;
+        return;
+    }
+
+    expected_year = 116;
+    expected_month = 6;
+    expected_day = 5;
+    expected_hour = 20;
+    expected_minute = 20;
+    expected_second = 0;
+
+    if (
+        datetime.tm_year != expected_year
+        || datetime.tm_mon != expected_month
+        || datetime.tm_mday != expected_day
+        || datetime.tm_hour != expected_hour
+        || datetime.tm_min != expected_minute
+        || datetime.tm_sec != expected_second
+    ) {
+        cout << "\x1b[41m" << 
+        "test_nmea_parser datetimeWithTimezone FAIL " << endl <<
+        "expected_year: " << expected_year << " encountered " << datetime.tm_year << endl <<
+        "expected_month: " << expected_month << " encountered " << datetime.tm_mon << endl <<
+        "expected_day: " << expected_day << " encountered " << datetime.tm_mday << endl <<
+        "expected_hour: " << expected_hour << " encountered " << datetime.tm_hour << endl <<
+        "expected_minute: " << expected_minute << " encountered " << datetime.tm_min << endl <<
+        "expected_second: " << expected_second << " encountered " << datetime.tm_sec <<
         "\x1b[0m"  << endl;
         return;
     }

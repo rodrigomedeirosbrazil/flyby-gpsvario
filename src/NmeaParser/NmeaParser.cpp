@@ -273,49 +273,42 @@ unsigned long NmeaParser::parseDegrees(char *degree)
   return (left_of_decimal / 100) * 1000000 + (hundred1000ths_of_minute + 3) / 6;
 }
 
-time_t NmeaParser::convertDateAndTimeToEpochTime(
-    unsigned long dateParam, // format ddmmyy
-    unsigned long timeParam // format hhmmsscc
-) {
-
-  time_t rawtime;
-  time(&rawtime);
-  time_t localTimestamp = mktime(localtime(&rawtime));
-  time_t utcTimestamp = mktime(gmtime(&rawtime));
-  int localTimezone = (localTimestamp - utcTimestamp) / 3600;
-
-  struct tm timeStruct;
-  timeStruct.tm_mday = dateParam / 10000;
-  timeStruct.tm_mon = ((dateParam - timeStruct.tm_mday * 10000) / 100);
-  timeStruct.tm_year = dateParam - timeStruct.tm_mday * 10000 -  (timeStruct.tm_mon + 1) * 100 + 2000 - 1900;
-  timeStruct.tm_hour = timeParam / 1000000;
-  timeStruct.tm_min = (timeParam - timeStruct.tm_hour * 1000000) / 10000;
-  timeStruct.tm_sec = (timeParam - timeStruct.tm_hour * 1000000 - timeStruct.tm_min * 10000) / 100;
-
-  cout << "dateParam: " << dateParam << endl;
-  cout << "tm_hour: " << timeStruct.tm_hour << endl;
-  cout << "tm_min: " << (timeParam - timeStruct.tm_hour * 1000000) / 10000 << endl;
-  cout << "tm_sec: " << (timeParam - timeStruct.tm_hour * 1000000 - timeStruct.tm_min * 10000) / 100 << endl;
-
-  printf ( "The current date/time is: %s", asctime(&timeStruct));
-
-  cout << "localTimezone: " << localTimezone << endl;
-  cout << "timestamp: " << mktime(&timeStruct) << endl;
-  cout << "localTimestamp: " << mktime(&timeStruct) - (localTimezone * 3600 * -1) << endl;
-
-  return mktime(&timeStruct) - (localTimezone * 3600 * -1);
-  // return mktime(&timeStruct);
-}
-
-struct tm * NmeaParser::getDatetime(int timezone)
+bool NmeaParser::getDatetime(struct tm *timeStruct, int timezone)
 {
   if (
     decodedData.date == 0
     || decodedData.time == 0
   ) {
-    return NULL;
+    return false;
   }
 
-  time_t t = convertDateAndTimeToEpochTime(decodedData.date, decodedData.time) - (timezone * 3600);
-  return gmtime(&t);
+  timeStruct->tm_mday = decodedData.date / 10000;
+  timeStruct->tm_mon = ((decodedData.date - timeStruct->tm_mday * 10000) / 100);
+  timeStruct->tm_year = decodedData.date - timeStruct->tm_mday * 10000 - 
+    ((decodedData.date - timeStruct->tm_mday * 10000) / 100)
+     * 100 + (2000 - 1900);
+  timeStruct->tm_hour = decodedData.time / 1000000;
+  timeStruct->tm_min = (decodedData.time - timeStruct->tm_hour * 1000000) / 10000;
+  timeStruct->tm_sec = (decodedData.time - timeStruct->tm_hour * 1000000 - timeStruct->tm_min * 10000) / 100;
+
+  if (timezone != 0) {
+    int localTimezone = 0;
+    struct tm *timezoneStruct;
+
+    #if !defined(ARDUINO)
+      time_t rawtime;
+      time(&rawtime);
+      time_t localTimestamp = mktime(localtime(&rawtime));
+      time(&rawtime);
+      time_t utcTimestamp = mktime(gmtime(&rawtime));
+      localTimezone = (localTimestamp - utcTimestamp) / 3600;
+    #endif
+
+    time_t unixtime = mktime(timeStruct) + (localTimezone * 3600) + (timezone * 3600);
+    timezoneStruct = gmtime(&unixtime);
+    memcpy(timeStruct, timezoneStruct, sizeof(struct tm));
+    return true;
+  }
+
+  return true;
 }

@@ -20,7 +20,7 @@ class NmeaParser
     unsigned long getSpeedKnots();
     unsigned long getDate();
     unsigned long getTime();
-    struct tm * getDatetime(int timezone = 0);
+    bool getDatetime(struct tm *timeStruct, int timezone = 0);
     unsigned long getHdop();
     long getAltitudeMeters();
     long getCourseDegrees();
@@ -34,10 +34,6 @@ class NmeaParser
     bool gpsisdigit(char c);
     unsigned long parseDecimal(char *decimal);
     unsigned long parseDegrees(char *degree);
-    time_t convertDateAndTimeToEpochTime(
-      unsigned long date, // format ddmmyy
-      unsigned long time // format hhmmsscc
-    );
 
     enum {
       GPS_SENTENCE_OTHER, 
