@@ -66,9 +66,7 @@ void Gps::tick()
     while (serial2->available())
     {
         char c = serial2->read();
-        if (this->gpsParser->encode(c)) {
-            dataIsAvailable = true;
-        }
+        dataIsAvailable = this->gpsParser->encode(c);
     }
     #endif
     
