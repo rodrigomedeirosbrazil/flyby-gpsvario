@@ -1,8 +1,8 @@
 #include <Arduino.h>
 
-#include "src/config.h"
-#include "src/helpers/helpers.h"
-#include "src/FlightCpu/FlightCpu.h"
+#include "config.h"
+#include "helpers/helpers.h"
+#include "FlightCpu/FlightCpu.h"
 
 FlightCpu *flightCpu;
 

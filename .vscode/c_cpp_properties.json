@@ -9,6 +9,8 @@
             "name": "PlatformIO",
             "includePath": [
                 "/Users/rodrigomedeiros/dev/flyby-gpsvario/src",
+                "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit BMP085 Library",
+                "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit BusIO",
                 "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/U8g2/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
@@ -208,6 +210,7 @@
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/dio_qspi/include",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/cores/esp32",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/variants/esp32",
+                "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit Unified Sensor",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/ArduinoOTA/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/AsyncUDP/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src",
@@ -245,6 +248,8 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
                     "/Users/rodrigomedeiros/dev/flyby-gpsvario/src",
+                    "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit BMP085 Library",
+                    "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit BusIO",
                     "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/U8g2/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
@@ -444,6 +449,7 @@
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/dio_qspi/include",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/cores/esp32",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/variants/esp32",
+                    "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/Adafruit Unified Sensor",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/ArduinoOTA/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/AsyncUDP/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src",
