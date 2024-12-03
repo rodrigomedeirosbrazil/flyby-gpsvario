@@ -9,6 +9,9 @@
             "name": "PlatformIO",
             "includePath": [
                 "/Users/rodrigomedeiros/dev/flyby-gpsvario/src",
+                "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/U8g2/src",
+                "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
+                "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/esp_additions/freertos",
@@ -227,7 +230,6 @@
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/RainMaker/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
@@ -237,13 +239,15 @@
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
-                "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
                     "/Users/rodrigomedeiros/dev/flyby-gpsvario/src",
+                    "/Users/rodrigomedeiros/dev/flyby-gpsvario/.pio/libdeps/esp32dev/U8g2/src",
+                    "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
+                    "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/esp_additions/freertos",
@@ -462,7 +466,6 @@
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/RainMaker/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                    "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
@@ -472,7 +475,6 @@
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
-                    "/Users/rodrigomedeiros/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     ""
                 ]
             },
