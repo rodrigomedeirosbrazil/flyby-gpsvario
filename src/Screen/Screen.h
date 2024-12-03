@@ -1,7 +1,7 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include "../defines.h"
+#include "../config.h"
 #include "../Compass/Compass.h"
 #include "../Display/Display.h"
 #include "../FlightCpu/FlightCpu.h"

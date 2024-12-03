@@ -1,6 +1,6 @@
 
 #include <U8g2lib.h>
-#include "../defines.h"
+#include "../config.h"
 #include "../Display/Display.h"
 
 #define pi 3.141593

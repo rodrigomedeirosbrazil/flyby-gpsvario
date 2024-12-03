@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 #include <U8g2lib.h>
-#include "../defines.h"
+#include "../config.h"
 
 #ifdef FLYBY_GPS_VARIO
     class Display : public U8G2_ST7567_ENH_DG128064I_F_HW_I2C {

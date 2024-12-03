@@ -1,6 +1,6 @@
 #include <time.h>
 #include "helpers.h"
-#include "../defines.h"
+#include "../config.h"
 
 void startSound()
 {

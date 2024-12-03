@@ -1,6 +1,6 @@
 #include <time.h>
 #include "Screen.h"
-#include "../defines.h"
+#include "../config.h"
 #include "../helpers/helpers.h"
 
 Screen::Screen(FlightCpu *flightCpu)

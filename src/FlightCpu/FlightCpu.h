@@ -1,7 +1,7 @@
 #ifndef FLIGHTCPU_H
 #define FLIGHTCPU_H
 
-#include "../defines.h"
+#include "../config.h"
 #include "../helpers/helpers.h"
 #include "../Variometer/Variometer.h"
 #include "../Gps/Gps.h"
