@@ -1,6 +1,9 @@
 /*
     Use this command to run the test:
-    g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && g++ -o Variometer.test Variometer.o Variometer.test.o && ./Variometer.test
+    g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && \ 
+    g++ -c -w ../src/KalmanFilter4d/kalmanfilter4d.cpp kalmanfilter4d.test.cpp && \ 
+    g++ -o Variometer.test Variometer.o Variometer.test.o kalmanfilter4d.o && \
+    ./Variometer.test
 */
 #include <iostream>
 #include <string.h>
@@ -16,15 +19,17 @@ void test_vario()
         vario.tick(101325 - i, i);
     };
     
-    // cout << "Vario: " << (int) vario.getVario() << endl;
-    // cout << "Altitude: " << (int) vario.getAltitude() << endl;
+    int expected_vario = 9;
 
     if (
-        (int) vario.getVario() == 83
+        (int) vario.getVario() == expected_vario
     ) {
-        cout << "\x1b[40m" << "test_vario OK" << "\x1b[0m" << endl;
+        cout << "\x1b[42m" << "test_vario OK" << "\x1b[0m" << endl;
     } else {
-        cout << "\x1b[40m" << "test_vario FAIL" << "\x1b[0m"  << endl;
+        cout << "\x1b[41m" << 
+        "test_vario FAIL " <<
+        "expected vario == " << expected_vario << " encountered " << (int) vario.getVario() <<
+        "\x1b[0m"  << endl;
     }
 }
 
@@ -41,15 +46,17 @@ void test_vario_with_qnh_change()
         }
     };
     
-    // cout << "Vario: " << (int) vario.getVario() << endl;
-    // cout << "Altitude: " << (int) vario.getAltitude() << endl;
+    int expected_vario = 9;
 
     if (
-        (int) vario.getVario() == 83
+        (int) vario.getVario() == expected_vario
     ) {
-        cout << "\x1b[40m" << "test_vario_with_qnh_change OK" << "\x1b[0m" << endl;
+        cout << "\x1b[42m" << "test_vario_with_qnh_change OK" << "\x1b[0m" << endl;
     } else {
-        cout << "\x1b[40m" << "test_vario_with_qnh_change FAIL" << "\x1b[0m"  << endl;
+        cout << "\x1b[41m" << 
+        "test_vario_with_qnh_change FAIL " <<
+        "expected vario == " << expected_vario << " encountered " << (int) vario.getVario() <<
+        "\x1b[0m"  << endl;
     }
 }
 

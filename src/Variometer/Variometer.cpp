@@ -1,51 +1,31 @@
 #include <string.h>
 #include <cmath>
 #include "Variometer.h"
+#include "../KalmanFilter4d/kalmanfilter4d.h"
 
 Variometer::Variometer() {
+    kalmanFilter4d_configure(0, 0, 1.0f, 0.0f, 0.0f);
 }
 
-void Variometer::tick(long pressure, long now)
+void Variometer::tick(long pressure, long nowMsec)
 {
   this->lastPressure = getAveragePressure(pressure);
-  calcVario(now);
+  calcVario(nowMsec);
 }
 
-void Variometer::calcVario(long now)
+void Variometer::calcVario(long nowMsec)
 {
-  float N1 = 0;
-  float N2 = 0;
-  float N3 = 0;
-  float D1 = 0;
-  float D2 = 0;
+  float KFAltitudeCm, KFClimbrateCps;
 
-  // move the array one position to the left
-  for(int i = 1; i <= MAX_SAMPLES; i++)
-  {
-    this->pressureArray[(i - 1)] = this->pressureArray[i];
-    this->timeArray[(i - 1)] = this->timeArray[i];
-  };
+  float elapsedTimeMsec = nowMsec - lastTimeVarioWasCalculatedMsec;
+  lastTimeVarioWasCalculatedMsec = nowMsec;
 
-  // after moving, add the new value to the end of the array
-  this->pressureArray[MAX_SAMPLES] = this->lastPressure;
-  this->timeArray[MAX_SAMPLES] = now;
+  kalmanFilter4d_predict(elapsedTimeMsec / 1000.0f);
 
-  float elapsedTime = this->timeArray[MAX_SAMPLES - SAMPLES];
+  float altitudeMeters = calcAltitude(this->lastPressure, false);
+  kalmanFilter4d_update(altitudeMeters * 100, 0, (float*)&KFAltitudeCm, (float*)&KFClimbrateCps);
 
-  for(int i = (MAX_SAMPLES - SAMPLES); i < MAX_SAMPLES; i++)
-  {
-    float altitude = calcAltitude(this->pressureArray[i]);
-
-    N1 += (this->timeArray[i] - elapsedTime) * altitude;
-    N2 += (this->timeArray[i] - elapsedTime);
-    N3 += (altitude);
-    D1 += (this->timeArray[i] - elapsedTime) * (this->timeArray[i] - elapsedTime);
-    D2 += (this->timeArray[i] - elapsedTime);
-  };
-
-  this->vario = 1000 
-    * ((SAMPLES * N1) - N2 * N3) 
-    / (SAMPLES * D1 - D2 * D2);
+  this->vario = KFClimbrateCps / 100.0f;
 }
 
 long Variometer::getPressure()
@@ -53,9 +33,10 @@ long Variometer::getPressure()
   return this->lastPressure;
 }
 
-float Variometer::calcAltitude(long pressure)
+float Variometer::calcAltitude(long pressure, bool useQnh)
 {
-  return 44330 * (1.0 - pow((float) pressure / (float) this->qnh, 0.1903));
+  long qnh = useQnh ? this->qnh : 101325;
+  return 44330 * (1.0 - pow((float) pressure / (float) qnh, 0.1903));
 }
 
 float Variometer::getVario()
@@ -85,6 +66,14 @@ void Variometer::setQnhByAltitude(float altitude)
 
 long Variometer::getAveragePressure(long newPressure)
 {
+
+  if (lastTimeVarioWasCalculatedMsec == 0) {
+    for (unsigned i = 0; i < NUMBER_OF_PRESSURE_SAMPLES; i++) {
+      this->pressureSamples[i] = newPressure;
+    }
+    return newPressure;
+  }
+
   memmove(
     &this->pressureSamples[1], 
     &this->pressureSamples, 

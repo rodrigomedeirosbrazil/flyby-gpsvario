@@ -2,3 +2,5 @@ build/*
 *.o
 *.test
 a.out
+.vscode/*
+.DS_Store

@@ -1,15 +1,13 @@
 #ifndef VARIOMETER_H
 #define VARIOMETER_H
 
-#define NUMBER_OF_PRESSURE_SAMPLES 6
-#define SAMPLES 40
-#define MAX_SAMPLES 50
+#define NUMBER_OF_PRESSURE_SAMPLES 20
 
 class Variometer
 {
     public:
         Variometer();
-        void tick(long pressure, long now);
+        void tick(long pressure, long nowMsec);
         long getPressure();
         float getAltitude();
         float getVario();
@@ -20,14 +18,12 @@ class Variometer
     private:
         long qnh = 101325;
         long pressureSamples[NUMBER_OF_PRESSURE_SAMPLES];
-        unsigned long lastTimeVarioWasCalculated = 0;
+        unsigned long lastTimeVarioWasCalculatedMsec = 0;
         long lastPressure = qnh;
         float vario = 0;
-        long pressureArray[MAX_SAMPLES + 1];
-        float timeArray[MAX_SAMPLES + 1];
 
-        void calcVario(long now);
-        float calcAltitude(long pressure);
+        void calcVario(long nowMsec);
+        float calcAltitude(long pressure, bool useQnh = true);
         long getAveragePressure(long newPressure);
 };
 
