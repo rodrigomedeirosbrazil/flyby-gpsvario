@@ -51,8 +51,7 @@ void Variometer::calcVario(long now)
     D2 += (this->timeArray[i] - elapsedTime);
   };
 
-  this->vario = 1000 
-    * ((SAMPLES * N1) - N2 * N3) 
+  this->vario = ((SAMPLES * N1) - N2 * N3) 
     / (SAMPLES * D1 - D2 * D2);
 }
 
