@@ -61,6 +61,44 @@ See `diagram.json` for a sample wiring diagram (Wokwi simulator compatible).
 - The device automatically detects takeoff and landing based on GPS speed.
 - Wind data is updated in real-time using the custom algorithm.
 
+## Testing
+The project includes unit tests for core algorithms (Variometer and Wind calculations).
+
+### Running Tests
+You can run tests using the Makefile shortcuts (requires g++):
+
+```sh
+# Run all tests
+make test-all
+
+# Run individual test suites
+make test-variometer
+make test-wind
+
+# Clean test artifacts
+make test-clean
+```
+
+### Manual Test Execution
+Alternatively, you can run tests manually:
+
+```sh
+# Variometer tests
+cd tests
+g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp
+g++ -o Variometer.test Variometer.o Variometer.test.o
+./Variometer.test
+
+# Wind tests
+g++ -c -w ../src/Wind/Wind.cpp Wind.test.cpp
+g++ -o Wind.test Wind.o Wind.test.o
+./Wind.test
+```
+
+### Test Suites
+- **Variometer Tests**: Validates climb/sink rate calculations and QNH adjustments
+- **Wind Tests**: Validates wind speed and direction algorithm for different wind scenarios (N, S, E, SSE)
+
 ## Custom Wind Algorithm
 This project features a unique algorithm to estimate wind speed and direction in flight:
 - **Data Collection:** GPS heading and speed are stored in 16 cardinal directions.

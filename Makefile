@@ -1,24 +1,26 @@
-# Makefile - Atalhos para PlatformIO
-# Use: make <comando>
+# Makefile - Shortcuts for PlatformIO
+# Use: make <command>
 
-.PHONY: help build upload monitor clean wokwi install test
+.PHONY: help build upload monitor clean wokwi install test test-variometer test-wind test-all test-clean
 
 help:
-	@echo "Comandos disponíveis:"
-	@echo "  make build          - Compilar para ESP32"
-	@echo "  make upload         - Upload para ESP32"
-	@echo "  make monitor        - Monitor serial"
-	@echo "  make clean          - Limpar build"
-	@echo "  make wokwi          - Compilar para Wokwi"
-	@echo "  make install        - Instalar dependências"
-	@echo "  make test           - Executar testes"
+	@echo "Available commands:"
+	@echo "  make build          - Build for ESP32"
+	@echo "  make upload         - Upload to ESP32"
+	@echo "  make monitor        - Serial monitor"
+	@echo "  make clean          - Clean build"
+	@echo "  make wokwi          - Build for Wokwi"
+	@echo "  make install        - Install dependencies"
+	@echo "  make test-all       - Run all unit tests"
+	@echo "  make test-variometer - Run Variometer tests"
+	@echo "  make test-wind      - Run Wind tests"
 	@echo "  make flash          - Upload + Monitor"
 	@echo ""
-	@echo "Ambientes:"
-	@echo "  make build-wokwi    - Build para simulação"
-	@echo "  make build-esp32    - Build para hardware"
+	@echo "Environments:"
+	@echo "  make build-wokwi    - Build for simulation"
+	@echo "  make build-esp32    - Build for hardware"
 
-# Compilação
+# Build
 build:
 	platformio run -e esp32dev
 
@@ -28,7 +30,7 @@ build-esp32:
 build-wokwi:
 	platformio run -e wokwi
 
-# Upload e Monitor
+# Upload and Monitor
 upload:
 	platformio run -e esp32dev --target upload
 
@@ -40,18 +42,37 @@ flash: upload
 
 # Wokwi
 wokwi: build-wokwi
-	@echo "Build concluído! Agora inicie o Wokwi no VS Code (F1 -> Wokwi: Start Simulator)"
+	@echo "Build complete! Now start Wokwi in VS Code (F1 -> Wokwi: Start Simulator)"
 
-# Manutenção
+# Maintenance
 clean:
 	platformio run --target clean
+	@$(MAKE) test-clean
 
 install:
 	platformio pkg install
 
-# Testes
-test:
-	platformio test
+# Unit Tests
+test-variometer:
+	@echo "Running Variometer tests..."
+	@cd tests && \
+		g++ -c -w ../src/Variometer/Variometer.cpp Variometer.test.cpp && \
+		g++ -o Variometer.test Variometer.o Variometer.test.o && \
+		./Variometer.test
+
+test-wind:
+	@echo "Running Wind tests..."
+	@cd tests && \
+		g++ -c -w ../src/Wind/Wind.cpp Wind.test.cpp && \
+		g++ -o Wind.test Wind.o Wind.test.o && \
+		./Wind.test
+
+test-all: test-variometer test-wind
+	@echo ""
+	@echo "All tests completed!"
+
+test-clean:
+	@rm -f tests/*.test tests/*.o
 
 # Info
 info:
