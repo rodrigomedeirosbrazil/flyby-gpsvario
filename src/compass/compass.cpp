@@ -1,8 +1,8 @@
 #include <U8g2lib.h>
-#include "Compass.h"
+#include "compass.h"
+#include "../globals.h"
 
-Compass::Compass(Display *display, uint8_t x, uint8_t y, uint8_t size) {
-  this->display = display;
+Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
   this->x = x;
   this->y = y;
   this->size = size;
@@ -26,7 +26,7 @@ void Compass::setWindAvailabilty(bool isAvailable)
 
 void Compass::draw()
 {
-  this->display->setFont(SMALL_FONT);
+  display.setFont(SMALL_FONT);
   drawCompassCircles();
   drawNeedle();
   drawNorth();
@@ -39,37 +39,37 @@ void Compass::draw()
 
 void Compass::drawCompassCircles()
 {
-  this->display->drawCircle(this->x, this->y, this->size);
-  this->display->drawCircle(this->x, this->y, this->size - 10);
+  display.drawCircle(this->x, this->y, this->size);
+  display.drawCircle(this->x, this->y, this->size - 10);
 }
 
 void Compass::drawNeedle()
 {
-    this->display->drawLine(
-        this->x, 
+    display.drawLine(
+        this->x,
         this->y - 10,
-        this->x - 5, 
+        this->x - 5,
         this->y + 10
     );
 
-    this->display->drawLine(
-        this->x, 
+    display.drawLine(
+        this->x,
         this->y - 10,
-        this->x + 5, 
+        this->x + 5,
         this->y + 10
     );
 
-    this->display->drawLine(
-        this->x, 
+    display.drawLine(
+        this->x,
         this->y + 5,
-        this->x - 5, 
+        this->x - 5,
         this->y + 10
     );
 
-    this->display->drawLine(
-        this->x, 
+    display.drawLine(
+        this->x,
         this->y + 5,
-        this->x + 5, 
+        this->x + 5,
         this->y + 10
     );
 }
@@ -79,8 +79,8 @@ void Compass::drawNorth()
   unsigned char x = ((cos((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->x;
   unsigned char y = ((sin((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  this->display->print("N");
+  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.print("N");
 }
 
 void Compass::drawSouth()
@@ -88,8 +88,8 @@ void Compass::drawSouth()
   unsigned char x = ((cos((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->x;
   unsigned char y = ((sin((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  this->display->print("S");
+  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.print("S");
 }
 
 void Compass::drawEast()
@@ -97,8 +97,8 @@ void Compass::drawEast()
   unsigned char x = ((cos(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->x;
   unsigned char y = ((sin(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  this->display->print("E");
+  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.print("E");
 }
 
 void Compass::drawWest()
@@ -106,13 +106,13 @@ void Compass::drawWest()
   unsigned char x = ((cos((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->x;
   unsigned char y = ((sin((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
-  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  this->display->print("W");
+  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.print("W");
 }
 
 void Compass::drawCompassDegree(unsigned int degree)
 {
-  this->display->printCenter(
+  display.printCenter(
       (int) degree,
       this->x,
       this->y + this->size + SMALL_FONT_HEIGHT + 1);
@@ -127,6 +127,6 @@ void Compass::drawWindSock()
   unsigned char x = ((cos((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->x;
   unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->y + 6;
 
-  this->display->setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  this->display->print("P");
+  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.print("P");
 }
