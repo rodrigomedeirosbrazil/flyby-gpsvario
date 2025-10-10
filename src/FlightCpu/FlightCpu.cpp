@@ -8,7 +8,7 @@ void FlightCpu::tick() {
     if (barometer.isAvailable()) {
       variometer.tick(barometer.getPressure(), millis());
     }
-    
+
     if (inFlight) {
       beep.tick(variometer.getVario());
     }
