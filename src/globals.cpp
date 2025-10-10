@@ -1,5 +1,14 @@
 #include "globals.h"
 #include "defines.h"
+#include "Barometer/Barometer.h"
+#include "Variometer/Variometer.h"
+#include "Beep/Beep.h"
+#include "Gps/Gps.h"
+#include "Wind/Wind.h"
+#include "Display/Display.h"
+#include "Compass/Compass.h"
+#include "Screen/Screen.h"
+#include "FlightCpu/FlightCpu.h"
 
 Barometer barometer;
 Variometer variometer;

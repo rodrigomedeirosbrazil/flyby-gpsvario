@@ -1,15 +1,15 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "Barometer/Barometer.h"
-#include "Variometer/Variometer.h"
-#include "Beep/Beep.h"
-#include "Gps/Gps.h"
-#include "Wind/Wind.h"
-#include "Display/Display.h"
-#include "Compass/Compass.h"
-#include "Screen/Screen.h"
-#include "FlightCpu/FlightCpu.h"
+class Barometer;
+class Variometer;
+class Beep;
+class Gps;
+class Wind;
+class Display;
+class Compass;
+class Screen;
+class FlightCpu;
 
 extern Barometer barometer;
 extern Variometer variometer;
