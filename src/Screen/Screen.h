@@ -9,7 +9,6 @@
 #define INFOBOX_WIDTH 64
 #define INFOBOX_HEIGHT 20
 
-class FlightCpu;
 class Screen
 {
     public:
@@ -18,15 +17,12 @@ class Screen
             InfoScreen
         };
 
-        Screen(FlightCpu *flightCpu);
+        Screen();
         void begin();
         void draw();
 
     private:
         Screens screenSelected = InfoScreen;
-        Compass *compass;
-        Display *display;
-        FlightCpu *flightCpu;
         unsigned long lastTimeScreenWasDrawn = 0;
         const char notAvailableText[4] = "N/A";
         const char spinner[4] = {'-', '\\', '|', '/'};

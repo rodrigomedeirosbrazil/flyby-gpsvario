@@ -2,34 +2,19 @@
 #include "Screen.h"
 #include "../defines.h"
 #include "../helpers/helpers.h"
+#include "../globals.h"
 
-Screen::Screen(FlightCpu *flightCpu)
+Screen::Screen()
 {
-    #ifdef FLYBY_GPS_VARIO
-    this->display = new Display(
-        U8G2_R2,
-        LCD_CLOCK_PIN,
-        LCD_DATA_PIN,
-        U8X8_PIN_NONE
-    );
-    #endif
-
-    #ifdef WOKWI
-    this->display = new Display(U8G2_R0);
-    #endif
-
-    this->flightCpu = flightCpu;
-    this->compass = new Compass(this->display, 25, 25, 25);
 }
 
 void Screen::begin()
 {
     #ifdef FLYBY_GPS_VARIO
-    this->display->setI2CAddress(0x3F * 2);
+    display.setI2CAddress(0x3F * 2);
     #endif
 
-    this->display->begin();
-    // this->display->setContrast(SCREEN_CONTRAST);
+    display.begin();
 }
 
 void Screen::draw()
@@ -39,11 +24,11 @@ void Screen::draw()
     }
     this->lastTimeScreenWasDrawn = millis();
 
-    this->screenSelected = this->flightCpu->getGps()->isAvailable()
+    this->screenSelected = gps.isAvailable()
         ? GpsScreen
         : InfoScreen;
 
-    this->display->firstPage();
+    display.firstPage();
     do {
         switch (this->screenSelected)
         {
@@ -58,113 +43,111 @@ void Screen::draw()
             default:
                 break;
         }
-    } while (this->display->nextPage());
+    } while (display.nextPage());
 }
 
 void Screen::drawGpsScreen()
 {
-    this->compass->setHeading(this->flightCpu->getGps()->getHeading());
-    this->compass->setWindDirection(this->flightCpu->getWind()->getDirection());
-    this->compass->setWindAvailabilty(this->flightCpu->getWind()->isAvailable());
-    this->compass->draw();
+    compass.setHeading(gps.getHeading());
+    compass.setWindDirection(wind.getDirection());
+    compass.setWindAvailabilty(wind.isAvailable());
+    compass.draw();
 
-    drawInfoBox((int) this->flightCpu->getVariometer()->getAltitude(), "m", 64, 0, this->flightCpu->getBarometer()->isAvailable());
-    drawInfoBox((int) this->flightCpu->getGps()->getSpeed(), "km/h", 64, 20, this->flightCpu->getGps()->isAvailable());
-    drawInfoBox(this->flightCpu->getVariometer()->getVario(), "m/s", 64, 40, this->flightCpu->getBarometer()->isAvailable());
+    drawInfoBox((int) variometer.getAltitude(), "m", 64, 0, barometer.isAvailable());
+    drawInfoBox((int) gps.getSpeed(), "km/h", 64, 20, gps.isAvailable());
+    drawInfoBox(variometer.getVario(), "m/s", 64, 40, barometer.isAvailable());
 
+    display.setFont(SMALL_FONT);
+    display.setCursor(54, 8);
+    display.printf("%.0fm", gps.getAltitude());
 
-    this->display->setFont(SMALL_FONT);
-    this->display->setCursor(54, 8);
-    this->display->printf("%.0fm", this->flightCpu->getGps()->getAltitude());
+    if (wind.isAvailable()) {
+        display.setCursor(54, 32);
+        display.print("Wind:");
 
-    if (this->flightCpu->getWind()->isAvailable()) {
-        this->display->setCursor(54, 32);
-        this->display->print("Wind:");
-
-        this->display->setCursor(54, 40);
-        this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
+        display.setCursor(54, 40);
+        display.printf("%.0fkmh", wind.getSpeed());
     }
 
-    if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
-        this->display->setFont(SMALL_FONT);
-        this->display->setCursor(54, 64);
+    if (flightCpu.getFlightTime() > 0) {
+        display.setFont(SMALL_FONT);
+        display.setCursor(54, 64);
 
-        unsigned int hours = this->flightCpu->getFlightTime() / 3600;
-        unsigned int minutes = (this->flightCpu->getFlightTime() % 3600) / 60;
-        this->display->printf("%01d:%02d", hours, minutes);
+        unsigned int hours = flightCpu.getFlightTime() / 3600;
+        unsigned int minutes = (flightCpu.getFlightTime() % 3600) / 60;
+        display.printf("%01d:%02d", hours, minutes);
     }
 }
 
 void Screen::drawInfoScreen()
 {
-    this->display->setFont(SMALL_FONT);
+    display.setFont(SMALL_FONT);
 
-    this->display->setCursor(0, 8);
-    this->flightCpu->getBarometer()->isAvailable()
-        ?   this->display->printf("Pre:%ld", this->flightCpu->getVariometer()->getPressure())
-        :   this->display->print("Pre: N/A");
+    display.setCursor(0, 8);
+    barometer.isAvailable()
+        ?   display.printf("Pre:%ld", variometer.getPressure())
+        :   display.print("Pre: N/A");
 
-    this->display->setCursor(0, 16);
-    this->flightCpu->getBarometer()->isAvailable()
-        ?   this->display->printf("Alt:%.0f", this->flightCpu->getVariometer()->getAltitude())
-        :   this->display->print("Alt: N/A");
+    display.setCursor(0, 16);
+    barometer.isAvailable()
+        ?   display.printf("Alt:%.0f", variometer.getAltitude())
+        :   display.print("Alt: N/A");
 
-    this->display->setCursor(0, 24);
-    this->flightCpu->getBarometer()->isAvailable()
-        ?   this->display->printf("Var:%.1f", this->flightCpu->getVariometer()->getVario())
-        :   this->display->print("Var: N/A");
+    display.setCursor(0, 24);
+    barometer.isAvailable()
+        ?   display.printf("Var:%.1f", variometer.getVario())
+        :   display.print("Var: N/A");
 
-    this->display->setCursor(0, 32);
-    this->display->printf("QNH:%ld", this->flightCpu->getVariometer()->getQnh());
+    display.setCursor(0, 32);
+    display.printf("QNH:%ld", variometer.getQnh());
 
-    this->display->setCursor(0, 40);
-    this->flightCpu->getBarometer()->isAvailable()
-        ?   this->display->printf("Tmp:%.1f", this->flightCpu->getBarometer()->getTemperature())
-        :   this->display->print("Tmp: N/A");
+    display.setCursor(0, 40);
+    barometer.isAvailable()
+        ?   display.printf("Tmp:%.1f", barometer.getTemperature())
+        :   display.print("Tmp: N/A");
 
-    this->display->setCursor(0, 48);
-    this->display->printf("TMZ: %d", TIMEZONE);
+    display.setCursor(0, 48);
+    display.printf("TMZ: %d", TIMEZONE);
 
-    if (this->flightCpu->getGps()->isAvailable()) {
-        unsigned long unixtime = convertDateAndTimeEpochTime(this->flightCpu->getGps()->getDate(), this->flightCpu->getGps()->getTime());
+    if (gps.isAvailable()) {
+        unsigned long unixtime = convertDateAndTimeEpochTime(gps.getDate(), gps.getTime());
 
         time_t t = unixtime - (TIMEZONE * 3600);
         struct tm *timestamp = gmtime(&t);
 
-        this->display->setCursor(0, 56);
-        this->display->printf("%04d-%02d-%02d", timestamp->tm_year + 1900, timestamp->tm_mon + 1, timestamp->tm_mday);
+        display.setCursor(0, 56);
+        display.printf("%04d-%02d-%02d", timestamp->tm_year + 1900, timestamp->tm_mon + 1, timestamp->tm_mday);
 
-        this->display->setCursor(0, 64);
-        this->display->printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
+        display.setCursor(0, 64);
+        display.printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
     }
 
+    display.setCursor(64, 8);
+    display.printf("Lat:%.6f", gps.getLatitude());
 
-    this->display->setCursor(64, 8);
-    this->display->printf("Lat:%.6f", this->flightCpu->getGps()->getLatitude());
+    display.setCursor(64, 16);
+    display.printf("Lon:%.6f", gps.getLongitude());
 
-    this->display->setCursor(64, 16);
-    this->display->printf("Lon:%.6f", this->flightCpu->getGps()->getLongitude());
+    display.setCursor(64, 24);
+    display.printf("Spd:%.1f", gps.getSpeed());
 
-    this->display->setCursor(64, 24);
-    this->display->printf("Spd:%.1f", this->flightCpu->getGps()->getSpeed());
+    display.setCursor(64, 32);
+    display.printf("Hed:%.0f", gps.getHeading());
 
-    this->display->setCursor(64, 32);
-    this->display->printf("Hed:%.0f", this->flightCpu->getGps()->getHeading());
+    display.setCursor(64, 40);
+    display.printf("PDP:%ld", gps.getPdop());
 
-    this->display->setCursor(64, 40);
-    this->display->printf("PDP:%ld", this->flightCpu->getGps()->getPdop());
+    display.setCursor(64, 48);
+    display.printf("VDP:%ld", gps.getVdop());
 
-    this->display->setCursor(64, 48);
-    this->display->printf("VDP:%ld", this->flightCpu->getGps()->getVdop());
+    display.setCursor(64, 56);
+    display.printf("Sat:%d", gps.getSatellites());
 
-    this->display->setCursor(64, 56);
-    this->display->printf("Sat:%d", this->flightCpu->getGps()->getSatellites());
+    display.setCursor(64, 64);
+    display.printf("Alt:%.0f", gps.getAltitude());
 
-    this->display->setCursor(64, 64);
-    this->display->printf("Alt:%.0f", this->flightCpu->getGps()->getAltitude());
-
-    this->display->setCursor(123, 64);
-    this->display->print(spinner[spinnerIndex]);
+    display.setCursor(123, 64);
+    display.print(spinner[spinnerIndex]);
     if (spinnerIndex == 3) {
         spinnerIndex = 0;
     } else {
@@ -174,18 +157,18 @@ void Screen::drawInfoScreen()
 
 void Screen::drawInfoBox (char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
-    this->display->setFont(BIG_FONT);
+    display.setFont(BIG_FONT);
 
-    this->display->printRight(
+    display.printRight(
         isAvailable
             ? value
             : (char *) this->notAvailableText,
         x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
         y + BIG_FONT_HEIGHT - 5);
 
-    this->display->setFont(SMALL_FONT);
+    display.setFont(SMALL_FONT);
 
-    this->display->printRight(
+    display.printRight(
         unit,
         x + INFOBOX_WIDTH,
         y + INFOBOX_HEIGHT);
