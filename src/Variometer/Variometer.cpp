@@ -51,8 +51,11 @@ void Variometer::calcVario(long now)
     D2 += (this->timeArray[i] - elapsedTime);
   };
 
-  this->vario = ((SAMPLES * N1) - N2 * N3) 
-    / (SAMPLES * D1 - D2 * D2);
+  float denominator = (SAMPLES * D1 - D2 * D2);
+  
+  if (denominator != 0) {
+    this->vario = ((SAMPLES * N1) - N2 * N3) / denominator;
+  }
 }
 
 long Variometer::getPressure()
