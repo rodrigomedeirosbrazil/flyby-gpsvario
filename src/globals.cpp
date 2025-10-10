@@ -6,7 +6,7 @@
 #include "Gps/Gps.h"
 #include "Wind/Wind.h"
 #include "Display/Display.h"
-#include "Compass/Compass.h"
+#include "compass/compass.h"
 #include "Screen/Screen.h"
 #include "FlightCpu/FlightCpu.h"
 

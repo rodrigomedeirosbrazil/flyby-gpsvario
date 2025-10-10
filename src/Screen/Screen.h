@@ -2,7 +2,7 @@
 #define SCREEN_H
 
 #include "../defines.h"
-#include "../Compass/Compass.h"
+#include "../compass/compass.h"
 #include "../Display/Display.h"
 #include "../FlightCpu/FlightCpu.h"
 
