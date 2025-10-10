@@ -1,18 +1,16 @@
 #include <Arduino.h>
 #include "defines.h"
 #include "helpers/helpers.h"
-#include "FlightCpu/FlightCpu.h"
-
-FlightCpu *flightCpu;
+#include "globals.h"
 
 void setup(void) {
   startSound();
 
   delay(POWER_ON_DELAY);
 
-  flightCpu = new FlightCpu();
+  screen.begin();
 }
 
 void loop(void) {
-  flightCpu->tick();
+  flightCpu.tick();
 }
