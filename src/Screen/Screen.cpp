@@ -18,17 +18,6 @@ Screen::Screen(FlightCpu *flightCpu)
     this->display = new Display(U8G2_R0);
     #endif
 
-    #ifdef SMARTVARIO
-    this->display = new Display(
-        U8G2_R0,
-        LCD_CLOCK_PIN,
-        LCD_DATA_PIN,
-        LCD_CS_PIN,
-        LCD_DC_PIN,
-        LCD_RESET_PIN
-    );
-    #endif
-
     this->flightCpu = flightCpu;
     this->compass = new Compass(this->display, 25, 25, 25);
 }

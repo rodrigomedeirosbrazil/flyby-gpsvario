@@ -14,7 +14,6 @@
 
 #define FLYBY_GPS_VARIO
 // #define WOKWI
-// #define SMARTVARIO
 
 #ifdef FLYBY_GPS_VARIO
     #define SPEAKER_PIN 14
@@ -22,15 +21,6 @@
     #define LCD_CLOCK_PIN 22 // SCL
     #define GPS_TX_PIN 17
     #define GPS_RX_PIN 16
-#endif
-
-#ifdef SMARTVARIO
-    #define SPEAKER_PIN 9
-    #define LCD_CS_PIN 6
-    #define LCD_RESET_PIN 5
-    #define LCD_DC_PIN 4 // RS
-    #define LCD_DATA_PIN 3  // SDA
-    #define LCD_CLOCK_PIN 2 // SCL
 #endif
 
 #ifdef WOKWI
