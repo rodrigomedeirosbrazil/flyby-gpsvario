@@ -7,7 +7,7 @@ Screen::Screen(FlightCpu *flightCpu)
 {
     #ifdef FLYBY_GPS_VARIO
     this->display = new Display(
-        U8G2_R2, 
+        U8G2_R2,
         LCD_CLOCK_PIN,
         LCD_DATA_PIN,
         U8X8_PIN_NONE
@@ -20,11 +20,11 @@ Screen::Screen(FlightCpu *flightCpu)
 
     #ifdef SMARTVARIO
     this->display = new Display(
-        U8G2_R0, 
+        U8G2_R0,
         LCD_CLOCK_PIN,
         LCD_DATA_PIN,
-        LCD_CS_PIN, 
-        LCD_DC_PIN, 
+        LCD_CS_PIN,
+        LCD_DC_PIN,
         LCD_RESET_PIN
     );
     #endif
@@ -50,8 +50,8 @@ void Screen::draw()
     }
     this->lastTimeScreenWasDrawn = millis();
 
-    this->screenSelected = this->flightCpu->getGps()->isAvailable() 
-        ? GpsScreen 
+    this->screenSelected = this->flightCpu->getGps()->isAvailable()
+        ? GpsScreen
         : InfoScreen;
 
     this->display->firstPage();
@@ -95,11 +95,11 @@ void Screen::drawGpsScreen()
         this->display->setCursor(54, 40);
         this->display->printf("%.0fkmh", this->flightCpu->getWind()->getSpeed());
     }
-    
+
     if (this->flightCpu && this->flightCpu->getFlightTime() > 0) {
         this->display->setFont(SMALL_FONT);
         this->display->setCursor(54, 64);
-        
+
         unsigned int hours = this->flightCpu->getFlightTime() / 3600;
         unsigned int minutes = (this->flightCpu->getFlightTime() % 3600) / 60;
         this->display->printf("%01d:%02d", hours, minutes);
@@ -111,17 +111,17 @@ void Screen::drawInfoScreen()
     this->display->setFont(SMALL_FONT);
 
     this->display->setCursor(0, 8);
-    this->flightCpu->getBarometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable()
         ?   this->display->printf("Pre:%ld", this->flightCpu->getVariometer()->getPressure())
         :   this->display->print("Pre: N/A");
 
     this->display->setCursor(0, 16);
-    this->flightCpu->getBarometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable()
         ?   this->display->printf("Alt:%.0f", this->flightCpu->getVariometer()->getAltitude())
         :   this->display->print("Alt: N/A");
 
     this->display->setCursor(0, 24);
-    this->flightCpu->getBarometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable()
         ?   this->display->printf("Var:%.1f", this->flightCpu->getVariometer()->getVario())
         :   this->display->print("Var: N/A");
 
@@ -129,7 +129,7 @@ void Screen::drawInfoScreen()
     this->display->printf("QNH:%ld", this->flightCpu->getVariometer()->getQnh());
 
     this->display->setCursor(0, 40);
-    this->flightCpu->getBarometer()->isAvailable() 
+    this->flightCpu->getBarometer()->isAvailable()
         ?   this->display->printf("Tmp:%.1f", this->flightCpu->getBarometer()->getTemperature())
         :   this->display->print("Tmp: N/A");
 
@@ -148,7 +148,7 @@ void Screen::drawInfoScreen()
         this->display->setCursor(0, 64);
         this->display->printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
     }
-    
+
 
     this->display->setCursor(64, 8);
     this->display->printf("Lat:%.6f", this->flightCpu->getGps()->getLatitude());
@@ -183,13 +183,13 @@ void Screen::drawInfoScreen()
     }
 }
 
-void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox (char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     this->display->setFont(BIG_FONT);
 
     this->display->printRight(
-        isAvailable 
-            ? value 
+        isAvailable
+            ? value
             : (char *) this->notAvailableText,
         x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
         y + BIG_FONT_HEIGHT - 5);
@@ -202,23 +202,23 @@ void Screen::drawInfoBox (char *value, char* unit, uint8_t x, uint8_t y, bool is
         y + INFOBOX_HEIGHT);
 }
 
-void Screen::drawInfoBox (int value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%d", value);
     drawInfoBox(buffer, unit, x, y, isAvailable);
 }
 
-void Screen::drawInfoBox (long value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox (long value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%ld", value);
     drawInfoBox(buffer, unit, x, y, isAvailable);
 }
 
-void Screen::drawInfoBox (float value, char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
 {
-    char buffer[10]; 
+    char buffer[10];
     dtostrf(value, 2, 1, buffer);
     drawInfoBox(buffer, unit, x, y, isAvailable);
 }

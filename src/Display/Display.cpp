@@ -1,6 +1,6 @@
 #include "Display.h"
 
-void Display::printCenter(char *text, uint8_t textX, uint8_t textY)
+void Display::printCenter(const char *text, uint8_t textX, uint8_t textY)
 {
     unsigned int chars = strlen(text);
     unsigned char x = textX - ((chars * getMaxCharWidth()) / 2);
@@ -17,12 +17,12 @@ void Display::printCenter(int value, uint8_t textX, uint8_t textY)
 
 void Display::printCenter(float value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6]; 
+    char buffer[6];
     dtostrf(value, 2, 2, buffer);
     printCenter(buffer, textX, textY);
 }
 
-void Display::printRight(char *text, uint8_t textX, uint8_t textY)
+void Display::printRight(const char *text, uint8_t textX, uint8_t textY)
 {
     unsigned int chars = strlen(text);
     unsigned char x = textX - (chars * getMaxCharWidth());
@@ -39,7 +39,7 @@ void Display::printRight(int value, uint8_t textX, uint8_t textY)
 
 void Display::printRight(float value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6]; 
+    char buffer[6];
     dtostrf(value, 2, 2, buffer);
     printRight(buffer, textX, textY);
 }

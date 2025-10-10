@@ -1,8 +1,14 @@
 {
-    "editor.autoIndent": "none",
-    "files.associations": {
-        "*.module": "php",
-        "array": "cpp",
-        "string": "cpp"
-    }
+  "files.associations": {
+    "*.ino": "cpp",
+    "*.tpp": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "disabled",
+  "editor.formatOnSave": false,
+  "files.exclude": {
+    "**/.pio": true
+  },
+  "search.exclude": {
+    "**/.pio": true
+  }
 }

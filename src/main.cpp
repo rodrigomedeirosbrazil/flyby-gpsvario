@@ -1,6 +1,7 @@
-#include "src/defines.h"
-#include "src/helpers/helpers.h"
-#include "src/FlightCpu/FlightCpu.h"
+#include <Arduino.h>
+#include "defines.h"
+#include "helpers/helpers.h"
+#include "FlightCpu/FlightCpu.h"
 
 FlightCpu *flightCpu;
 

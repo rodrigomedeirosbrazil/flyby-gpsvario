@@ -33,13 +33,26 @@ See `diagram.json` for a sample wiring diagram (Wokwi simulator compatible).
    ```sh
    git clone https://github.com/yourusername/flyby-gpsvario.git
    ```
-2. **Open in Arduino IDE or PlatformIO:**
-   - Select the ESP32 Dev Module board.
-   - Install required libraries: `Adafruit_BMP085`, `U8g2lib`, and any others as needed.
-3. **Configure Pins (if needed):**
+2. **Using PlatformIO (Recommended):**
+   - Install [PlatformIO](https://platformio.org/) (VS Code extension or CLI)
+   - Open the project folder in PlatformIO
+   - PlatformIO will automatically install all required libraries
+   - Build the project: `pio run`
+   - Upload to ESP32: `pio run --target upload`
+   - Monitor serial output: `pio device monitor`
+
+3. **Alternative - Arduino IDE:**
+   - Select the ESP32 Dev Module board
+   - Install required libraries: `Adafruit_BMP085`, `U8g2lib`
+   - Rename `src/main.cpp` to `flyby-gpsvario.ino` and move to root
+   - Adjust include paths in the main file
+
+4. **Configure Pins (if needed):**
    - Adjust pin definitions in `src/defines.h` for your hardware.
-4. **Build and Upload:**
-   - Compile and upload the firmware to your ESP32.
+
+## PlatformIO Environments
+- `esp32dev` - Default environment for physical ESP32 hardware
+- `wokwi` - Environment for Wokwi simulation with WOKWI flag enabled
 
 ## Usage
 - On power-up, the device initializes sensors and displays the main screen.

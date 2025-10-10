@@ -35,10 +35,10 @@ class Screen
         void drawGpsScreen();
         void drawInfoScreen();
 
-        void drawInfoBox(char *value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (int value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (long value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (float value, char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox(char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (long value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
 };
 
 #endif
