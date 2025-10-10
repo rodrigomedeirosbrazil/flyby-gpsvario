@@ -3,6 +3,14 @@
 #include "Variometer.h"
 
 Variometer::Variometer() {
+  for (int i = 0; i <= MAX_SAMPLES; i++) {
+    this->pressureArray[i] = 0;
+    this->timeArray[i] = 0;
+  }
+  
+  for (int i = 0; i < NUMBER_OF_PRESSURE_SAMPLES; i++) {
+    this->pressureSamples[i] = this->qnh;
+  }
 }
 
 void Variometer::tick(long pressure, long now)
