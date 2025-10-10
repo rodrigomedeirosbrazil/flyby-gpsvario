@@ -15,9 +15,9 @@ void test_vario()
     for(int i = 0; i <= 60; i++) {
         vario.tick(101325 - (i * 100), i * 10);
     };
-    
+
     float varioValue = vario.getVario();
-    
+
     if (varioValue >= 0.8 && varioValue <= 0.9) {
         cout << "\x1b[40m" << "test_vario OK (vario: " << varioValue << " m/s)" << "\x1b[0m" << endl;
     } else {
@@ -37,9 +37,9 @@ void test_vario_with_qnh_change()
             vario.setQnh(102100);
         }
     };
-    
+
     float varioValue = vario.getVario();
-    
+
     if (varioValue >= 0.8 && varioValue <= 0.9) {
         cout << "\x1b[40m" << "test_vario_with_qnh_change OK (vario: " << varioValue << " m/s)" << "\x1b[0m" << endl;
     } else {

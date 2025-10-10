@@ -7,7 +7,7 @@ Variometer::Variometer() {
     this->pressureArray[i] = 0;
     this->timeArray[i] = 0;
   }
-  
+
   for (int i = 0; i < NUMBER_OF_PRESSURE_SAMPLES; i++) {
     this->pressureSamples[i] = this->qnh;
   }
@@ -52,7 +52,7 @@ void Variometer::calcVario(long now)
   };
 
   float denominator = (SAMPLES * D1 - D2 * D2);
-  
+
   if (denominator != 0) {
     this->vario = ((SAMPLES * N1) - N2 * N3) / denominator;
   }
@@ -96,8 +96,8 @@ void Variometer::setQnhByAltitude(float altitude)
 long Variometer::getAveragePressure(long newPressure)
 {
   memmove(
-    &this->pressureSamples[1], 
-    &this->pressureSamples, 
+    &this->pressureSamples[1],
+    &this->pressureSamples,
     sizeof(this->pressureSamples[0]) * (NUMBER_OF_PRESSURE_SAMPLES - 1)
   );
 

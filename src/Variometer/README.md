@@ -28,7 +28,7 @@ long timestamp = millis();
 vario.tick(pressure, timestamp);
 ```
 
-**Important:** 
+**Important:**
 - Pressure must be in Pascals (Pa). If your sensor returns hPa, multiply by 100.
 - Timestamp must be in milliseconds.
 - Call `tick()` regularly (recommended: every 50-100ms) for accurate results.
@@ -94,18 +94,18 @@ void setup() {
 void loop() {
   long pressure = readPressureFromSensor();
   vario.tick(pressure, millis());
-  
+
   float verticalSpeed = vario.getVario();
   float altitude = vario.getAltitude();
-  
+
   Serial.print("Vertical Speed: ");
   Serial.print(verticalSpeed);
   Serial.println(" m/s");
-  
+
   Serial.print("Altitude: ");
   Serial.print(altitude);
   Serial.println(" m");
-  
+
   delay(100);
 }
 ```
