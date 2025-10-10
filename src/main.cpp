@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "defines.h"
 #include "helpers/helpers.h"
+#include "Screen/Screen.h"
+#include "FlightCpu/FlightCpu.h"
 #include "globals.h"
 
 void setup(void) {
