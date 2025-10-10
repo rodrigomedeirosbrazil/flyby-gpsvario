@@ -9,6 +9,7 @@ class Gps
 {
     public:
         Gps();
+        void begin();
         void tick();
         bool isAvailable();
         byte getBestVdop();

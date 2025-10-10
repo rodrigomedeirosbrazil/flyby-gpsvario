@@ -17,7 +17,7 @@ Gps gps;
 Wind wind;
 
 #ifdef FLYBY_GPS_VARIO
-Display display(U8G2_R2, LCD_CLOCK_PIN, LCD_DATA_PIN, U8X8_PIN_NONE);
+Display display(U8G2_R2, U8X8_PIN_NONE, LCD_CLOCK_PIN, LCD_DATA_PIN);
 #endif
 
 #ifdef WOKWI

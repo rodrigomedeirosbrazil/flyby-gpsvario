@@ -10,6 +10,8 @@ void setup(void) {
 
   delay(POWER_ON_DELAY);
 
+  barometer.begin();
+  gps.begin();
   screen.begin();
 }
 

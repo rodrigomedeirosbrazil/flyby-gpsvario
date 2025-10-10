@@ -2,6 +2,9 @@
 #include "Barometer.h"
 
 Barometer::Barometer() {
+}
+
+void Barometer::begin() {
   #ifndef NO_BAROMETER
   if (barometer.begin(BMP085_ULTRAHIGHRES)) {
     this->barometerInitialized = true;

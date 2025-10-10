@@ -47,6 +47,10 @@ $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
 Gps::Gps()
 {
     this->gpsParser = new TinyGPS();
+}
+
+void Gps::begin()
+{
     #ifndef NO_GPS
     serial2 = new HardwareSerial(2);
     serial2->begin(GPS_BAUD_RATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
@@ -71,7 +75,7 @@ void Gps::tick()
         }
     }
     #endif
-    
+
     #ifdef NO_GPS
     delay(2000);
     char GPGGA[] = "$GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A";
@@ -110,7 +114,7 @@ void Gps::getParserData()
 
 bool Gps::isAvailable()
 {
-    return gpsHasFreshData() 
+    return gpsHasFreshData()
         && isValidData();
 }
 
@@ -122,7 +126,7 @@ bool Gps::gpsHasFreshData()
 
 bool Gps::isValidData()
 {
-    return this->latitude != this->gpsParser->GPS_INVALID_ANGLE 
+    return this->latitude != this->gpsParser->GPS_INVALID_ANGLE
         && this->longitude != this->gpsParser->GPS_INVALID_ANGLE
         && this->gpsParser->vdop() != this->gpsParser->GPS_INVALID_VDOP;
 }

@@ -7,6 +7,7 @@ class Barometer
 {
     public:
         Barometer();
+        void begin();
         long getPressure();
         float getTemperature();
         bool isAvailable();
