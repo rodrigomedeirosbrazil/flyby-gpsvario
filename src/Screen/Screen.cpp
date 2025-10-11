@@ -15,6 +15,7 @@ void Screen::begin()
     #endif
 
     display.begin();
+    systemStartTime = millis();
 }
 
 void Screen::draw()
@@ -24,9 +25,15 @@ void Screen::draw()
     }
     this->lastTimeScreenWasDrawn = millis();
 
-    this->screenSelected = gps.isAvailable()
-        ? GpsScreen
-        : InfoScreen;
+    this->screenSelected = InfoScreen;
+
+    if (gps.isAvailable()) {
+        this->screenSelected = GpsScreen;
+    }
+
+    if (isInfoScreenTimeoutExpired()) {
+        this->screenSelected = GpsScreen;
+    }
 
     display.firstPage();
     do {
@@ -48,20 +55,25 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    compass.setHeading(gps.getHeading());
-    compass.setWindDirection(wind.getDirection());
-    compass.setWindAvailabilty(wind.isAvailable());
-    compass.draw();
+    if (gps.isAvailable()) {
+        compass.setHeading(gps.getHeading());
+        compass.setWindDirection(wind.getDirection());
+        compass.setWindAvailabilty(wind.isAvailable());
+        compass.draw();
+    }
 
     drawInfoBox((int) variometer.getAltitude(), "m", 64, 0, barometer.isAvailable());
-    drawInfoBox((int) gps.getSpeed(), "km/h", 64, 20, gps.isAvailable());
-    drawInfoBox(variometer.getVario(), "m/s", 64, 40, barometer.isAvailable());
+    drawInfoBox(variometer.getVario(), "m/s", 64, 20, barometer.isAvailable());
+    drawInfoBox((int) gps.getSpeed(), "km/h", 64, 40, gps.isAvailable());
 
-    display.setFont(SMALL_FONT);
-    display.setCursor(54, 8);
-    display.printf("%.0fm", gps.getAltitude());
+    if (gps.isAvailable()) {
+        display.setFont(SMALL_FONT);
+        display.setCursor(54, 8);
+        display.printf("%.0fm", gps.getAltitude());
+    }
 
     if (wind.isAvailable()) {
+        display.setFont(SMALL_FONT);
         display.setCursor(54, 32);
         display.print("Wind:");
 
@@ -193,4 +205,9 @@ void Screen::drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, b
     char buffer[10];
     dtostrf(value, 2, 1, buffer);
     drawInfoBox(buffer, unit, x, y, isAvailable);
+}
+
+bool Screen::isInfoScreenTimeoutExpired()
+{
+    return (millis() - systemStartTime) >= INFO_SCREEN_TIMEOUT;
 }

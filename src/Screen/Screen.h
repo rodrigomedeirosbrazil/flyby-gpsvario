@@ -24,12 +24,15 @@ class Screen
     private:
         Screens screenSelected = InfoScreen;
         unsigned long lastTimeScreenWasDrawn = 0;
-        const char notAvailableText[4] = "N/A";
+        const char notAvailableText[3] = "--";
         const char spinner[4] = {'-', '\\', '|', '/'};
         byte spinnerIndex = 0;
+        static const unsigned long INFO_SCREEN_TIMEOUT = 10000;
+        unsigned long systemStartTime = 0;
 
         void drawGpsScreen();
         void drawInfoScreen();
+        bool isInfoScreenTimeoutExpired();
 
         void drawInfoBox(char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
         void drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
