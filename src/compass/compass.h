@@ -12,9 +12,6 @@ class Compass
     public:
         Compass(uint8_t x, uint8_t y, uint8_t size);
         void draw();
-        void setHeading(unsigned int heading);
-        void setWindDirection(unsigned long windDirection);
-        void setWindAvailabilty(bool isAvailable);
     private:
         uint8_t x;
         uint8_t y;
@@ -32,6 +29,8 @@ class Compass
         void drawWest();
         void drawCompassDegree(unsigned int degree);
         void drawWindSock();
+        void drawWaitingGps();
+        void drawSatelliteCount();
 };
 
 #endif

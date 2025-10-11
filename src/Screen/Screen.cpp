@@ -55,12 +55,7 @@ void Screen::draw()
 
 void Screen::drawGpsScreen()
 {
-    if (gps.isAvailable()) {
-        compass.setHeading(gps.getHeading());
-        compass.setWindDirection(wind.getDirection());
-        compass.setWindAvailabilty(wind.isAvailable());
-        compass.draw();
-    }
+    compass.draw();
 
     drawInfoBox((int) variometer.getAltitude(), "m", 64, 0, barometer.isAvailable());
     drawInfoBox(variometer.getVario(), "m/s", 64, 20, barometer.isAvailable());

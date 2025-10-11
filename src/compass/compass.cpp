@@ -1,6 +1,8 @@
 #include <U8g2lib.h>
 #include "compass.h"
 #include "../globals.h"
+#include "../Gps/Gps.h"
+#include "../Wind/Wind.h"
 
 Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
   this->x = x;
@@ -8,33 +10,29 @@ Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
   this->size = size;
 }
 
-void Compass::setHeading(unsigned int heading)
-{
-  this->heading = heading;
-  this->compassDegree = 360 - heading;
-}
-
-void Compass::setWindDirection(unsigned long windDirection)
-{
-  this->windDirection = windDirection;
-}
-
-void Compass::setWindAvailabilty(bool isAvailable)
-{
-  this->isWindAvailable = isAvailable;
-}
-
 void Compass::draw()
 {
   display.setFont(SMALL_FONT);
-  drawCompassCircles();
-  drawNeedle();
-  drawNorth();
-  drawSouth();
-  drawEast();
-  drawWest();
-  drawCompassDegree(this->heading);
-  drawWindSock();
+
+  if (gps.isAvailable()) {
+    this->heading = gps.getHeading();
+    this->compassDegree = 360 - this->heading;
+    this->windDirection = wind.getDirection();
+    this->isWindAvailable = wind.isAvailable();
+
+    drawCompassCircles();
+    drawNeedle();
+    drawNorth();
+    drawSouth();
+    drawEast();
+    drawWest();
+    drawCompassDegree(this->heading);
+    drawWindSock();
+  }
+
+  if (!gps.isAvailable()) {
+    drawWaitingGps();
+  }
 }
 
 void Compass::drawCompassCircles()
@@ -129,4 +127,34 @@ void Compass::drawWindSock()
 
   display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
   display.print("P");
+}
+
+void Compass::drawWaitingGps()
+{
+  this->compassDegree = 0;
+
+  drawCompassCircles();
+  drawNeedle();
+  drawSatelliteCount();
+}
+
+void Compass::drawSatelliteCount()
+{
+  unsigned short satellites = gps.getSatellites();
+
+  char buffer[8];
+
+  if (satellites == 255 || satellites == 0) {
+    sprintf(buffer, "--");
+  }
+
+  if (satellites < 255 && satellites > 0) {
+    sprintf(buffer, "%d", satellites);
+  }
+
+  display.printCenter(
+    buffer,
+    this->x,
+    this->y + this->size + SMALL_FONT_HEIGHT + 1
+  );
 }
