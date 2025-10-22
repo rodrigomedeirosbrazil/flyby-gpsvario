@@ -4,13 +4,17 @@
 #define TIMEZONE -3
 #define TAKEOFF_SPEED 6
 
-#define SMALL_FONT u8g_font_5x7
+#define SMALL_FONT u8g2_font_4x6_tr
 #define SMALL_FONT_WIDTH 5
 #define SMALL_FONT_HEIGHT 7
 
-#define BIG_FONT u8g2_font_10x20_tr
+#define MEDIUM_FONT u8g2_font_5x8_tr
+#define MEDIUM_FONT_WIDTH 5
+#define MEDIUM_FONT_HEIGHT 8
+
+#define BIG_FONT u8g2_font_t0_22_tr
 #define BIG_FONT_WIDTH 10
-#define BIG_FONT_HEIGHT 20
+#define BIG_FONT_HEIGHT 22
 
 #define FLYBY_GPS_VARIO
 // #define WOKWI
