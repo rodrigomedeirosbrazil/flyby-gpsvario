@@ -4,10 +4,10 @@
 #include "../Gps/Gps.h"
 #include "../Wind/Wind.h"
 
-Compass::Compass(uint8_t x, uint8_t y, uint8_t size) {
-  this->x = x;
-  this->y = y;
-  this->size = size;
+Compass::Compass() {
+  this->x = 27;
+  this->y = 27;
+  this->size = 27;
 }
 
 void Compass::draw()
@@ -38,7 +38,6 @@ void Compass::draw()
 void Compass::drawCompassCircles()
 {
   display.drawCircle(this->x, this->y, this->size);
-  display.drawCircle(this->x, this->y, this->size - 10);
 }
 
 void Compass::drawNeedle()

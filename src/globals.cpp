@@ -24,7 +24,7 @@ Display display(U8G2_R2, U8X8_PIN_NONE, LCD_CLOCK_PIN, LCD_DATA_PIN);
 Display display(U8G2_R0);
 #endif
 
-Compass compass(25, 25, 25);
+Compass compass;
 Screen screen;
 FlightCpu flightCpu;
 

@@ -10,7 +10,7 @@
 class Compass
 {
     public:
-        Compass(uint8_t x, uint8_t y, uint8_t size);
+        Compass();
         void draw();
     private:
         uint8_t x;
