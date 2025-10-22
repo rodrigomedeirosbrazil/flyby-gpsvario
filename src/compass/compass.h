@@ -25,7 +25,7 @@ class Compass
         void drawNeedle();
         void drawCardinalPoint(int angleOffset, const char* letter);
         void drawCompassDegree(unsigned int degree);
-        void drawWindSock();
+        void drawWindDirection();
         void drawWaitingGps();
         void drawSatelliteCount();
 };

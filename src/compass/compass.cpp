@@ -27,7 +27,7 @@ void Compass::draw()
     drawCardinalPoint(0, "E");
     drawCardinalPoint(180, "W");
     drawCompassDegree(this->heading);
-    drawWindSock();
+    drawWindDirection();
   }
 
   if (!gps.isAvailable()) {
@@ -88,17 +88,41 @@ void Compass::drawCompassDegree(unsigned int degree)
       this->y + this->size + SMALL_FONT_HEIGHT + 1);
 }
 
-void Compass::drawWindSock()
+void Compass::drawWindDirection()
 {
   if (! this->isWindAvailable) {
     return;
   }
 
+  // Starting position of the arrow (on the compass circle)
   unsigned char x = ((cos((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->y + 6;
+  unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->y;
 
-  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  display.print("P");
+  // Calculate the angle of the arrow pointing to the center
+  float angleToCenter = atan2(this->y - y, this->x - x);
+
+  // Length of the main arrow and arrowhead
+  int arrowLength = 10;
+  int arrowHeadLength = 5;
+  float arrowHeadAngle = 30 * (pi / 180); // 30 degrees
+
+  // End point of the main line (pointing to the center)
+  int endX = x + (cos(angleToCenter) * arrowLength);
+  int endY = y + (sin(angleToCenter) * arrowLength);
+
+  // Draw main arrow line
+  display.drawLine(x, y, endX, endY);
+
+  // Draw arrowhead (two lines forming the "V")
+  // First line of the arrowhead
+  int head1X = endX + (cos(angleToCenter + pi - arrowHeadAngle) * arrowHeadLength);
+  int head1Y = endY + (sin(angleToCenter + pi - arrowHeadAngle) * arrowHeadLength);
+  display.drawLine(endX, endY, head1X, head1Y);
+
+  // Second line of the arrowhead
+  int head2X = endX + (cos(angleToCenter + pi + arrowHeadAngle) * arrowHeadLength);
+  int head2Y = endY + (sin(angleToCenter + pi + arrowHeadAngle) * arrowHeadLength);
+  display.drawLine(endX, endY, head2X, head2Y);
 }
 
 void Compass::drawWaitingGps()
