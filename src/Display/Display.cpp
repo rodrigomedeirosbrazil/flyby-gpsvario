@@ -10,15 +10,15 @@ void Display::printCenter(const char *text, uint8_t textX, uint8_t textY)
 
 void Display::printCenter(int value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6];
-    sprintf(buffer, "%d", value);
+    char buffer[DISPLAY_BUFFER_SIZE];
+    snprintf(buffer, sizeof(buffer), "%d", value);
     printCenter(buffer, textX, textY);
 }
 
 void Display::printCenter(float value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6];
-    dtostrf(value, 2, 2, buffer);
+    char buffer[DISPLAY_BUFFER_SIZE];
+    dtostrf(value, 4, 2, buffer);
     printCenter(buffer, textX, textY);
 }
 
@@ -32,14 +32,14 @@ void Display::printRight(const char *text, uint8_t textX, uint8_t textY)
 
 void Display::printRight(int value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6];
-    sprintf(buffer, "%d", value);
+    char buffer[DISPLAY_BUFFER_SIZE];
+    snprintf(buffer, sizeof(buffer), "%d", value);
     printRight(buffer, textX, textY);
 }
 
 void Display::printRight(float value, uint8_t textX, uint8_t textY)
 {
-    char buffer[6];
-    dtostrf(value, 2, 2, buffer);
+    char buffer[DISPLAY_BUFFER_SIZE];
+    dtostrf(value, 4, 2, buffer);
     printRight(buffer, textX, textY);
 }
