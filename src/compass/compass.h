@@ -23,10 +23,7 @@ class Compass
 
         void drawCompassCircles();
         void drawNeedle();
-        void drawNorth();
-        void drawSouth();
-        void drawEast();
-        void drawWest();
+        void drawCardinalPoint(int angleOffset, const char* letter);
         void drawCompassDegree(unsigned int degree);
         void drawWindSock();
         void drawWaitingGps();

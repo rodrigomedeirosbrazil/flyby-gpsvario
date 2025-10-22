@@ -22,10 +22,10 @@ void Compass::draw()
 
     drawCompassCircles();
     drawNeedle();
-    drawNorth();
-    drawSouth();
-    drawEast();
-    drawWest();
+    drawCardinalPoint(270, "N");
+    drawCardinalPoint(90, "S");
+    drawCardinalPoint(0, "E");
+    drawCardinalPoint(180, "W");
     drawCompassDegree(this->heading);
     drawWindSock();
   }
@@ -72,40 +72,13 @@ void Compass::drawNeedle()
     );
 }
 
-void Compass::drawNorth()
+void Compass::drawCardinalPoint(int angleOffset, const char* letter)
 {
-  unsigned char x = ((cos((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + 270) * (pi / 180))) * (this->size - 5)) + this->y + 6;
+  unsigned char x = ((cos((this->compassDegree + angleOffset) * (pi / 180))) * (this->size - 5)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + angleOffset) * (pi / 180))) * (this->size - 5)) + this->y + 6;
 
   display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  display.print("N");
-}
-
-void Compass::drawSouth()
-{
-  unsigned char x = ((cos((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + 90) * (pi / 180))) * (this->size - 5)) + this->y + 6;
-
-  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  display.print("S");
-}
-
-void Compass::drawEast()
-{
-  unsigned char x = ((cos(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->x;
-  unsigned char y = ((sin(this->compassDegree * (pi / 180))) * (this->size - 5)) + this->y + 6;
-
-  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  display.print("E");
-}
-
-void Compass::drawWest()
-{
-  unsigned char x = ((cos((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + 180) * (pi / 180))) * (this->size - 5)) + this->y + 6;
-
-  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
-  display.print("W");
+  display.print(letter);
 }
 
 void Compass::drawCompassDegree(unsigned int degree)
