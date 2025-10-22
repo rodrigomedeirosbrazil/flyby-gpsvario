@@ -38,6 +38,8 @@ class Screen
         void drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
         void drawInfoBox (long value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
         void drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawWindSpeedBox();
+        void drawGpsAltitudeBox();
 };
 
 #endif

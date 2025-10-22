@@ -62,18 +62,11 @@ void Screen::drawGpsScreen()
     drawInfoBox((int) gps.getSpeed(), "km/h", 64, 40, gps.isAvailable());
 
     if (gps.isAvailable()) {
-        display.setFont(SMALL_FONT);
-        display.setCursor(54, 8);
-        display.printf("%.0fm", gps.getAltitude());
+        drawGpsAltitudeBox();
     }
 
     if (wind.isAvailable()) {
-        display.setFont(SMALL_FONT);
-        display.setCursor(54, 32);
-        display.print("Wind:");
-
-        display.setCursor(54, 40);
-        display.printf("%.0fkmh", wind.getSpeed());
+        drawWindSpeedBox();
     }
 
     if (flightCpu.getFlightTime() > 0) {
@@ -205,4 +198,24 @@ void Screen::drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, b
 bool Screen::isInfoScreenTimeoutExpired()
 {
     return (millis() - systemStartTime) >= INFO_SCREEN_TIMEOUT;
+}
+
+void Screen::drawWindSpeedBox()
+{
+    display.setFont(SMALL_FONT);
+    display.printRight("wind:", 48, 62);
+    display.setCursor(69, 62);
+    display.printf("%.0fkmh", wind.getSpeed());
+    display.drawFrame(46, 55, 44, 9);
+}
+
+void Screen::drawGpsAltitudeBox()
+{
+    display.drawFrame(54, 0, 20, 15);
+
+    display.setFont(SMALL_FONT);
+    display.drawStr(59, 7, "GPS");
+
+    display.setCursor(56, 13);
+    display.printf("%.0f", gps.getAltitude());
 }
