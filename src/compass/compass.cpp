@@ -28,11 +28,9 @@ void Compass::draw()
     drawCardinalPoint(180, "W");
     drawCompassDegree(this->heading);
     drawWindDirection();
+    return;
   }
-
-  if (!gps.isAvailable()) {
     drawWaitingGps();
-  }
 }
 
 void Compass::drawCompassCircles()
@@ -74,17 +72,19 @@ void Compass::drawNeedle()
 void Compass::drawCardinalPoint(int angleOffset, const char* letter)
 {
   unsigned char x = ((cos((this->compassDegree + angleOffset) * (pi / 180))) * (this->size - 5)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + angleOffset) * (pi / 180))) * (this->size - 5)) + this->y + 6;
+  unsigned char y = ((sin((this->compassDegree + angleOffset) * (pi / 180))) * (this->size - 5)) + this->y + 8;
 
-  display.setCursor(x - (SMALL_FONT_WIDTH / 2), y - (SMALL_FONT_HEIGHT / 2));
+  display.setFont(MEDIUM_FONT);
+  display.setCursor(x - (MEDIUM_FONT_WIDTH / 2), y - (MEDIUM_FONT_HEIGHT / 2));
   display.print(letter);
 }
 
 void Compass::drawCompassDegree(unsigned int degree)
 {
+  display.setFont(SMALL_FONT);
   display.printCenter(
       (int) degree,
-      21,
+      27,
       63
   );
 }
@@ -96,14 +96,14 @@ void Compass::drawWindDirection()
   }
 
   // Starting position of the arrow (on the compass circle)
-  unsigned char x = ((cos((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->x;
-  unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 10)) + this->y;
+  unsigned char x = ((cos((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 8)) + this->x;
+  unsigned char y = ((sin((this->compassDegree + this->windDirection - 90) * (pi / 180))) * (this->size - 8)) + this->y;
 
   // Calculate the angle of the arrow pointing to the center
   float angleToCenter = atan2(this->y - y, this->x - x);
 
   // Length of the main arrow and arrowhead
-  int arrowLength = 10;
+  int arrowLength = 8;
   int arrowHeadLength = 5;
   float arrowHeadAngle = 30 * (pi / 180); // 30 degrees
 
@@ -149,6 +149,7 @@ void Compass::drawSatelliteCount()
     sprintf(buffer, "%d", satellites);
   }
 
+  display.setFont(SMALL_FONT);
   display.printCenter(
     buffer,
     this->x,
