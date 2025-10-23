@@ -57,9 +57,9 @@ void Screen::drawGpsScreen()
 {
     compass.draw();
 
-    drawInfoBox((int) variometer.getAltitude(), "m", 64, 0, barometer.isAvailable());
-    drawInfoBox(variometer.getVario(), "m/s", 64, 20, barometer.isAvailable());
-    drawInfoBox((int) gps.getSpeed(), "km/h", 64, 40, gps.isAvailable());
+    drawInfoBox("ALT", (int) variometer.getAltitude(), "m", 0, barometer.isAvailable());
+    drawInfoBox("VAR", variometer.getVario(), "m/s", 1, barometer.isAvailable());
+    drawInfoBox("SPD", (int) gps.getSpeed(), "km/h", 2, gps.isAvailable());
 
     if (gps.isAvailable()) {
         drawGpsAltitudeBox();
@@ -155,44 +155,40 @@ void Screen::drawInfoScreen()
     }
 }
 
-void Screen::drawInfoBox (char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox(const char* label, char *value, const char* unit, uint8_t offset, bool isAvailable)
 {
-    display.setFont(BIG_FONT);
-
-    display.printRight(
-        isAvailable
-            ? value
-            : (char *) this->notAvailableText,
-        x + INFOBOX_WIDTH - SMALL_FONT_WIDTH,
-        y + BIG_FONT_HEIGHT - 5);
+    uint8_t x = 74;
+    uint8_t y_base = offset * INFOBOX_HEIGHT;
 
     display.setFont(SMALL_FONT);
+    display.drawStr(x + 2, y_base + 5, label);
 
-    display.printRight(
-        unit,
-        x + INFOBOX_WIDTH,
-        y + INFOBOX_HEIGHT);
+    display.setFont(BIG_FONT);
+    display.drawStr(x, y_base + 17, isAvailable ? value : (char *) this->notAvailableText);
+
+    display.setFont(MEDIUM_FONT);
+    display.drawStr(x + 49, y_base + 22, unit);
 }
 
-void Screen::drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox(const char* label, int value, const char* unit, uint8_t offset, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%d", value);
-    drawInfoBox(buffer, unit, x, y, isAvailable);
+    drawInfoBox(label, buffer, unit, offset, isAvailable);
 }
 
-void Screen::drawInfoBox (long value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox(const char* label, long value, const char* unit, uint8_t offset, bool isAvailable)
 {
     char buffer[10];
     sprintf(buffer, "%ld", value);
-    drawInfoBox(buffer, unit, x, y, isAvailable);
+    drawInfoBox(label, buffer, unit, offset, isAvailable);
 }
 
-void Screen::drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, bool isAvailable)
+void Screen::drawInfoBox(const char* label, float value, const char* unit, uint8_t offset, bool isAvailable)
 {
     char buffer[10];
     dtostrf(value, 2, 1, buffer);
-    drawInfoBox(buffer, unit, x, y, isAvailable);
+    drawInfoBox(label, buffer, unit, offset, isAvailable);
 }
 
 bool Screen::isInfoScreenTimeoutExpired()

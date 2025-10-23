@@ -6,8 +6,8 @@
 #include "../Display/Display.h"
 #include "../FlightCpu/FlightCpu.h"
 
-#define INFOBOX_WIDTH 64
-#define INFOBOX_HEIGHT 20
+#define INFOBOX_WIDTH 55
+#define INFOBOX_HEIGHT 22
 
 class Screen
 {
@@ -34,10 +34,10 @@ class Screen
         void drawInfoScreen();
         bool isInfoScreenTimeoutExpired();
 
-        void drawInfoBox(char *value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (int value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (long value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
-        void drawInfoBox (float value, const char* unit, uint8_t x, uint8_t y, bool isAvailable);
+        void drawInfoBox(const char* label, char *value, const char* unit, uint8_t offset, bool isAvailable);
+        void drawInfoBox(const char* label, int value, const char* unit, uint8_t offset, bool isAvailable);
+        void drawInfoBox(const char* label, long value, const char* unit, uint8_t offset, bool isAvailable);
+        void drawInfoBox(const char* label, float value, const char* unit, uint8_t offset, bool isAvailable);
         void drawWindSpeedBox();
         void drawGpsAltitudeBox();
 };
