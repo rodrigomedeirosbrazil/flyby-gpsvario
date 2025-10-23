@@ -84,8 +84,9 @@ void Compass::drawCompassDegree(unsigned int degree)
 {
   display.printCenter(
       (int) degree,
-      this->x,
-      this->y + this->size + SMALL_FONT_HEIGHT + 1);
+      21,
+      63
+  );
 }
 
 void Compass::drawWindDirection()
