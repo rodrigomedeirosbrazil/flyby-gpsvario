@@ -216,5 +216,5 @@ void Screen::drawGpsAltitudeBox()
     display.drawStr(58, 7, "GPS");
 
     display.setCursor(56, 13);
-    display.printf("%4.0f", 332.56);
+    display.printf("%4.0f", gps.getAltitude());
 }
