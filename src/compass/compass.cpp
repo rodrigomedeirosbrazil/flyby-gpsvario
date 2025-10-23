@@ -4,6 +4,9 @@
 #include "../Gps/Gps.h"
 #include "../Wind/Wind.h"
 
+// GPS icon bitmap (15x15 pixels)
+static const unsigned char image_GPS_ICON_bits[] = {0xe0,0x0f,0x00,0x18,0xc4,0x33,0x0a,0x64,0x12,0x48,0xa1,0x53,0xc1,0x53,0x81,0x53,0x01,0x51,0x01,0x42,0x02,0x04,0x02,0x08,0x04,0x10,0x18,0x0c,0xe0,0x03};
+
 Compass::Compass() {
   this->x = 27;
   this->y = 27;
@@ -30,7 +33,8 @@ void Compass::draw()
     drawWindDirection();
     return;
   }
-    drawWaitingGps();
+
+  drawWaitingGps();
 }
 
 void Compass::drawCompassCircles()
@@ -131,7 +135,7 @@ void Compass::drawWaitingGps()
   this->compassDegree = 0;
 
   drawCompassCircles();
-  drawNeedle();
+  drawGpsIcon();
   drawSatelliteCount();
 }
 
@@ -152,7 +156,12 @@ void Compass::drawSatelliteCount()
   display.setFont(SMALL_FONT);
   display.printCenter(
     buffer,
-    this->x,
-    this->y + this->size + SMALL_FONT_HEIGHT + 1
+    27,
+    63
   );
+}
+
+void Compass::drawGpsIcon()
+{
+  display.drawXBM(20, 20, 15, 15, image_GPS_ICON_bits);
 }

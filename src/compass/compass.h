@@ -28,6 +28,7 @@ class Compass
         void drawWindDirection();
         void drawWaitingGps();
         void drawSatelliteCount();
+        void drawGpsIcon();
 };
 
 #endif
