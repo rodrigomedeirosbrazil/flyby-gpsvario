@@ -58,8 +58,8 @@ void Screen::drawGpsScreen()
     compass.draw();
 
     drawInfoBox("ALT", (int) variometer.getAltitude(), "m", 0, barometer.isAvailable());
-    drawInfoBox("VAR", variometer.getVario(), "m/s", 1, barometer.isAvailable());
-    drawInfoBox("SPD", (int) gps.getSpeed(), "km/h", 2, gps.isAvailable());
+    drawInfoBox("VARIO", variometer.getVario(), "m/s", 1, barometer.isAvailable());
+    drawInfoBox("SPEED", (int) gps.getSpeed(), "km/h", 2, gps.isAvailable());
 
     if (gps.isAvailable()) {
         drawGpsAltitudeBox();
@@ -164,10 +164,13 @@ void Screen::drawInfoBox(const char* label, char *value, const char* unit, uint8
     display.drawStr(x + 2, y_base + 5, label);
 
     display.setFont(BIG_FONT);
-    display.drawStr(x, y_base + 17, isAvailable ? value : (char *) this->notAvailableText);
+    display.printRight(
+        isAvailable ? value : (char *) this->notAvailableText,
+        x + INFOBOX_WIDTH - MEDIUM_FONT_WIDTH,
+        y_base + 17);
 
     display.setFont(MEDIUM_FONT);
-    display.drawStr(x + 49, y_base + 22, unit);
+    display.printRight(unit, x + INFOBOX_WIDTH - 1, y_base + 21);
 }
 
 void Screen::drawInfoBox(const char* label, int value, const char* unit, uint8_t offset, bool isAvailable)
@@ -199,7 +202,7 @@ bool Screen::isInfoScreenTimeoutExpired()
 void Screen::drawWindSpeedBox()
 {
     display.setFont(SMALL_FONT);
-    display.printRight("wind:", 48, 62);
+    display.drawStr(48, 62, "wind:");
     display.setCursor(69, 62);
     display.printf("%.0fkmh", wind.getSpeed());
     display.drawFrame(46, 55, 44, 9);
@@ -210,8 +213,8 @@ void Screen::drawGpsAltitudeBox()
     display.drawFrame(54, 0, 20, 15);
 
     display.setFont(SMALL_FONT);
-    display.drawStr(59, 7, "GPS");
+    display.drawStr(58, 7, "GPS");
 
     display.setCursor(56, 13);
-    display.printf("%.0f", gps.getAltitude());
+    display.printf("%4.0f", 332.56);
 }
