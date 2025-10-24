@@ -270,58 +270,58 @@ input[type="file"] {
 <body>
     <div class="container">
         <h1>OTA FIRMWARE UPDATE</h1>
-        
+
         <div class="file-input">
             <p>Select firmware file (.bin)</p>
             <input type="file" id="fileInput" accept=".bin">
         </div>
-        
+
         <button class="btn" id="uploadBtn" onclick="uploadFile()" disabled>Upload Firmware</button>
-        
+
         <div class="progress-container" id="progressContainer">
             <div class="progress-bar" id="progressBar">0%</div>
         </div>
-        
+
         <div class="message" id="message"></div>
-        
+
         <div style="margin-top: 20px;">
             <a href="/" style="color: #4CAF50; text-decoration: none;">← Back to Home</a>
         </div>
     </div>
-    
+
     <script>
         var fileInput = document.getElementById('fileInput');
         var uploadBtn = document.getElementById('uploadBtn');
         var progressContainer = document.getElementById('progressContainer');
         var progressBar = document.getElementById('progressBar');
         var message = document.getElementById('message');
-        
+
         fileInput.addEventListener('change', function() {
             uploadBtn.disabled = !fileInput.files.length;
         });
-        
+
         function uploadFile() {
             var file = fileInput.files[0];
             if (!file) {
                 showMessage('Please select a file', 'error');
                 return;
             }
-            
+
             if (!file.name.endsWith('.bin')) {
                 showMessage('Please select a .bin file', 'error');
                 return;
             }
-            
+
             uploadBtn.disabled = true;
             fileInput.disabled = true;
             progressContainer.style.display = 'block';
             message.style.display = 'none';
-            
+
             var formData = new FormData();
             formData.append('file', file);
-            
+
             var xhr = new XMLHttpRequest();
-            
+
             xhr.upload.addEventListener('progress', function(e) {
                 if (e.lengthComputable) {
                     var percentComplete = (e.loaded / e.total) * 100;
@@ -329,7 +329,7 @@ input[type="file"] {
                     progressBar.textContent = Math.round(percentComplete) + '%';
                 }
             });
-            
+
             xhr.addEventListener('load', function() {
                 if (xhr.status === 200) {
                     progressBar.style.width = '100%';
@@ -344,17 +344,17 @@ input[type="file"] {
                     fileInput.disabled = false;
                 }
             });
-            
+
             xhr.addEventListener('error', function() {
                 showMessage('Upload error occurred', 'error');
                 uploadBtn.disabled = false;
                 fileInput.disabled = false;
             });
-            
+
             xhr.open('POST', '/ota/upload');
             xhr.send(formData);
         }
-        
+
         function showMessage(text, type) {
             message.textContent = text;
             message.className = 'message ' + type;

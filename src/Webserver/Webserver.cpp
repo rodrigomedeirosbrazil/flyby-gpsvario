@@ -15,11 +15,11 @@ void Webserver::begin() {
     Serial.println("Starting webserver...");
     startTime = millis();
     active = true;
-    
+
     setupWiFi();
     setupWebServer();
     setupRoutes();
-    
+
     server->begin();
     Serial.println("Webserver started");
 }
@@ -28,7 +28,7 @@ void Webserver::tick() {
     if (!active) {
         return;
     }
-    
+
     // Check timeout only if no clients are connected
     // Once someone connects, keep webserver active
     if (WiFi.softAPgetStationNum() == 0) {
@@ -43,18 +43,18 @@ void Webserver::stop() {
     if (!active) {
         return;
     }
-    
+
     Serial.println("Stopping webserver...");
-    
+
     if (server) {
         server->end();
         delete server;
         server = nullptr;
     }
-    
+
     WiFi.softAPdisconnect(true);
     WiFi.mode(WIFI_OFF);
-    
+
     active = false;
     Serial.println("Webserver stopped");
 }
@@ -72,10 +72,10 @@ float Webserver::getProgress() {
 
 void Webserver::setupWiFi() {
     Serial.println("Setting up WiFi AP...");
-    
+
     WiFi.mode(WIFI_AP);
     WiFi.softAP(WEBSERVER_WIFI_SSID, WEBSERVER_WIFI_PASSWORD, WEBSERVER_WIFI_CHANNEL);
-    
+
     IPAddress IP = WiFi.softAPIP();
     Serial.print("AP IP address: ");
     Serial.println(IP);
@@ -90,17 +90,17 @@ void Webserver::setupRoutes() {
     server->on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
         this->handleHome(request);
     });
-    
+
     // OTA page
     server->on("/ota", HTTP_GET, [this](AsyncWebServerRequest *request) {
         this->handleOTAPage(request);
     });
-    
+
     // Info page
     server->on("/info", HTTP_GET, [this](AsyncWebServerRequest *request) {
         this->handleInfo(request);
     });
-    
+
     // OTA upload handler
     server->on("/ota/upload", HTTP_POST,
         [this](AsyncWebServerRequest *request) {
@@ -140,12 +140,12 @@ void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename,
         uploadInProgress = true;
         uploadSize = request->contentLength();
         uploadReceived = 0;
-        
+
         if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
             Update.printError(Serial);
         }
     }
-    
+
     if (len) {
         if (Update.write(data, len) != len) {
             Update.printError(Serial);
@@ -154,7 +154,7 @@ void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename,
             Serial.printf("Progress: %d%%\n", (int)getProgress());
         }
     }
-    
+
     if (final) {
         if (Update.end(true)) {
             Serial.printf("OTA Update Success: %u bytes\n", index + len);
