@@ -39,7 +39,7 @@ void Thermal::tick() {
     currentlyRising = (vario >= THERMAL_MIN_CLIMB_RATE);
 
     // Collect point only if climbing and GPS is valid
-    if (!gps.isAvailable()) {
+    if (!gps.isReliable()) {
         return;
     }
 
@@ -89,7 +89,7 @@ float Thermal::getThermalCoreLongitude() {
 }
 
 int Thermal::calcDistanceToThermalCoreInMeters() {
-    if (!thermalCoreValid || !gps.isAvailable()) {
+    if (!thermalCoreValid || !gps.isReliable()) {
         return 0;
     }
 
@@ -104,7 +104,7 @@ int Thermal::calcDistanceToThermalCoreInMeters() {
 }
 
 int Thermal::calcBearingToThermalCoreInDegrees() {
-    if (!thermalCoreValid || !gps.isAvailable()) {
+    if (!thermalCoreValid || !gps.isReliable()) {
         return 0;
     }
 

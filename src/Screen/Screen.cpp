@@ -59,9 +59,9 @@ void Screen::drawGpsScreen()
 
     drawInfoBox("ALT", (int) variometer.getAltitude(), "m", 0, barometer.isAvailable());
     drawInfoBox("VARIO", variometer.getVario(), "m/s", 1, barometer.isAvailable());
-    drawInfoBox("SPEED", (int) gps.getSpeed(), "km/h", 2, gps.isAvailable());
+    drawInfoBox("SPEED", (int) gps.getSpeed(), "km/h", 2, gps.isReliable());
 
-    if (gps.isAvailable()) {
+    if (gps.isReliable()) {
         drawGpsAltitudeBox();
     }
 

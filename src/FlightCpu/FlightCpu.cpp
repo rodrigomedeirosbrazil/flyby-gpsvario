@@ -41,7 +41,7 @@ void FlightCpu::bySecondTask() {
 }
 
 void FlightCpu::autoAdjustQNH() {
-  if (! gps.isAvailable() || smallerVdop <= gps.getVdop()) {
+  if (! gps.isReliable() || smallerVdop <= gps.getVdop()) {
     return;
   }
 

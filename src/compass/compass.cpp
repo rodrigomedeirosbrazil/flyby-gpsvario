@@ -18,7 +18,7 @@ void Compass::draw()
 {
   display.setFont(SMALL_FONT);
 
-  if (gps.isAvailable()) {
+  if (gps.isReliable()) {
     this->heading = gps.getHeading();
     this->compassDegree = 360 - this->heading;
     this->windDirection = wind.getDirection();
