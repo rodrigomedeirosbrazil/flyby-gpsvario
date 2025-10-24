@@ -6,7 +6,11 @@
 #include "globals.h"
 
 void setup(void) {
+  Serial.begin(115200);
   startSound();
+
+  // Start webserver for 60 seconds
+  webserver.begin();
 
   delay(POWER_ON_DELAY);
 
@@ -16,5 +20,10 @@ void setup(void) {
 }
 
 void loop(void) {
+  // Process webserver if still active
+  if (webserver.isActive()) {
+    webserver.tick();
+  }
+  
   flightCpu.tick();
 }
