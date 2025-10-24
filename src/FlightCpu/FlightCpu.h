@@ -18,6 +18,7 @@ class FlightCpu
         void autoAdjustQNH();
         unsigned long getFlightTime();
         inline unsigned long getSmallerVdop() { return smallerVdop; }
+        inline bool isInFlight() { return inFlight; }
 
     private:
         void bySecondTask();

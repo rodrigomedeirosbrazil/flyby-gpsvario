@@ -29,6 +29,7 @@ void FlightCpu::bySecondTask() {
     checkInFlight();
     if (inFlight) {
       wind.storeSpeed(gps.getHeading(), gps.getSpeed(), millis());
+      thermal.tick();
     }
 }
 

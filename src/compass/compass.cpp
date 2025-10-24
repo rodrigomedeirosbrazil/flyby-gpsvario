@@ -31,6 +31,7 @@ void Compass::draw()
     drawCardinalPoint(180, "W");
     drawCompassDegree(this->heading);
     drawWindDirection();
+    drawThermalCore();
     return;
   }
 
@@ -164,4 +165,29 @@ void Compass::drawSatelliteCount()
 void Compass::drawGpsIcon()
 {
   display.drawXBM(20, 20, 15, 15, image_GPS_ICON_bits);
+}
+
+void Compass::drawThermalCore()
+{
+  if (!thermal.hasThermalCore()) {
+    return;
+  }
+
+  // Calculate relative position in circle (300m = radius)
+  int distance = thermal.calcDistanceToThermalCoreInMeters();
+  int bearing = thermal.calcBearingToThermalCoreInDegrees();
+
+  // Limit to circle radius
+  float normalizedDistance = min(distance / 300.0f, 1.0f);
+
+  // Calculate point position in circle
+  // Top of circle always points to current heading
+  float relativeAngle = bearing - this->heading;
+  float angleRad = (relativeAngle - 90) * (pi / 180);
+
+  int pointX = this->x + (cos(angleRad) * this->size * normalizedDistance);
+  int pointY = this->y + (sin(angleRad) * this->size * normalizedDistance);
+
+  // Draw black point (filled circle with radius 2)
+  display.drawDisc(pointX, pointY, 2);
 }
