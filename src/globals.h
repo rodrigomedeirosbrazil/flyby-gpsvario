@@ -11,6 +11,7 @@ class Compass;
 class Screen;
 class FlightCpu;
 class Thermal;
+class Webserver;
 
 extern Barometer barometer;
 extern Variometer variometer;
@@ -22,6 +23,7 @@ extern Compass compass;
 extern Screen screen;
 extern FlightCpu flightCpu;
 extern Thermal thermal;
+extern Webserver webserver;
 
 #endif
 
