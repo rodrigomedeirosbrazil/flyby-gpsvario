@@ -1,4 +1,5 @@
 #include "Webserver.h"
+#include "pages.h"
 #include "../defines.h"
 
 Webserver::Webserver() {
@@ -116,13 +117,11 @@ void Webserver::setupRoutes() {
 }
 
 void Webserver::handleHome(AsyncWebServerRequest *request) {
-    // Will be implemented with HTML pages
-    request->send(200, "text/html", "<h1>Flyby GPS Vario</h1><p>Home page placeholder</p>");
+    request->send_P(200, "text/html", HTML_HOME);
 }
 
 void Webserver::handleOTAPage(AsyncWebServerRequest *request) {
-    // Will be implemented with HTML pages
-    request->send(200, "text/html", "<h1>OTA Update</h1><p>OTA page placeholder</p>");
+    request->send_P(200, "text/html", HTML_OTA);
 }
 
 void Webserver::handleInfo(AsyncWebServerRequest *request) {
