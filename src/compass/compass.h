@@ -28,7 +28,7 @@ class Compass
         void drawWindDirection();
         void drawThermalCore();
         void drawWaitingGps();
-        void drawSatelliteCount();
+        void drawPdop();
         void drawGpsIcon();
 };
 

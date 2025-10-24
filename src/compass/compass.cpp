@@ -138,22 +138,20 @@ void Compass::drawWaitingGps()
 
   drawCompassCircles();
   drawGpsIcon();
-  drawSatelliteCount();
+  drawPdop();
 }
 
-void Compass::drawSatelliteCount()
+void Compass::drawPdop()
 {
-  unsigned short satellites = gps.getSatellites();
+  unsigned short pdop = gps.getPdop();
 
   char buffer[8];
 
-  if (satellites == 255 || satellites == 0) {
+  if (pdop > 1000) {
     sprintf(buffer, "--");
   }
 
-  if (satellites < 255 && satellites > 0) {
-    sprintf(buffer, "%d", satellites);
-  }
+  sprintf(buffer, "%d", pdop);
 
   display.setFont(SMALL_FONT);
   display.printCenter(
