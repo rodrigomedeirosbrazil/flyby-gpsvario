@@ -27,7 +27,7 @@ class Gps
         bool isReliable();
 
     private:
-        static const unsigned long PDOP_MAX_THRESHOLD = 200;
+        static const unsigned long PDOP_MAX_THRESHOLD = 220;
         TinyGPS *gpsParser;
         HardwareSerial *serial2;
         unsigned long lastTimeGpsWasTicked = 0;
