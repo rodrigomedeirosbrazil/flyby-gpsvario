@@ -4,6 +4,12 @@
 #define TIMEZONE -3
 #define TAKEOFF_SPEED 6
 
+// Webserver configuration
+#define WEBSERVER_WIFI_SSID "Flyby GPS Vario"
+#define WEBSERVER_WIFI_PASSWORD ""
+#define WEBSERVER_TIMEOUT 60000
+#define WEBSERVER_WIFI_CHANNEL 6
+
 #define SMALL_FONT u8g2_font_4x6_tr
 #define SMALL_FONT_WIDTH 5
 #define SMALL_FONT_HEIGHT 7
