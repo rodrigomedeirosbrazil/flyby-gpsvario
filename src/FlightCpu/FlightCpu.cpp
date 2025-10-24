@@ -50,24 +50,24 @@ void FlightCpu::autoAdjustQNH() {
 }
 
 void FlightCpu::checkInFlight() {
-  if (! inFlight && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter == 4) {
+  if (! inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter == 4) {
     inFlight = true;
     inFlightCounter = 0;
     startFlightTime = millis();
     oneUpSound();
-  } else if (! inFlight && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (! inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
     inFlightCounter++;
-  } else if (! inFlight && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (! inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
     inFlightCounter = 0;
-  } else if (inFlight && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter == 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter == 4) {
     inFlight = false;
     inFlightCounter = 0;
     fireballSound();
     fireballSound();
     fireballSound();
-  } else if (inFlight && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
     inFlightCounter++;
-  } else if (inFlight && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
     inFlightCounter = 0;
   }
 }
