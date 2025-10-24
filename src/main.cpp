@@ -7,7 +7,6 @@
 #include "globals.h"
 
 void setup(void) {
-  Serial.begin(115200);
   startSound();
 
   // Start webserver for 60 seconds

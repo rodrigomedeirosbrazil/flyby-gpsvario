@@ -12,16 +12,14 @@ Webserver::Webserver() {
 }
 
 void Webserver::begin() {
-    Serial.println("Starting webserver...");
     startTime = millis();
     active = true;
-
+    
     setupWiFi();
     setupWebServer();
     setupRoutes();
-
+    
     server->begin();
-    Serial.println("Webserver started");
 }
 
 void Webserver::tick() {
@@ -33,7 +31,6 @@ void Webserver::tick() {
     // Once someone connects, keep webserver active
     if (WiFi.softAPgetStationNum() == 0) {
         if (millis() - startTime >= WEBSERVER_TIMEOUT) {
-            Serial.println("Webserver timeout reached with no clients connected");
             stop();
         }
     }
@@ -43,20 +40,17 @@ void Webserver::stop() {
     if (!active) {
         return;
     }
-
-    Serial.println("Stopping webserver...");
-
+    
     if (server) {
         server->end();
         delete server;
         server = nullptr;
     }
-
+    
     WiFi.softAPdisconnect(true);
     WiFi.mode(WIFI_OFF);
-
+    
     active = false;
-    Serial.println("Webserver stopped");
 }
 
 bool Webserver::isActive() {
@@ -71,14 +65,8 @@ float Webserver::getProgress() {
 }
 
 void Webserver::setupWiFi() {
-    Serial.println("Setting up WiFi AP...");
-
     WiFi.mode(WIFI_AP);
     WiFi.softAP(WEBSERVER_WIFI_SSID, WEBSERVER_WIFI_PASSWORD, WEBSERVER_WIFI_CHANNEL);
-
-    IPAddress IP = WiFi.softAPIP();
-    Serial.print("AP IP address: ");
-    Serial.println(IP);
 }
 
 void Webserver::setupWebServer() {
@@ -136,31 +124,27 @@ void Webserver::handleInfo(AsyncWebServerRequest *request) {
 
 void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
     if (index == 0) {
-        Serial.printf("OTA Update Start: %s\n", filename.c_str());
         uploadInProgress = true;
         uploadSize = request->contentLength();
         uploadReceived = 0;
-
+        
         if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
-            Update.printError(Serial);
+            // Update failed to begin
         }
     }
-
+    
     if (len) {
         if (Update.write(data, len) != len) {
-            Update.printError(Serial);
+            // Write failed
         } else {
             uploadReceived += len;
-            Serial.printf("Progress: %d%%\n", (int)getProgress());
         }
     }
-
+    
     if (final) {
         if (Update.end(true)) {
-            Serial.printf("OTA Update Success: %u bytes\n", index + len);
             uploadInProgress = false;
         } else {
-            Update.printError(Serial);
             uploadInProgress = false;
         }
     }
