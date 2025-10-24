@@ -119,7 +119,60 @@ const char HTML_HOME[] PROGMEM = R"rawliteral(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flyby GPS Vario</title>
-)rawliteral" HTML_STYLE R"rawliteral(
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+.container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #333;
+    text-align: center;
+    border-bottom: 3px solid #4CAF50;
+    padding-bottom: 10px;
+}
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+.menu li {
+    margin: 10px 0;
+}
+.menu a, .btn {
+    display: block;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+.menu a:hover, .btn:hover {
+    background-color: #45a049;
+}
+.info {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    text-align: center;
+}
+.timer {
+    font-size: 24px;
+    color: #ff5722;
+    font-weight: bold;
+}
+</style>
 </head>
 <body>
     <div class="container">
@@ -154,7 +207,90 @@ const char HTML_OTA[] PROGMEM = R"rawliteral(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OTA Update - Flyby GPS Vario</title>
-)rawliteral" HTML_STYLE R"rawliteral(
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+.container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #333;
+    text-align: center;
+    border-bottom: 3px solid #4CAF50;
+    padding-bottom: 10px;
+}
+.btn {
+    display: block;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
+.btn:hover {
+    background-color: #45a049;
+}
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.progress-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    display: none;
+}
+.progress-bar {
+    width: 0%;
+    height: 30px;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    transition: width 0.3s;
+}
+.file-input {
+    margin: 20px 0;
+    padding: 10px;
+    border: 2px dashed #4CAF50;
+    border-radius: 5px;
+    text-align: center;
+}
+input[type="file"] {
+    margin: 10px 0;
+}
+.message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: none;
+}
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    display: block;
+}
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    display: block;
+}
+</style>
 </head>
 <body>
     <div class="container">

@@ -1,8 +1,9 @@
-#ifndef WEBSERVER_H
-#define WEBSERVER_H
+#ifndef FLYBY_WEBSERVER_H
+#define FLYBY_WEBSERVER_H
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <Update.h>
 
@@ -39,5 +40,5 @@ private:
                          bool final);
 };
 
-#endif
+#endif // FLYBY_WEBSERVER_H
 
