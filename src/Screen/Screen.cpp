@@ -71,7 +71,7 @@ void Screen::drawGpsScreen()
 
     if (flightCpu.getFlightTime() > 0) {
         display.setFont(SMALL_FONT);
-        display.setCursor(54, 64);
+        display.setCursor(47, 53);
 
         unsigned int hours = flightCpu.getFlightTime() / 3600;
         unsigned int minutes = (flightCpu.getFlightTime() % 3600) / 60;
