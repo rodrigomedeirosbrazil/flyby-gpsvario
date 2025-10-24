@@ -160,41 +160,16 @@ h1 {
 .menu a:hover, .btn:hover {
     background-color: #45a049;
 }
-.info {
-    background-color: #e3f2fd;
-    padding: 15px;
-    border-radius: 5px;
-    margin: 20px 0;
-    text-align: center;
-}
-.timer {
-    font-size: 24px;
-    color: #ff5722;
-    font-weight: bold;
-}
 </style>
 </head>
 <body>
     <div class="container">
         <h1>FLYBY GPS VARIO</h1>
-        <div class="info">
-            <p>Time remaining: <span class="timer" id="timer">60</span>s</p>
-        </div>
         <ul class="menu">
             <li><a href="/ota">OTA Firmware Update</a></li>
             <li><a href="/info">Device Information</a></li>
         </ul>
     </div>
-    <script>
-        var timeLeft = 60;
-        var timerElement = document.getElementById('timer');
-        
-        setInterval(function() {
-            timeLeft--;
-            if (timeLeft < 0) timeLeft = 0;
-            timerElement.textContent = timeLeft;
-        }, 1000);
-    </script>
 </body>
 </html>
 )rawliteral";

@@ -29,10 +29,13 @@ void Webserver::tick() {
         return;
     }
     
-    // Check timeout
-    if (millis() - startTime >= WEBSERVER_TIMEOUT) {
-        Serial.println("Webserver timeout reached");
-        stop();
+    // Check timeout only if no clients are connected
+    // Once someone connects, keep webserver active
+    if (WiFi.softAPgetStationNum() == 0) {
+        if (millis() - startTime >= WEBSERVER_TIMEOUT) {
+            Serial.println("Webserver timeout reached with no clients connected");
+            stop();
+        }
     }
 }
 
