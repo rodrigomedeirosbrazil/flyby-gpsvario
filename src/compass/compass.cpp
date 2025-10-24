@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../Gps/Gps.h"
 #include "../Wind/Wind.h"
+#include "../Thermal/Thermal.h"
 
 // GPS icon bitmap (15x15 pixels)
 static const unsigned char image_GPS_ICON_bits[] = {0xe0,0x0f,0x00,0x18,0xc4,0x33,0x0a,0x64,0x12,0x48,0xa1,0x53,0xc1,0x53,0x81,0x53,0x01,0x51,0x01,0x42,0x02,0x04,0x02,0x08,0x04,0x10,0x18,0x0c,0xe0,0x03};
@@ -17,7 +18,7 @@ void Compass::draw()
 {
   display.setFont(SMALL_FONT);
 
-  if (gps.isAvailable()) {
+  if (gps.isReliable()) {
     this->heading = gps.getHeading();
     this->compassDegree = 360 - this->heading;
     this->windDirection = wind.getDirection();
@@ -31,6 +32,7 @@ void Compass::draw()
     drawCardinalPoint(180, "W");
     drawCompassDegree(this->heading);
     drawWindDirection();
+    drawThermalCore();
     return;
   }
 
@@ -164,4 +166,29 @@ void Compass::drawSatelliteCount()
 void Compass::drawGpsIcon()
 {
   display.drawXBM(20, 20, 15, 15, image_GPS_ICON_bits);
+}
+
+void Compass::drawThermalCore()
+{
+  if (!thermal.hasThermalCore()) {
+    return;
+  }
+
+  // Calculate relative position in circle (300m = radius)
+  int distance = thermal.calcDistanceToThermalCoreInMeters();
+  int bearing = thermal.calcBearingToThermalCoreInDegrees();
+
+  // Limit to circle radius
+  float normalizedDistance = min(distance / 300.0f, 1.0f);
+
+  // Calculate point position in circle
+  // Top of circle always points to current heading
+  float relativeAngle = bearing - this->heading;
+  float angleRad = (relativeAngle - 90) * (pi / 180);
+
+  int pointX = this->x + (cos(angleRad) * this->size * normalizedDistance);
+  int pointY = this->y + (sin(angleRad) * this->size * normalizedDistance);
+
+  // Draw black point (filled circle with radius 2)
+  display.drawDisc(pointX, pointY, 2);
 }

@@ -9,6 +9,7 @@
 #include "compass/compass.h"
 #include "Screen/Screen.h"
 #include "FlightCpu/FlightCpu.h"
+#include "Thermal/Thermal.h"
 
 Barometer barometer;
 Variometer variometer;
@@ -27,4 +28,5 @@ Display display(U8G2_R0);
 Compass compass;
 Screen screen;
 FlightCpu flightCpu;
+Thermal thermal;
 

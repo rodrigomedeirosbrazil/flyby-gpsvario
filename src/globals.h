@@ -10,6 +10,7 @@ class Display;
 class Compass;
 class Screen;
 class FlightCpu;
+class Thermal;
 
 extern Barometer barometer;
 extern Variometer variometer;
@@ -20,6 +21,7 @@ extern Display display;
 extern Compass compass;
 extern Screen screen;
 extern FlightCpu flightCpu;
+extern Thermal thermal;
 
 #endif
 

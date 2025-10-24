@@ -185,3 +185,10 @@ unsigned long Gps::getTime()
 {
     return this->gpsParser->time();
 }
+
+bool Gps::isReliable()
+{
+    unsigned long pdop = this->gpsParser->pdop();
+    return pdop != this->gpsParser->GPS_INVALID_PDOP
+        && pdop < PDOP_MAX_THRESHOLD;
+}

@@ -24,8 +24,10 @@ class Gps
         unsigned short getSatellites();
         unsigned long getDate();
         unsigned long getTime();
+        bool isReliable();
 
     private:
+        static const unsigned long PDOP_MAX_THRESHOLD = 150;
         TinyGPS *gpsParser;
         HardwareSerial *serial2;
         unsigned long lastTimeGpsWasTicked = 0;
