@@ -14,11 +14,11 @@ Webserver::Webserver() {
 void Webserver::begin() {
     startTime = millis();
     active = true;
-    
+
     setupWiFi();
     setupWebServer();
     setupRoutes();
-    
+
     server->begin();
 }
 
@@ -40,16 +40,16 @@ void Webserver::stop() {
     if (!active) {
         return;
     }
-    
+
     if (server) {
         server->end();
         delete server;
         server = nullptr;
     }
-    
+
     WiFi.softAPdisconnect(true);
     WiFi.mode(WIFI_OFF);
-    
+
     active = false;
 }
 
@@ -127,12 +127,12 @@ void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename,
         uploadInProgress = true;
         uploadSize = request->contentLength();
         uploadReceived = 0;
-        
+
         if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
             // Update failed to begin
         }
     }
-    
+
     if (len) {
         if (Update.write(data, len) != len) {
             // Write failed
@@ -140,7 +140,7 @@ void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename,
             uploadReceived += len;
         }
     }
-    
+
     if (final) {
         if (Update.end(true)) {
             uploadInProgress = false;
