@@ -1,5 +1,12 @@
 #include "FlightCpu.h"
 #include "../globals.h"
+#include "../Barometer/Barometer.h"
+#include "../Variometer/Variometer.h"
+#include "../Beep/Beep.h"
+#include "../Gps/Gps.h"
+#include "../Wind/Wind.h"
+#include "../Screen/Screen.h"
+#include "../Thermal/Thermal.h"
 
 FlightCpu::FlightCpu() {
 }
