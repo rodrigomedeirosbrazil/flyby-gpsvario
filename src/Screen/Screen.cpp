@@ -69,9 +69,18 @@ void Screen::drawGpsScreen()
         drawWindSpeedBox();
     }
 
+    if (gps.isAvailable()) {
+        unsigned long unixtime = convertDateAndTimeEpochTime(gps.getDate(), gps.getTime());
+
+        time_t t = unixtime + (TIMEZONE * 3600);
+        struct tm *timestamp = gmtime(&t);
+
+        display.setCursor(48, 63);
+        display.printf("%02d:%02d:%02d", timestamp->tm_hour, timestamp->tm_min, timestamp->tm_sec);
+    }
     if (flightCpu.getFlightTime() > 0) {
         display.setFont(SMALL_FONT);
-        display.setCursor(47, 53);
+        display.setCursor(52, 5);
 
         unsigned int hours = flightCpu.getFlightTime() / 3600;
         unsigned int minutes = (flightCpu.getFlightTime() % 3600) / 60;
@@ -112,7 +121,7 @@ void Screen::drawInfoScreen()
     if (gps.isAvailable()) {
         unsigned long unixtime = convertDateAndTimeEpochTime(gps.getDate(), gps.getTime());
 
-        time_t t = unixtime - (TIMEZONE * 3600);
+        time_t t = unixtime + (TIMEZONE * 3600);
         struct tm *timestamp = gmtime(&t);
 
         display.setCursor(0, 56);
@@ -202,19 +211,13 @@ bool Screen::isInfoScreenTimeoutExpired()
 void Screen::drawWindSpeedBox()
 {
     display.setFont(SMALL_FONT);
-    display.drawStr(48, 62, "wind:");
-    display.setCursor(69, 62);
+    display.drawStr(48, 56, "wind:");
+    display.setCursor(68, 56);
     display.printf("%.0fkmh", wind.getSpeed());
-    display.drawFrame(46, 55, 44, 9);
 }
 
 void Screen::drawGpsAltitudeBox()
 {
-    display.drawFrame(54, 0, 20, 15);
-
-    display.setFont(SMALL_FONT);
-    display.drawStr(58, 7, "GPS");
-
-    display.setCursor(56, 13);
+    display.setCursor(90, 6);
     display.printf("%4.0f", gps.getAltitude());
 }
