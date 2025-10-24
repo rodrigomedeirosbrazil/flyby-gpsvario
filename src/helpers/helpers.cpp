@@ -37,7 +37,7 @@ void coinSound()
     delay(800);
     noTone(SPEAKER_PIN);
 }
-  
+
 void fireballSound()
 {
     tone(SPEAKER_PIN,196,35);
@@ -53,7 +53,7 @@ void fireballSound()
 // {
 //   NOTE_C5,-4, NOTE_G4,-4, NOTE_E4,4, //45
 //   NOTE_A4,-8, NOTE_B4,-8, NOTE_A4,-8, NOTE_GS4,-8, NOTE_AS4,-8, NOTE_GS4,-8,
-//   NOTE_G4,8, NOTE_D4,8, NOTE_E4,-2,  
+//   NOTE_G4,8, NOTE_D4,8, NOTE_E4,-2,
 // }
 
 void adjustTimezone(int timezone, int *year, byte *month, byte *day, byte *hour)
@@ -80,10 +80,10 @@ unsigned long convertDateAndTimeEpochTime(
     struct tm timestamp;
     timestamp.tm_mday = date / 10000;
     timestamp.tm_mon = ((date - timestamp.tm_mday * 10000) / 100) - 1;
-    timestamp.tm_year = date - timestamp.tm_mday * 10000 - (timestamp.tm_mon + 1) * 100 + 2000 - 1900;
+    timestamp.tm_year = (date % 100) + 100; // GPS year is 2-digit, tm_year is years since 1900
     timestamp.tm_hour = time / 1000000;
     timestamp.tm_min = (time - timestamp.tm_hour * 1000000) / 10000;
     timestamp.tm_sec = (time - timestamp.tm_hour * 1000000 - timestamp.tm_min * 10000) / 100;
-    
+
     return mktime(&timestamp);
 }
