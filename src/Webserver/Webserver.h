@@ -23,6 +23,7 @@ private:
     bool uploadInProgress;
     size_t uploadSize;
     size_t uploadReceived;
+    String configRequestBody;  // Store POST body for config API
 
     void setupWiFi();
     void setupWebServer();
@@ -42,6 +43,7 @@ private:
     // Configuration API handlers
     void handleConfigGet(AsyncWebServerRequest *request);
     void handleConfigPost(AsyncWebServerRequest *request);
+    void handleConfigPostBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
     void handleConfigDefaults(AsyncWebServerRequest *request);
 };
 

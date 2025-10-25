@@ -11,6 +11,7 @@ Webserver::Webserver() {
     uploadSize = 0;
     uploadReceived = 0;
     startTime = 0;
+    configRequestBody = "";
 }
 
 void Webserver::begin() {
@@ -103,6 +104,9 @@ void Webserver::setupRoutes() {
 
     server->on("/api/config", HTTP_POST, [this](AsyncWebServerRequest *request) {
         this->handleConfigPost(request);
+    }, nullptr, [this](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+        // Handle body data
+        this->handleConfigPostBody(request, data, len, index, total);
     });
 
     server->on("/api/config/defaults", HTTP_POST, [this](AsyncWebServerRequest *request) {
@@ -190,59 +194,72 @@ void Webserver::handleConfigGet(AsyncWebServerRequest *request) {
 }
 
 void Webserver::handleConfigPost(AsyncWebServerRequest *request) {
-    Config& config = Config::getInstance();
+    // This method is called when POST request starts
+    configRequestBody = "";
+}
 
-    DynamicJsonDocument doc(1024);
-    DeserializationError error = deserializeJson(doc, request->getBody());
+void Webserver::handleConfigPostBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    // Accumulate body data
+    for (size_t i = 0; i < len; i++) {
+        configRequestBody += (char)data[i];
+    }
+    
+    // If this is the last chunk, process the complete body
+    if (index + len == total) {
+        Config& config = Config::getInstance();
+        
+        DynamicJsonDocument doc(1024);
+        DeserializationError error = deserializeJson(doc, configRequestBody);
 
-    if (error) {
-        DynamicJsonDocument errorDoc(256);
-        errorDoc["success"] = false;
-        errorDoc["error"] = "Invalid JSON";
-        String errorResponse;
-        serializeJson(errorDoc, errorResponse);
-        request->send(400, "application/json", errorResponse);
-        return;
+        if (error) {
+            DynamicJsonDocument errorDoc(256);
+            errorDoc["success"] = false;
+            errorDoc["error"] = "Invalid JSON";
+            String errorResponse;
+            serializeJson(errorDoc, errorResponse);
+            request->send(400, "application/json", errorResponse);
+            return;
+        }
+        
+        // Update configuration values
+        if (doc.containsKey("timezone")) {
+            config.setTimezone(doc["timezone"]);
+        }
+        if (doc.containsKey("takeoffSpeed")) {
+            config.setTakeoffSpeed(doc["takeoffSpeed"]);
+        }
+        if (doc.containsKey("pdopMaxThreshold")) {
+            config.setPdopMaxThreshold(doc["pdopMaxThreshold"]);
+        }
+        if (doc.containsKey("qnh")) {
+            config.setQnh(doc["qnh"]);
+        }
+        if (doc.containsKey("qnhByGps")) {
+            config.setQnhByGps(doc["qnhByGps"]);
+        }
+        if (doc.containsKey("varioBeepOnlyInFlight")) {
+            config.setVarioBeepOnlyInFlight(doc["varioBeepOnlyInFlight"]);
+        }
+        if (doc.containsKey("climbRate")) {
+            config.setClimbRate(doc["climbRate"]);
+        }
+        if (doc.containsKey("sinkRate")) {
+            config.setSinkRate(doc["sinkRate"]);
+        }
+        
+        // Save configuration
+        bool success = config.save();
+        
+        DynamicJsonDocument responseDoc(256);
+        responseDoc["success"] = success;
+        if (!success) {
+            responseDoc["error"] = "Failed to save configuration";
+        }
+        
+        String response;
+        serializeJson(responseDoc, response);
+        request->send(success ? 200 : 500, "application/json", response);
     }
-
-    // Update configuration values
-    if (doc.containsKey("timezone")) {
-        config.setTimezone(doc["timezone"]);
-    }
-    if (doc.containsKey("takeoffSpeed")) {
-        config.setTakeoffSpeed(doc["takeoffSpeed"]);
-    }
-    if (doc.containsKey("pdopMaxThreshold")) {
-        config.setPdopMaxThreshold(doc["pdopMaxThreshold"]);
-    }
-    if (doc.containsKey("qnh")) {
-        config.setQnh(doc["qnh"]);
-    }
-    if (doc.containsKey("qnhByGps")) {
-        config.setQnhByGps(doc["qnhByGps"]);
-    }
-    if (doc.containsKey("varioBeepOnlyInFlight")) {
-        config.setVarioBeepOnlyInFlight(doc["varioBeepOnlyInFlight"]);
-    }
-    if (doc.containsKey("climbRate")) {
-        config.setClimbRate(doc["climbRate"]);
-    }
-    if (doc.containsKey("sinkRate")) {
-        config.setSinkRate(doc["sinkRate"]);
-    }
-
-    // Save configuration
-    bool success = config.save();
-
-    DynamicJsonDocument responseDoc(256);
-    responseDoc["success"] = success;
-    if (!success) {
-        responseDoc["error"] = "Failed to save configuration";
-    }
-
-    String response;
-    serializeJson(responseDoc, response);
-    request->send(success ? 200 : 500, "application/json", response);
 }
 
 void Webserver::handleConfigDefaults(AsyncWebServerRequest *request) {
