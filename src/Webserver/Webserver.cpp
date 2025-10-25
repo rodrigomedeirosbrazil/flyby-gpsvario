@@ -173,7 +173,7 @@ void Webserver::handleOTAUpload(AsyncWebServerRequest *request, String filename,
 // Configuration API handlers
 void Webserver::handleConfigGet(AsyncWebServerRequest *request) {
     Config& config = Config::getInstance();
-    
+
     DynamicJsonDocument doc(1024);
     doc["timezone"] = config.getTimezone();
     doc["takeoffSpeed"] = config.getTakeoffSpeed();
@@ -183,7 +183,7 @@ void Webserver::handleConfigGet(AsyncWebServerRequest *request) {
     doc["varioBeepOnlyInFlight"] = config.getVarioBeepOnlyInFlight();
     doc["climbRate"] = config.getClimbRate();
     doc["sinkRate"] = config.getSinkRate();
-    
+
     String response;
     serializeJson(doc, response);
     request->send(200, "application/json", response);
@@ -191,10 +191,10 @@ void Webserver::handleConfigGet(AsyncWebServerRequest *request) {
 
 void Webserver::handleConfigPost(AsyncWebServerRequest *request) {
     Config& config = Config::getInstance();
-    
+
     DynamicJsonDocument doc(1024);
     DeserializationError error = deserializeJson(doc, request->getBody());
-    
+
     if (error) {
         DynamicJsonDocument errorDoc(256);
         errorDoc["success"] = false;
@@ -204,7 +204,7 @@ void Webserver::handleConfigPost(AsyncWebServerRequest *request) {
         request->send(400, "application/json", errorResponse);
         return;
     }
-    
+
     // Update configuration values
     if (doc.containsKey("timezone")) {
         config.setTimezone(doc["timezone"]);
@@ -230,16 +230,16 @@ void Webserver::handleConfigPost(AsyncWebServerRequest *request) {
     if (doc.containsKey("sinkRate")) {
         config.setSinkRate(doc["sinkRate"]);
     }
-    
+
     // Save configuration
     bool success = config.save();
-    
+
     DynamicJsonDocument responseDoc(256);
     responseDoc["success"] = success;
     if (!success) {
         responseDoc["error"] = "Failed to save configuration";
     }
-    
+
     String response;
     serializeJson(responseDoc, response);
     request->send(success ? 200 : 500, "application/json", response);
@@ -249,13 +249,13 @@ void Webserver::handleConfigDefaults(AsyncWebServerRequest *request) {
     Config& config = Config::getInstance();
     config.loadDefaults();
     bool success = config.save();
-    
+
     DynamicJsonDocument responseDoc(256);
     responseDoc["success"] = success;
     if (!success) {
         responseDoc["error"] = "Failed to reset configuration";
     }
-    
+
     String response;
     serializeJson(responseDoc, response);
     request->send(success ? 200 : 500, "application/json", response);

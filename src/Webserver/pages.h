@@ -403,7 +403,7 @@ const char HTML_CONFIG_PAGE[] PROGMEM = R"rawliteral(
 <body>
     <div class="container">
         <h1>⚙️ Configuration</h1>
-        
+
         <div class="info">
             <strong>Configure your Flyby GPS Vario settings</strong><br>
             Changes are saved automatically to device memory.
@@ -520,10 +520,10 @@ const char HTML_CONFIG_PAGE[] PROGMEM = R"rawliteral(
         // Save configuration
         document.getElementById('configForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const config = {};
-            
+
             for (let [key, value] of formData.entries()) {
                 if (key === 'qnhByGps' || key === 'varioBeepOnlyInFlight') {
                     config[key] = true;
@@ -531,7 +531,7 @@ const char HTML_CONFIG_PAGE[] PROGMEM = R"rawliteral(
                     config[key] = parseFloat(value);
                 }
             }
-            
+
             // Handle checkboxes separately
             config.qnhByGps = document.getElementById('qnhByGps').checked;
             config.varioBeepOnlyInFlight = document.getElementById('varioBeepOnlyInFlight').checked;
@@ -582,7 +582,7 @@ const char HTML_CONFIG_PAGE[] PROGMEM = R"rawliteral(
             message.textContent = text;
             message.className = 'message ' + type;
             message.style.display = 'block';
-            
+
             setTimeout(() => {
                 message.style.display = 'none';
             }, 3000);
