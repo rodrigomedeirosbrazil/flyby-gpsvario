@@ -108,6 +108,31 @@ input[type="file"] {
     color: #ff5722;
     font-weight: bold;
 }
+.form-group {
+    margin: 15px 0;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+.form-group label input[type="checkbox"] {
+    display: inline;
+    width: auto;
+}
 </style>
 )rawliteral";
 
@@ -167,6 +192,7 @@ h1 {
         <h1>FLYBY GPS VARIO</h1>
         <ul class="menu">
             <li><a href="/ota">OTA Firmware Update</a></li>
+            <li><a href="/config">⚙️ Configuration</a></li>
             <li><a href="/info">Device Information</a></li>
         </ul>
     </div>
@@ -359,6 +385,211 @@ input[type="file"] {
             message.textContent = text;
             message.className = 'message ' + type;
         }
+    </script>
+</body>
+</html>
+)rawliteral";
+
+// Configuration page HTML
+const char HTML_CONFIG_PAGE[] PROGMEM = R"rawliteral(
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flyby GPS Vario - Configuration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+)rawliteral" R"rawliteral(
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Configuration</h1>
+        
+        <div class="info">
+            <strong>Configure your Flyby GPS Vario settings</strong><br>
+            Changes are saved automatically to device memory.
+        </div>
+
+        <form id="configForm">
+            <div class="form-group">
+                <label for="timezone">Timezone (UTC offset):</label>
+                <select id="timezone" name="timezone">
+                    <option value="-12">UTC-12</option>
+                    <option value="-11">UTC-11</option>
+                    <option value="-10">UTC-10</option>
+                    <option value="-9">UTC-9</option>
+                    <option value="-8">UTC-8</option>
+                    <option value="-7">UTC-7</option>
+                    <option value="-6">UTC-6</option>
+                    <option value="-5">UTC-5</option>
+                    <option value="-4">UTC-4</option>
+                    <option value="-3">UTC-3</option>
+                    <option value="-2">UTC-2</option>
+                    <option value="-1">UTC-1</option>
+                    <option value="0">UTC+0</option>
+                    <option value="1">UTC+1</option>
+                    <option value="2">UTC+2</option>
+                    <option value="3">UTC+3</option>
+                    <option value="4">UTC+4</option>
+                    <option value="5">UTC+5</option>
+                    <option value="6">UTC+6</option>
+                    <option value="7">UTC+7</option>
+                    <option value="8">UTC+8</option>
+                    <option value="9">UTC+9</option>
+                    <option value="10">UTC+10</option>
+                    <option value="11">UTC+11</option>
+                    <option value="12">UTC+12</option>
+                    <option value="13">UTC+13</option>
+                    <option value="14">UTC+14</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="takeoffSpeed">Takeoff Speed (km/h):</label>
+                <input type="number" id="takeoffSpeed" name="takeoffSpeed" min="3" max="15" step="1">
+            </div>
+
+            <div class="form-group">
+                <label for="pdopMaxThreshold">GPS PDOP Max Threshold:</label>
+                <input type="number" id="pdopMaxThreshold" name="pdopMaxThreshold" min="50" max="1000" step="10">
+            </div>
+
+            <div class="form-group">
+                <label for="qnh">QNH Pressure (Pa):</label>
+                <input type="number" id="qnh" name="qnh" min="95000" max="105000" step="100">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="qnhByGps" name="qnhByGps">
+                    Auto-adjust QNH by GPS altitude
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="varioBeepOnlyInFlight" name="varioBeepOnlyInFlight">
+                    Vario beep only when in flight
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="climbRate">Climb Rate Threshold (m/s):</label>
+                <input type="number" id="climbRate" name="climbRate" min="0" max="5" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label for="sinkRate">Sink Rate Threshold (m/s):</label>
+                <input type="number" id="sinkRate" name="sinkRate" min="-10" max="0" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">💾 Save Configuration</button>
+                <button type="button" class="btn" onclick="loadDefaults()" style="background-color: #ff9800;">🔄 Reset to Defaults</button>
+            </div>
+        </form>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <div class="menu">
+            <a href="/">🏠 Home</a>
+            <a href="/ota">📤 OTA Update</a>
+            <a href="/info">📊 Device Info</a>
+        </div>
+    </div>
+
+    <script>
+        // Load current configuration
+        function loadConfig() {
+            fetch('/api/config')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('timezone').value = data.timezone;
+                    document.getElementById('takeoffSpeed').value = data.takeoffSpeed;
+                    document.getElementById('pdopMaxThreshold').value = data.pdopMaxThreshold;
+                    document.getElementById('qnh').value = data.qnh;
+                    document.getElementById('qnhByGps').checked = data.qnhByGps;
+                    document.getElementById('varioBeepOnlyInFlight').checked = data.varioBeepOnlyInFlight;
+                    document.getElementById('climbRate').value = data.climbRate;
+                    document.getElementById('sinkRate').value = data.sinkRate;
+                })
+                .catch(error => {
+                    showMessage('Failed to load configuration', 'error');
+                });
+        }
+
+        // Save configuration
+        document.getElementById('configForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const config = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key === 'qnhByGps' || key === 'varioBeepOnlyInFlight') {
+                    config[key] = true;
+                } else {
+                    config[key] = parseFloat(value);
+                }
+            }
+            
+            // Handle checkboxes separately
+            config.qnhByGps = document.getElementById('qnhByGps').checked;
+            config.varioBeepOnlyInFlight = document.getElementById('varioBeepOnlyInFlight').checked;
+
+            fetch('/api/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('Configuration saved successfully!', 'success');
+                } else {
+                    showMessage('Failed to save configuration: ' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('Error saving configuration', 'error');
+            });
+        });
+
+        // Load defaults
+        function loadDefaults() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                fetch('/api/config/defaults', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Configuration reset to defaults!', 'success');
+                        loadConfig(); // Reload the form
+                    } else {
+                        showMessage('Failed to reset configuration', 'error');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error resetting configuration', 'error');
+                });
+            }
+        }
+
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = 'message ' + type;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load configuration when page loads
+        loadConfig();
     </script>
 </body>
 </html>

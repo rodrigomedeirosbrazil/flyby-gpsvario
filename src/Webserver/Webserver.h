@@ -38,6 +38,11 @@ private:
                          uint8_t *data, 
                          size_t len, 
                          bool final);
+    
+    // Configuration API handlers
+    void handleConfigGet(AsyncWebServerRequest *request);
+    void handleConfigPost(AsyncWebServerRequest *request);
+    void handleConfigDefaults(AsyncWebServerRequest *request);
 };
 
 #endif // FLYBY_WEBSERVER_H
