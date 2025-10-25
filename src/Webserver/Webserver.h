@@ -28,18 +28,18 @@ private:
     void setupWiFi();
     void setupWebServer();
     void setupRoutes();
-    
+
     // Route handlers
     void handleHome(AsyncWebServerRequest *request);
     void handleOTAPage(AsyncWebServerRequest *request);
     void handleInfo(AsyncWebServerRequest *request);
-    void handleOTAUpload(AsyncWebServerRequest *request, 
-                         String filename, 
-                         size_t index, 
-                         uint8_t *data, 
-                         size_t len, 
+    void handleOTAUpload(AsyncWebServerRequest *request,
+                         String filename,
+                         size_t index,
+                         uint8_t *data,
+                         size_t len,
                          bool final);
-    
+
     // Configuration API handlers
     void handleConfigGet(AsyncWebServerRequest *request);
     void handleConfigPost(AsyncWebServerRequest *request);

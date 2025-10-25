@@ -203,11 +203,11 @@ void Webserver::handleConfigPostBody(AsyncWebServerRequest *request, uint8_t *da
     for (size_t i = 0; i < len; i++) {
         configRequestBody += (char)data[i];
     }
-    
+
     // If this is the last chunk, process the complete body
     if (index + len == total) {
         Config& config = Config::getInstance();
-        
+
         DynamicJsonDocument doc(1024);
         DeserializationError error = deserializeJson(doc, configRequestBody);
 
@@ -220,7 +220,7 @@ void Webserver::handleConfigPostBody(AsyncWebServerRequest *request, uint8_t *da
             request->send(400, "application/json", errorResponse);
             return;
         }
-        
+
         // Update configuration values
         if (doc.containsKey("timezone")) {
             config.setTimezone(doc["timezone"]);
@@ -246,16 +246,16 @@ void Webserver::handleConfigPostBody(AsyncWebServerRequest *request, uint8_t *da
         if (doc.containsKey("sinkRate")) {
             config.setSinkRate(doc["sinkRate"]);
         }
-        
+
         // Save configuration
         bool success = config.save();
-        
+
         DynamicJsonDocument responseDoc(256);
         responseDoc["success"] = success;
         if (!success) {
             responseDoc["error"] = "Failed to save configuration";
         }
-        
+
         String response;
         serializeJson(responseDoc, response);
         request->send(success ? 200 : 500, "application/json", response);
