@@ -1,10 +1,16 @@
 #include <Arduino.h>
 #include "Beep.h"
+#include "../Config/Config.h"
 
 Beep::Beep(unsigned char pin)
 {
     this->pin = pin;
     pinMode(this->pin, OUTPUT);
+    
+    // Load values from configuration
+    Config& config = Config::getInstance();
+    this->climbRate = config.getClimbRate();
+    this->sinkRate = config.getSinkRate();
 }
 
 void Beep::tick(float vario)

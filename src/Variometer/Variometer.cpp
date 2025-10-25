@@ -1,8 +1,13 @@
 #include <string.h>
 #include <cmath>
 #include "Variometer.h"
+#include "../Config/Config.h"
 
 Variometer::Variometer() {
+  // Load QNH from configuration
+  Config& config = Config::getInstance();
+  this->qnh = config.getQnh();
+  
   for (int i = 0; i <= MAX_SAMPLES; i++) {
     this->pressureArray[i] = 0;
     this->timeArray[i] = 0;

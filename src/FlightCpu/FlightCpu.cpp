@@ -7,6 +7,7 @@
 #include "../Wind/Wind.h"
 #include "../Screen/Screen.h"
 #include "../Thermal/Thermal.h"
+#include "../Config/Config.h"
 
 FlightCpu::FlightCpu() {
 }
@@ -16,7 +17,9 @@ void FlightCpu::tick() {
       variometer.tick(barometer.getPressure(), millis());
     }
 
-    if (inFlight) {
+    // Use configuration to control if beep only works in flight
+    Config& config = Config::getInstance();
+    if (inFlight || !config.getVarioBeepOnlyInFlight()) {
       beep.tick(variometer.getVario());
     }
 
@@ -41,7 +44,8 @@ void FlightCpu::bySecondTask() {
 }
 
 void FlightCpu::autoAdjustQNH() {
-  if (! gps.isReliable() || smallerVdop <= gps.getVdop()) {
+  Config& config = Config::getInstance();
+  if (!config.getQnhByGps() || !gps.isReliable() || smallerVdop <= gps.getVdop()) {
     return;
   }
 
@@ -50,24 +54,27 @@ void FlightCpu::autoAdjustQNH() {
 }
 
 void FlightCpu::checkInFlight() {
-  if (! inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter == 4) {
+  Config& config = Config::getInstance();
+  uint8_t takeoffSpeed = config.getTakeoffSpeed();
+  
+  if (! inFlight && gps.isReliable() && gps.getSpeed() > takeoffSpeed && inFlightCounter == 4) {
     inFlight = true;
     inFlightCounter = 0;
     startFlightTime = millis();
     oneUpSound();
-  } else if (! inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (! inFlight && gps.isReliable() && gps.getSpeed() > takeoffSpeed && inFlightCounter < 4) {
     inFlightCounter++;
-  } else if (! inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (! inFlight && gps.isReliable() && gps.getSpeed() < takeoffSpeed && inFlightCounter < 4) {
     inFlightCounter = 0;
-  } else if (inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter == 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() < takeoffSpeed && inFlightCounter == 4) {
     inFlight = false;
     inFlightCounter = 0;
     fireballSound();
     fireballSound();
     fireballSound();
-  } else if (inFlight && gps.isReliable() && gps.getSpeed() < TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() < takeoffSpeed && inFlightCounter < 4) {
     inFlightCounter++;
-  } else if (inFlight && gps.isReliable() && gps.getSpeed() > TAKEOFF_SPEED && inFlightCounter < 4) {
+  } else if (inFlight && gps.isReliable() && gps.getSpeed() > takeoffSpeed && inFlightCounter < 4) {
     inFlightCounter = 0;
   }
 }

@@ -1,6 +1,7 @@
 #include <HardwareSerial.h>
 #include "Gps.h"
 #include "../defines.h"
+#include "../Config/Config.h"
 /*
 $GPGGA,232000,2358.439,S,04618.474,W,1,08,0.9,545.4,M,46.9,M,,*4A
 $GPRMC,232000,A,2358.439,S,04618.474,W,022.4,090.0,050616,003.1,W*6D
@@ -188,7 +189,8 @@ unsigned long Gps::getTime()
 
 bool Gps::isReliable()
 {
+    Config& config = Config::getInstance();
     unsigned long pdop = this->gpsParser->pdop();
     return pdop != this->gpsParser->GPS_INVALID_PDOP
-        && pdop < PDOP_MAX_THRESHOLD;
+        && pdop < config.getPdopMaxThreshold();
 }

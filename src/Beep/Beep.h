@@ -9,8 +9,8 @@ class Beep {
     void setSinkRate(float sinkRate);
 
   private:
-    float climbRate = 0.1;
-    float sinkRate = -2.0;
+    float climbRate;  // Value will be loaded from Config
+    float sinkRate;   // Value will be loaded from Config
     unsigned char pin;
     unsigned long beep;
     float    beepTime;

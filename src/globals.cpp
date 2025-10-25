@@ -10,6 +10,7 @@
 #include "Screen/Screen.h"
 #include "FlightCpu/FlightCpu.h"
 #include "Thermal/Thermal.h"
+#include "Webserver/Webserver.h"
 
 Barometer barometer;
 Variometer variometer;
@@ -29,4 +30,5 @@ Compass compass;
 Screen screen;
 FlightCpu flightCpu;
 Thermal thermal;
+Webserver webserver;
 

@@ -18,7 +18,7 @@ class Variometer
         void setQnhByAltitude(float altitude);
 
     private:
-        long qnh = 101325;
+        long qnh;  // Initial value will be loaded from Config
         long pressureSamples[NUMBER_OF_PRESSURE_SAMPLES];
         unsigned long lastTimeVarioWasCalculated = 0;
         long lastPressure = qnh;

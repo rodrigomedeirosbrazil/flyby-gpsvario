@@ -3,10 +3,19 @@
 #include "helpers/helpers.h"
 #include "Screen/Screen.h"
 #include "FlightCpu/FlightCpu.h"
+#include "Webserver/Webserver.h"
 #include "globals.h"
+#include "Config/Config.h"
 
 void setup(void) {
   startSound();
+
+  // Initialize configurations
+  Config& config = Config::getInstance();
+  config.begin();
+
+  // Start webserver for 60 seconds
+  webserver.begin();
 
   delay(POWER_ON_DELAY);
 
@@ -16,5 +25,10 @@ void setup(void) {
 }
 
 void loop(void) {
+  // Process webserver if still active
+  if (webserver.isActive()) {
+    webserver.tick();
+  }
+  
   flightCpu.tick();
 }

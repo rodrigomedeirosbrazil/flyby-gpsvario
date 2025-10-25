@@ -1,8 +1,13 @@
 #define POWER_ON_DELAY 2000
 #define SCREEN_CONTRAST 60
 #define GPS_BAUD_RATE 9600
-#define TIMEZONE -3
-#define TAKEOFF_SPEED 6
+// TIMEZONE and TAKEOFF_SPEED are now managed by Config class
+
+// Webserver configuration
+#define WEBSERVER_WIFI_SSID "Flyby GPS Vario"
+#define WEBSERVER_WIFI_PASSWORD ""
+#define WEBSERVER_TIMEOUT 60000
+#define WEBSERVER_WIFI_CHANNEL 6
 
 #define SMALL_FONT u8g2_font_4x6_tr
 #define SMALL_FONT_WIDTH 5
