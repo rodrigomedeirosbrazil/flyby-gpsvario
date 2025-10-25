@@ -17,7 +17,7 @@ void FlightCpu::tick() {
       variometer.tick(barometer.getPressure(), millis());
     }
 
-    // Usar configuração para controlar se o beep só funciona em voo
+    // Use configuration to control if beep only works in flight
     Config& config = Config::getInstance();
     if (inFlight || !config.getVarioBeepOnlyInFlight()) {
       beep.tick(variometer.getVario());

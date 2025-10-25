@@ -8,12 +8,12 @@ public:
     // Singleton pattern
     static Config& getInstance();
     
-    // Métodos principais
-    void begin();                     // Inicializa e carrega da memória
-    bool load();                      // Carrega configurações do ESP32
-    bool save();                      // Salva configurações no ESP32
-    void loadDefaults();              // Restaura valores padrão
-    bool isValid();                   // Verifica integridade dos dados
+    // Main methods
+    void begin();                     // Initialize and load from memory
+    bool load();                      // Load configurations from ESP32
+    bool save();                      // Save configurations to ESP32
+    void loadDefaults();              // Restore default values
+    bool isValid();                   // Verify data integrity
     
     // Getters
     int8_t getTimezone() const;
@@ -37,14 +37,14 @@ public:
     
 private:
     Config();                         // Singleton
-    Config(const Config&) = delete;   // Previne cópia
-    Config& operator=(const Config&) = delete; // Previne atribuição
+    Config(const Config&) = delete;   // Prevent copy
+    Config& operator=(const Config&) = delete; // Prevent assignment
     
-    // Variáveis de controle
-    uint32_t checksum;                // Para verificar corrupção
-    uint16_t version;                 // Versão da config
+    // Control variables
+    uint32_t checksum;                // For corruption verification
+    uint16_t version;                 // Configuration version
     
-    // As 8 configurações
+    // The 8 configurations
     int8_t timezone;
     uint8_t takeoffSpeed;
     uint16_t pdopMaxThreshold;
@@ -54,7 +54,7 @@ private:
     float climbRate;
     float sinkRate;
     
-    // Métodos privados
+    // Private methods
     uint32_t calculateChecksum() const;
     bool validateChecksum() const;
     bool validateRanges() const;

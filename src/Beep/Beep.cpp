@@ -7,7 +7,7 @@ Beep::Beep(unsigned char pin)
     this->pin = pin;
     pinMode(this->pin, OUTPUT);
     
-    // Carregar valores da configuração
+    // Load values from configuration
     Config& config = Config::getInstance();
     this->climbRate = config.getClimbRate();
     this->sinkRate = config.getSinkRate();

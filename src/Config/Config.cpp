@@ -1,11 +1,11 @@
 #include "Config.h"
 #include <Preferences.h>
 
-// Chaves para armazenamento no Preferences
+// Keys for Preferences storage
 static const char* NAMESPACE = "flyby_config";
 static const uint16_t CONFIG_VERSION = 1;
 
-// Chaves individuais para cada configuração
+// Individual keys for each configuration
 static const char* KEY_VERSION = "version";
 static const char* KEY_CHECKSUM = "checksum";
 static const char* KEY_TIMEZONE = "timezone";
@@ -23,15 +23,15 @@ Config& Config::getInstance() {
 }
 
 Config::Config() {
-    // Inicializar com valores padrão
+    // Initialize with default values
     loadDefaults();
 }
 
 void Config::begin() {
-    // Tentar carregar da memória, se falhar usar defaults
+    // Try to load from memory, if fails use defaults
     if (!load()) {
         loadDefaults();
-        save(); // Salvar os defaults
+        save(); // Save the defaults
     }
 }
 
@@ -46,7 +46,7 @@ void Config::loadDefaults() {
     climbRate = 0.1f;
     sinkRate = -2.0f;
     
-    // Calcular checksum dos valores padrão
+    // Calculate checksum of default values
     checksum = calculateChecksum();
 }
 
@@ -56,17 +56,17 @@ bool Config::load() {
         return false;
     }
     
-    // Carregar versão e checksum
+    // Load version and checksum
     version = prefs.getUShort(KEY_VERSION, 0);
     checksum = prefs.getULong(KEY_CHECKSUM, 0);
     
-    // Se versão não corresponder, usar defaults
+    // If version doesn't match, use defaults
     if (version != CONFIG_VERSION) {
         prefs.end();
         return false;
     }
     
-    // Carregar configurações
+    // Load configurations
     timezone = prefs.getChar(KEY_TIMEZONE, -3);
     takeoffSpeed = prefs.getUChar(KEY_TAKEOFF_SPEED, 6);
     pdopMaxThreshold = prefs.getUShort(KEY_PDOP_MAX_THRESHOLD, 220);
@@ -78,7 +78,7 @@ bool Config::load() {
     
     prefs.end();
     
-    // Validar integridade
+    // Validate integrity
     return isValid();
 }
 
@@ -88,14 +88,14 @@ bool Config::save() {
         return false;
     }
     
-    // Calcular checksum atual
+    // Calculate current checksum
     checksum = calculateChecksum();
     
-    // Salvar versão e checksum
+    // Save version and checksum
     prefs.putUShort(KEY_VERSION, version);
     prefs.putULong(KEY_CHECKSUM, checksum);
     
-    // Salvar configurações
+    // Save configurations
     prefs.putChar(KEY_TIMEZONE, timezone);
     prefs.putUChar(KEY_TAKEOFF_SPEED, takeoffSpeed);
     prefs.putUShort(KEY_PDOP_MAX_THRESHOLD, pdopMaxThreshold);
@@ -114,10 +114,10 @@ bool Config::isValid() {
 }
 
 uint32_t Config::calculateChecksum() const {
-    // CRC32 simples baseado nos dados das configurações
+    // Simple CRC32 based on configuration data
     uint32_t crc = 0xFFFFFFFF;
     
-    // Incluir todas as configurações no cálculo do checksum
+    // Include all configurations in checksum calculation
     uint8_t* data = (uint8_t*)&timezone;
     for (int i = 0; i < sizeof(timezone); i++) {
         crc ^= data[i];
@@ -222,12 +222,12 @@ bool Config::validateChecksum() const {
 }
 
 bool Config::validateRanges() const {
-    return (timezone >= -12 && timezone <= 14) &&           // Fuso horário válido
-           (takeoffSpeed >= 3 && takeoffSpeed <= 15) &&     // Velocidade de decolagem razoável
-           (pdopMaxThreshold >= 50 && pdopMaxThreshold <= 1000) && // PDOP válido
-           (qnh >= 95000 && qnh <= 105000) &&               // QNH válido (Pa)
-           (climbRate >= 0.0f && climbRate <= 5.0f) &&     // Taxa de subida válida
-           (sinkRate >= -10.0f && sinkRate <= 0.0f);        // Taxa de descida válida
+    return (timezone >= -12 && timezone <= 14) &&           // Valid timezone
+           (takeoffSpeed >= 3 && takeoffSpeed <= 15) &&     // Reasonable takeoff speed
+           (pdopMaxThreshold >= 50 && pdopMaxThreshold <= 1000) && // Valid PDOP
+           (qnh >= 95000 && qnh <= 105000) &&               // Valid QNH (Pa)
+           (climbRate >= 0.0f && climbRate <= 5.0f) &&     // Valid climb rate
+           (sinkRate >= -10.0f && sinkRate <= 0.0f);        // Valid sink rate
 }
 
 // Getters

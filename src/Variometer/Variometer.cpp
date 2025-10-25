@@ -4,7 +4,7 @@
 #include "../Config/Config.h"
 
 Variometer::Variometer() {
-  // Carregar QNH da configuração
+  // Load QNH from configuration
   Config& config = Config::getInstance();
   this->qnh = config.getQnh();
   

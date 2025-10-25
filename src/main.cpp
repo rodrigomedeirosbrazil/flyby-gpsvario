@@ -10,7 +10,7 @@
 void setup(void) {
   startSound();
 
-  // Inicializar configurações
+  // Initialize configurations
   Config& config = Config::getInstance();
   config.begin();
 
