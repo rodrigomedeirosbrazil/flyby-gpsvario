@@ -12,6 +12,7 @@ class Screen;
 class FlightCpu;
 class Thermal;
 class Webserver;
+class Config;
 
 extern Barometer barometer;
 extern Variometer variometer;

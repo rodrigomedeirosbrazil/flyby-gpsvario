@@ -5,9 +5,14 @@
 #include "FlightCpu/FlightCpu.h"
 #include "Webserver/Webserver.h"
 #include "globals.h"
+#include "Config/Config.h"
 
 void setup(void) {
   startSound();
+
+  // Inicializar configurações
+  Config& config = Config::getInstance();
+  config.begin();
 
   // Start webserver for 60 seconds
   webserver.begin();

@@ -3,6 +3,7 @@
 #include "../defines.h"
 #include "../helpers/helpers.h"
 #include "../globals.h"
+#include "../Config/Config.h"
 
 Screen::Screen()
 {
@@ -72,7 +73,8 @@ void Screen::drawGpsScreen()
     if (gps.isAvailable()) {
         unsigned long unixtime = convertDateAndTimeEpochTime(gps.getDate(), gps.getTime());
 
-        time_t t = unixtime + (TIMEZONE * 3600);
+        Config& config = Config::getInstance();
+        time_t t = unixtime + (config.getTimezone() * 3600);
         struct tm *timestamp = gmtime(&t);
 
         display.setCursor(48, 63);
@@ -116,12 +118,13 @@ void Screen::drawInfoScreen()
         :   display.print("Tmp: N/A");
 
     display.setCursor(0, 48);
-    display.printf("TMZ: %d", TIMEZONE);
+    Config& config = Config::getInstance();
+    display.printf("TMZ: %d", config.getTimezone());
 
     if (gps.isAvailable()) {
         unsigned long unixtime = convertDateAndTimeEpochTime(gps.getDate(), gps.getTime());
 
-        time_t t = unixtime + (TIMEZONE * 3600);
+        time_t t = unixtime + (config.getTimezone() * 3600);
         struct tm *timestamp = gmtime(&t);
 
         display.setCursor(0, 56);
